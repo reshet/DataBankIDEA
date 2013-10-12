@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:third="urn:import:org.zenika.widget.client.datePicker">
+	<ui:style>
+		.important {
+			font-weight: bold;
+			padding-right: 10px;
+		}
+	</ui:style>
+	<g:HorizontalPanel>
+		<g:Label ui:field="field_name" styleName="{style.important}"></g:Label>
+		<g:HorizontalPanel>
+			<g:PushButton ui:field="up" height="28px" width="28px"></g:PushButton>
+			<g:PushButton ui:field="down" height="28px" width="28px"></g:PushButton>
+			<g:PushButton ui:field="delete" height="28px" width="28px"></g:PushButton>
+<!-- 			<g:Anchor ui:field="up">Вверх</g:Anchor> -->
+<!-- 			<g:Anchor ui:field="down">Вниз</g:Anchor> -->
+		</g:HorizontalPanel>
+<!-- 		<g:Anchor ui:field="delete">Удалить</g:Anchor>		 -->
+	</g:HorizontalPanel>
+</ui:UiBinder> 
