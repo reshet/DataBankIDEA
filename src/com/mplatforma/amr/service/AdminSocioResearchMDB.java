@@ -61,9 +61,10 @@ import org.opendatafoundation.data.FileFormatInfo.Format;
  *
  * @author reshet
  */
-/*@MessageDriven(mappedName = "jms/spss_parse", activationConfig = {
+@MessageDriven(mappedName = "jms/spss_parse/alliance", activationConfig = {
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
-    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")*/
+    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
+})
 /*@MessageDriven(name = "admin_mdb",activationConfig = {
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")*/
@@ -86,12 +87,13 @@ public class AdminSocioResearchMDB implements MessageListener {
 //    private MessageDrivenContext mdc;
     @EJB
     private RxStorageBeanRemote store;
-    //public static String INDEX_NAME = "databankalliance";
-    @Resource(name="indexname")
+    public static String INDEX_NAME = "databankalliance";
+    /*@Resource(name="indexname")
     public  String INDEX_NAME;
-
-   /* public AdminSocioResearchMDB() {
-    }*/
+*/
+    public AdminSocioResearchMDB() {
+        super();
+    }
 
     @Override
     public void onMessage(Message message) {
@@ -139,11 +141,11 @@ public class AdminSocioResearchMDB implements MessageListener {
 //        new AdminSocioResearchMDB().perform_indexing(0);
 //    }
     private Node node;
-    //@Resource(mappedName = "jms/myQCF")
-    @Resource(name = "jmsQCF")
+    @Resource(mappedName = "jms/myQCF/alliance")
+    //@Resource(name = "jmsQCF")
     private QueueConnectionFactory connectionFactory;
-    //@Resource(mappedName = "jms/spss_parse")
-    @Resource(name = "jmsqueue")
+    @Resource(mappedName = "jms/spss_parse/alliance")
+    //@Resource(name = "jmsqueue")
     private Queue queue;
     private QueueConnection connection;
     private QueueSession session;

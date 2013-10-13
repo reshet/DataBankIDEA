@@ -5,27 +5,27 @@
 		  http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd"
          version="3.1">
 
-    <enterprise-beans>
-        <session>
+    <!--<enterprise-beans>-->
+       <!-- <session>
             <ejb-name>UserSocioResearchRemoteBean</ejb-name>
-            <!--<mapped-name>UserSocioResearchRemoteBean</mapped-name>-->
-            <!--<remote>com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote</remote>-->
+            &lt;!&ndash;<mapped-name>UserSocioResearchRemoteBean</mapped-name>&ndash;&gt;
+            &lt;!&ndash;<remote>com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote</remote>&ndash;&gt;
             <ejb-class>
                 com.mplatforma.amr.service.UserSocioResearchSessionBean
             </ejb-class>
-            <!--<session-type>Stateless</session-type>
+            &lt;!&ndash;<session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
--->
+&ndash;&gt;
             <env-entry>
                 <env-entry-name>indexname</env-entry-name>
                 <env-entry-type>java.lang.String</env-entry-type>
                 <env-entry-value>databankalliance</env-entry-value>
             </env-entry>
-            <!--<ejb-local-ref>
+            &lt;!&ndash;<ejb-local-ref>
                 <ejb-ref-name>UserSocioResearchRemoteBean</ejb-ref-name>
-            </ejb-local-ref>-->
-        </session>
-        <message-driven>
+            </ejb-local-ref>&ndash;&gt;
+        </session>-->
+<!--        <message-driven>
             <display-name>AdminSocioResearchMDB</display-name>
             <ejb-name>AdminSocioResearchMDB</ejb-name>
             <mapped-name>jms/spss_parse</mapped-name>
@@ -81,7 +81,7 @@
 
             <message-destination-ref>
                 <message-destination-ref-name>jms/spss_parse</message-destination-ref-name>
-            </message-destination-ref>
+            </message-destination-ref>-->
 
 
           <!--  <env-entry>
@@ -93,9 +93,9 @@
                 <ejb-ref-name>admin_mdb</ejb-ref-name>
             </ejb-local-ref>-->
 
+<!--
+        </message-driven>-->
 
-        </message-driven>
-
-    </enterprise-beans>
+  <!--  </enterprise-beans>-->
 
 </ejb-jar>
