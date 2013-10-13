@@ -196,10 +196,10 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             }
     }
     
-    @Resource(mappedName="jms/myQCF/alliance")
+    @Resource(mappedName="jms/alliance/myQCF")
     private  QueueConnectionFactory connectionFactory;
 
-    @Resource(mappedName="jms/spss_parse/alliance")
+    @Resource(mappedName="jms/alliance/spss_parse")
     private  Queue queue;
     
 //    @Resource(mappedName="jms/ES_index")

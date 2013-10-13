@@ -61,7 +61,7 @@ import org.opendatafoundation.data.FileFormatInfo.Format;
  *
  * @author reshet
  */
-@MessageDriven(mappedName = "jms/spss_parse/alliance", activationConfig = {
+@MessageDriven(mappedName = "jms/alliance/spss_parse", activationConfig = {
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 })
@@ -141,10 +141,10 @@ public class AdminSocioResearchMDB implements MessageListener {
 //        new AdminSocioResearchMDB().perform_indexing(0);
 //    }
     private Node node;
-    @Resource(mappedName = "jms/myQCF/alliance")
+    @Resource(mappedName = "jms/alliance/myQCF")
     //@Resource(name = "jmsQCF")
     private QueueConnectionFactory connectionFactory;
-    @Resource(mappedName = "jms/spss_parse/alliance")
+    @Resource(mappedName = "jms/alliance/spss_parse")
     //@Resource(name = "jmsqueue")
     private Queue queue;
     private QueueConnection connection;
