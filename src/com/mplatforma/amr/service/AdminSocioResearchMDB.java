@@ -90,8 +90,8 @@ public class AdminSocioResearchMDB implements MessageListener {
     @Resource(name="indexname")
     public  String INDEX_NAME;
 
-    public AdminSocioResearchMDB() {
-    }
+   /* public AdminSocioResearchMDB() {
+    }*/
 
     @Override
     public void onMessage(Message message) {

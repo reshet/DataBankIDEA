@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd"
+         version="3.1">
+
+    <enterprise-beans>
+        <session>
+            <ejb-name>UserSocioResearchRemoteBean</ejb-name>
+            <!--<mapped-name>UserSocioResearchRemoteBean</mapped-name>-->
+            <!--<remote>com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote</remote>-->
+            <ejb-class>
+                com.mplatforma.amr.service.UserSocioResearchSessionBean
+            </ejb-class>
+            <!--<session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+-->
+            <env-entry>
+                <env-entry-name>indexname</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>databankalliance</env-entry-value>
+            </env-entry>
+            <!--<ejb-local-ref>
+                <ejb-ref-name>UserSocioResearchRemoteBean</ejb-ref-name>
+            </ejb-local-ref>-->
+        </session>
+        <message-driven>
+            <display-name>AdminSocioResearchMDB</display-name>
+            <ejb-name>AdminSocioResearchMDB</ejb-name>
+            <mapped-name>jms/spss_parse</mapped-name>
+            <ejb-class>
+                com.mplatforma.amr.service.AdminSocioResearchMDB
+            </ejb-class>
+            <messaging-type>javax.jms.MessageListener</messaging-type>
+
+            <message-destination-type>
+                 javax.jms.Queue
+            </message-destination-type>
+            <activation-config>
+                <activation-config-property>
+                    <activation-config-property-name>destinationType
+                    </activation-config-property-name>
+                    <activation-config-property-value>javax.jms.Queue
+                    </activation-config-property-value>
+                </activation-config-property>
+                <activation-config-property>
+                    <activation-config-property-name>acknowledgeMode
+                    </activation-config-property-name>
+                    <activation-config-property-value>Auto-acknowledge
+                    </activation-config-property-value>
+                </activation-config-property>
+            </activation-config>
+            <resource-env-ref>
+                <resource-env-ref-name>jmsQCF</resource-env-ref-name>
+                <resource-env-ref-type>
+                    javax.jms.QueueConnectionFactory
+                </resource-env-ref-type>
+                <mapped-name>jms/myQCF</mapped-name>
+                <injection-target>
+                    <injection-target-class>
+                        com.mplatforma.amr.service.AdminSocioResearchMDB
+                    </injection-target-class>
+                    <injection-target-name>connectionFactory</injection-target-name>
+                </injection-target>
+
+            </resource-env-ref>
+            <resource-env-ref>
+                <resource-env-ref-name>jmsqueue</resource-env-ref-name>
+                <resource-env-ref-type>
+                    javax.jms.Queue
+                </resource-env-ref-type>
+                <mapped-name>jms/spss_parse</mapped-name>
+                <injection-target>
+                    <injection-target-class>
+                        com.mplatforma.amr.service.AdminSocioResearchMDB
+                    </injection-target-class>
+                    <injection-target-name>queue</injection-target-name>
+                </injection-target>
+            </resource-env-ref>
+
+            <message-destination-ref>
+                <message-destination-ref-name>jms/spss_parse</message-destination-ref-name>
+            </message-destination-ref>
+
+
+          <!--  <env-entry>
+                <env-entry-name>indexname</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>databankalliance</env-entry-value>
+            </env-entry>
+            <ejb-local-ref>
+                <ejb-ref-name>admin_mdb</ejb-ref-name>
+            </ejb-local-ref>-->
+
+
+        </message-driven>
+
+    </enterprise-beans>
+
+</ejb-jar>
