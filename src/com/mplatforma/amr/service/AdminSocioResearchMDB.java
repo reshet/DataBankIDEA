@@ -800,7 +800,8 @@ public class AdminSocioResearchMDB implements MessageListener {
                 missing_codes.add(s_var.getMissing1());
                 missing_codes.add(s_var.getMissing2());
                 missing_codes.add(s_var.getMissing3());
-                
+
+
                 
                 int missings_count = 0;
                 for (int i = 0; i < labels_encoding.size(); i++) {
