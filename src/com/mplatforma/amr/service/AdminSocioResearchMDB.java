@@ -61,10 +61,7 @@ import org.opendatafoundation.data.FileFormatInfo.Format;
  *
  * @author reshet
  */
-@MessageDriven(mappedName = "jms/alliance/spss_parse", activationConfig = {
-    @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
-    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
-})
+@MessageDriven(mappedName = "jms/alliance/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
 /*@MessageDriven(name = "admin_mdb",activationConfig = {
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")*/
@@ -269,7 +266,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 
             Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexQueryDoc:" + dto.getJson_descriptor());
             Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse:"+response.toString());
-                Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse2:"+response.index()+" "+response.id()+" "+response.getVersion()+" "+response.getMatches());
+                Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse2:"+response.getIndex()+" "+response.getId()+" "+response.getVersion()+" "+response.getMatches());
 //            GetResponse response2 = client.prepareGet("twitter", "tweet", "1")
 //                 .execute()
 //                 .actionGet();
@@ -314,7 +311,7 @@ public class AdminSocioResearchMDB implements MessageListener {
                     bulkRequest.add(client.prepareIndex(INDEX_NAME, "sociovar", String.valueOf(dto.getId())).setSource(generateVarJSONDesc(dto)));
                 }
                 BulkResponse resp = bulkRequest.execute().actionGet();
-                System.out.println("Indexed vars count:" + resp.items().length + " ,takes time:" + resp.getTook().toString());
+                System.out.println("Indexed vars count:" + resp.getItems().length + " ,takes time:" + resp.getTook().toString());
                 vars_waiting_indexing = null;
             }
 
@@ -340,7 +337,8 @@ public class AdminSocioResearchMDB implements MessageListener {
                         .field("sociovar_name", dto.getLabel() == null ? "" : dto.getLabel())
                         .array("sociovar_alt_codes", dto.getV_label_codes() == null ? empt : dto.getV_label_codes().toArray())
                         .array("sociovar_alt_values", dto.getV_label_values() == null ? empt : dto.getV_label_values().toArray());
-                  for(String key:dto.getFilling().keySet())
+                if(dto.getFilling()!= null)
+                for(String key:dto.getFilling().keySet())
                   {
                       bld.field(key,dto.getFilling().get(key));
                   }
@@ -390,7 +388,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 //                 .actionGet();
              Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexQueryDoc:" + jsondesc);
             Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse:"+response.toString());
-                Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse2:"+response.index()+" "+response.id()+" "+response.getVersion()+" "+response.getMatches());
+                Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse2:"+response.getIndex()+" "+response.getId()+" "+response.getVersion()+" "+response.getMatches());
             //System.out.println(response.index());
 
         } catch (Exception ex) {
@@ -643,6 +641,8 @@ public class AdminSocioResearchMDB implements MessageListener {
 //            }
 //            ans+=new String(arr_first);
             //s.
+
+
             try {
                 s.setIsCP1251(isCP1251);
                 s.setIsKOI8_R(isKOI8_R);
@@ -742,6 +742,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         Long var_id = null;
 
         try {
+            //em.getTransaction().begin();
             var = new Var();
 
             var.setResearch_id(research_id);
@@ -834,6 +835,7 @@ public class AdminSocioResearchMDB implements MessageListener {
                     var.setCortage_string(str_arr);
                 }
             }
+
             ArrayList<Double> values = new ArrayList<Double>();
             //SPSS
             if (s_var instanceof SPSSNumericVariable) {
@@ -841,7 +843,15 @@ public class AdminSocioResearchMDB implements MessageListener {
                 SPSSNumericVariable s_var_numeric = (SPSSNumericVariable) s_var;
                 for (Iterator<Double> it = s_var_numeric.data.iterator(); it.hasNext();) {
                     Double value = it.next();
-                    values.add(value);
+                    if(value!=null && value!=Double.NaN){
+                        double newval = Math.round(value);
+                        values.add(newval);
+                        //TODO THis is testing hack!!!
+                        //values.add(value);
+                    }
+                    else {
+                        values.add(0.0);
+                    }
                 }
             }
             var.setCortage(values);
@@ -855,6 +865,8 @@ public class AdminSocioResearchMDB implements MessageListener {
             var_id = var.getID();
             VarDTO_Detailed ddto = var.toDTO_Detailed(null, null, em);
             launchIndexingVarBULKED(ddto);
+            em.flush();
+            //em.getTransaction().commit();
             //launchIndexingVar(var_id);
 //     }  catch (UnsupportedEncodingException ex) {
 //            Logger.getLogger(AdminSocioResearchSessionBean.class.getName()).log(Level.SEVERE, null, ex);

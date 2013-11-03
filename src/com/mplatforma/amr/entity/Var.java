@@ -42,12 +42,12 @@ public class Var {
 
     @ElementCollection private List<Double> v_label_codes;
     @ElementCollection private List<String> v_label_values;
-    @ElementCollection private List<Long> generalized_var_ids;
-    @ElementCollection private List<Double> cortage;
-    @ElementCollection private List<String> cortage_string;
+    @ElementCollection private List<Long> generalized_var_ids  = new ArrayList<Long>();
+    @ElementCollection private List<Double> cortage = new ArrayList<Double>();
+    @ElementCollection private List<String> cortage_string  = new ArrayList<String>();
     @OneToOne(cascade = CascadeType.ALL)
     private MetaUnitEntityItem entity_item;
-    @ElementCollection private Map<String, String> filling;
+    @ElementCollection private Map<String, String> filling = new HashMap<String, String>();
 
     public Map<String, String> getFilling() {
         return filling;
@@ -164,8 +164,8 @@ public class Var {
         dto.setCode(code);
         dto.setLabel(label);
         dto.setId(id);
-        dto.setV_label_codes((ArrayList<Double>) v_label_codes);
-        dto.setV_label_values((ArrayList<String>) v_label_values);
+        if( v_label_codes!=null)dto.setV_label_codes(new ArrayList<Double>( v_label_codes));
+        if( v_label_values!=null)dto.setV_label_values(new ArrayList<String>( v_label_values));
         //dto.setDistribution(calcDistributionSimple());
         return dto;
     }
@@ -183,8 +183,8 @@ public class Var {
         dto.setCode(code);
         dto.setLabel(label);
         dto.setId(id);
-        dto.setV_label_codes((ArrayList<Double>) v_label_codes);
-        dto.setV_label_values((ArrayList<String>) v_label_values);
+        if( v_label_codes!=null)dto.setV_label_codes(new ArrayList<Double>(v_label_codes));
+        if( v_label_values!=null)dto.setV_label_values(new ArrayList<String>( v_label_values));
         dto.setResearch_id(research_id);
         if (var_type.equals(VarDTO_Detailed.alt_var_type)) {
             if (watching_user != null) {
@@ -222,9 +222,9 @@ public class Var {
         dto.setCode(code);
         dto.setLabel(label);
         dto.setId(id);
-        dto.setV_label_codes(new ArrayList<Double>(v_label_codes));
-        dto.setV_label_values(new ArrayList<String>(v_label_values));
-        dto.setGen_vars_ids(new ArrayList<Long>(generalized_var_ids));
+        if( v_label_codes!=null)dto.setV_label_codes(new ArrayList<Double>(v_label_codes));
+        if( v_label_values!=null)dto.setV_label_values(new ArrayList<String>(v_label_values));
+        if( generalized_var_ids!=null)dto.setGen_vars_ids(new ArrayList<Long>(generalized_var_ids));
         dto.setGen_var_names(getGenVarsNames(generalized_var_ids, em));
         dto.setGen_research_names(getGenResearchesNames(generalized_var_ids, em));
         dto.setGen_research_ids(getGenResearchesIds(generalized_var_ids, em));
@@ -276,9 +276,9 @@ public class Var {
         dto.setCode(code);
         dto.setLabel(label);
         dto.setId(id);
-        dto.setV_label_codes(new ArrayList<Double>(v_label_codes));
-        dto.setV_label_values(new ArrayList<String>(v_label_values));
-        dto.setGen_vars_ids(new ArrayList<Long>(generalized_var_ids));
+        if(v_label_codes!=null)dto.setV_label_codes(new ArrayList<Double>(v_label_codes));
+        if(v_label_values!=null)dto.setV_label_values(new ArrayList<String>(v_label_values));
+        if(generalized_var_ids!=null)dto.setGen_vars_ids(new ArrayList<Long>(generalized_var_ids));
         dto.setGen_var_names(getGenVarsNames(generalized_var_ids, em));
         dto.setGen_research_names(getGenResearchesNames(generalized_var_ids, em));
         dto.setGen_research_ids(getGenResearchesIds(generalized_var_ids, em));
