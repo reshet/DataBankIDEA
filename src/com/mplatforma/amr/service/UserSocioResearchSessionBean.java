@@ -348,8 +348,8 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
     
     private Node node;
 
-    @Resource(name="indexname")
-    public  String INDEX_NAME;
+    //@Resource(name="indexname")
+    public  String INDEX_NAME = "databankalliance";
 
     @PostConstruct
     private void init()

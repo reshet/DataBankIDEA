@@ -984,11 +984,14 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             //JSONObject total = hits.get("total");
             
             BigDecimal totalRoyalties = asBigDecimal(hits.getNumberValue("total"));
+            Double max_score = 0.0;
             Integer tot = totalRoyalties.intValue();
-            
-            BigDecimal max_sc = asBigDecimal(hits.getNumberValue("max_score"));
-            Double max_score = max_sc.doubleValue();
-            
+            if(tot > 0){
+                BigDecimal max_sc = asBigDecimal(hits.getNumberValue());
+                max_score = max_sc.doubleValue();
+            }
+            //String st = hits.getNullableNumberValue("max_score");
+
             Double score_barrier = max_score/variance;
             
             //JSONArray hits_arr = (JSONArray)hits.getJSONArray("hits");
@@ -1026,6 +1029,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         String query = constructSearchLikewiseQuery(origin_var, params); 
         String [] types = new String[]{"sociovar"};
         String result = user_bean.doIndexSearchMaxResults(query, types,20);
+
         ArrayList<Long> var_ids = doParseLikewiseSearchResult(origin_var, params, result,params.getBarrier_variance());
         return var_ids;   
      }
