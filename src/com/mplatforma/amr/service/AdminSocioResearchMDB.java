@@ -61,7 +61,7 @@ import org.opendatafoundation.data.FileFormatInfo.Format;
  *
  * @author reshet
  */
-@MessageDriven(mappedName = "jms/alliance/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
+@MessageDriven(mappedName = "jms/kiis/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
 /*@MessageDriven(name = "admin_mdb",activationConfig = {
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")*/
@@ -84,7 +84,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 //    private MessageDrivenContext mdc;
     @EJB
     private RxStorageBeanRemote store;
-    public static String INDEX_NAME = "databankalliance";
+    public static String INDEX_NAME = "databankkiis";
     /*@Resource(name="indexname")
     public  String INDEX_NAME;
 */
@@ -138,10 +138,10 @@ public class AdminSocioResearchMDB implements MessageListener {
 //        new AdminSocioResearchMDB().perform_indexing(0);
 //    }
     private Node node;
-    @Resource(mappedName = "jms/alliance/myQCF")
+    @Resource(mappedName = "jms/kiis/myQCF")
     //@Resource(name = "jmsQCF")
     private QueueConnectionFactory connectionFactory;
-    @Resource(mappedName = "jms/alliance/spss_parse")
+    @Resource(mappedName = "jms/kiis/spss_parse")
     //@Resource(name = "jmsqueue")
     private Queue queue;
     private QueueConnection connection;
@@ -150,7 +150,8 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     @PostConstruct
     public void init() {
-        node = nodeBuilder().clusterName("elasticsearch_" + INDEX_NAME + "_Prj_Cluster").client(false).node();
+        //TIP single cluster for different orgz.
+        node = nodeBuilder().clusterName("elasticsearch_databankalliance_Prj_Cluster").client(false).node();
         try {
             connection = connectionFactory.createQueueConnection();
             session = connection.createQueueSession(false, 0);

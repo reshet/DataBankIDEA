@@ -349,12 +349,12 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
     private Node node;
 
     //@Resource(name="indexname")
-    public  String INDEX_NAME = "databankalliance";
+    public  String INDEX_NAME = "databankkiis";
 
     @PostConstruct
     private void init()
     {
-        node = nodeBuilder().clusterName("elasticsearch_"+INDEX_NAME+"_Prj_Cluster").client(true).node();
+        node = nodeBuilder().clusterName("elasticsearch_databankalliance_Prj_Cluster").client(true).node();
     }
     
     @PreDestroy
@@ -399,7 +399,7 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
 //                .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
             
-            SearchResponse response = client.prepareSearch("databankalliance").setTypes(types_to_search)
+            SearchResponse response = client.prepareSearch(INDEX_NAME).setTypes(types_to_search)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .setQuery(json_query)
                 .setExplain(true)
