@@ -1,0 +1,99 @@
+Index: src/com/mplatforma/amr/service/AdminSocioResearchMDB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/mplatforma/amr/service/AdminSocioResearchMDB.java	(date 1383822686000)
++++ src/com/mplatforma/amr/service/AdminSocioResearchMDB.java	(revision )
+@@ -61,7 +61,7 @@
+  *
+  * @author reshet
+  */
+-@MessageDriven(mappedName = "jms/alliance/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
++@MessageDriven(mappedName = "jms/kiis/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
+ /*@MessageDriven(name = "admin_mdb",activationConfig = {
+         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
+         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")*/
+@@ -84,7 +84,7 @@
+ //    private MessageDrivenContext mdc;
+     @EJB
+     private RxStorageBeanRemote store;
+-    public static String INDEX_NAME = "databankalliance";
++    public static String INDEX_NAME = "databankkiis";
+     /*@Resource(name="indexname")
+     public  String INDEX_NAME;
+ */
+@@ -138,10 +138,10 @@
+ //        new AdminSocioResearchMDB().perform_indexing(0);
+ //    }
+     private Node node;
+-    @Resource(mappedName = "jms/alliance/myQCF")
++    @Resource(mappedName = "jms/kiis/myQCF")
+     //@Resource(name = "jmsQCF")
+     private QueueConnectionFactory connectionFactory;
+-    @Resource(mappedName = "jms/alliance/spss_parse")
++    @Resource(mappedName = "jms/kiis/spss_parse")
+     //@Resource(name = "jmsqueue")
+     private Queue queue;
+     private QueueConnection connection;
+@@ -150,7 +150,8 @@
+ 
+     @PostConstruct
+     public void init() {
+-        node = nodeBuilder().clusterName("elasticsearch_" + INDEX_NAME + "_Prj_Cluster").client(false).node();
++        //TIP single cluster for different orgz.
++        node = nodeBuilder().clusterName("elasticsearch_databankalliance_Prj_Cluster").client(false).node();
+         try {
+             connection = connectionFactory.createQueueConnection();
+             session = connection.createQueueSession(false, 0);
+Index: src/com/mplatforma/amr/service/AdminSocioResearchSessionBean.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/mplatforma/amr/service/AdminSocioResearchSessionBean.java	(date 1383822686000)
++++ src/com/mplatforma/amr/service/AdminSocioResearchSessionBean.java	(revision )
+@@ -196,10 +196,10 @@
+             }
+     }
+     
+-    @Resource(mappedName="jms/alliance/myQCF")
++    @Resource(mappedName="jms/kiis/myQCF")
+     private  QueueConnectionFactory connectionFactory;
+ 
+-    @Resource(mappedName="jms/alliance/spss_parse")
++    @Resource(mappedName="jms/kiis/spss_parse")
+     private  Queue queue;
+     
+ //    @Resource(mappedName="jms/ES_index")
+Index: src/com/mplatforma/amr/service/UserSocioResearchSessionBean.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/com/mplatforma/amr/service/UserSocioResearchSessionBean.java	(date 1383822686000)
++++ src/com/mplatforma/amr/service/UserSocioResearchSessionBean.java	(revision )
+@@ -349,12 +349,12 @@
+     private Node node;
+ 
+     //@Resource(name="indexname")
+-    public  String INDEX_NAME = "databankalliance";
++    public  String INDEX_NAME = "databankkiis";
+ 
+     @PostConstruct
+     private void init()
+     {
+-        node = nodeBuilder().clusterName("elasticsearch_"+INDEX_NAME+"_Prj_Cluster").client(true).node();
++        node = nodeBuilder().clusterName("elasticsearch_databankalliance_Prj_Cluster").client(true).node();
+     }
+     
+     @PreDestroy
+@@ -399,7 +399,7 @@
+ //                .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+ 
+             
+-            SearchResponse response = client.prepareSearch("databankalliance").setTypes(types_to_search)
++            SearchResponse response = client.prepareSearch(INDEX_NAME).setTypes(types_to_search)
+                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                 .setQuery(json_query)
+                 .setExplain(true)
