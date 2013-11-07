@@ -30,17 +30,16 @@ import java.util.ArrayList;
 
 public class UserAnalysisSaveDTO implements Serializable, ICatalogizable {
 
-  /**
-	 * 
-	 */
-	public static enum User2DD_Choice {FREQ,PERC_ROW,PERC_COL,PERC_ALL}; 
-	private User2DD_Choice user2dd_choice = User2DD_Choice.FREQ;
+    ;
+	private String user2dd_choice = User2DD_Choices.FREQ;
 	
   public static String DISTR_TYPE_1D = "1D";
   public static String DISTR_TYPE_2D = "2D";   
 	private static final long serialVersionUID = 4066887588027126691L;
   private long id;
-  
+
+
+
   private String name,distr_type;
   private UserResearchSettingDTO seting;
   private VarDTO_Detailed var_1;
@@ -175,11 +174,11 @@ public void setValid_distribution(ArrayList<Double> valid_distribution) {
 		return id;
 	}
 
-	public User2DD_Choice getUser2dd_choice() {
+	public String getUser2dd_choice() {
 		return user2dd_choice;
 	}
 
-	public void setUser2dd_choice(User2DD_Choice user2dd_choice) {
+	public void setUser2dd_choice(String user2dd_choice) {
 		this.user2dd_choice = user2dd_choice;
 	}
 	

@@ -30,7 +30,6 @@ import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
 import com.mresearch.databank.shared.ResearchFilesDTO;
 import com.mresearch.databank.shared.SocioResearchFilesDTO;
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 public class AdminResearchAdvancedFilesEditView extends Composite implements AdminResearchDetailedPresenter.FilesEditDisplay{
 	private static AdminResearchFilesEditViewUiBinder uiBinder = GWT
@@ -45,8 +44,8 @@ public class AdminResearchAdvancedFilesEditView extends Composite implements Adm
 		      .create(UserSocioResearchService.class);
 	
 	private long research_id;
-	@UiField VerticalPanel arrays_panel,quest_panel,quest_cards_panel,protocol_panel,technical_report_panel;
-	@UiField VerticalPanel instructions_panel,analytic_report_panel,publications_panel;
+	@UiField VerticalPanel arrays_panel,desc_panel, results_panel,protocol_panel, ethic_report_panel;
+    @UiField VerticalPanel mailto_panel,publications_panel;
 	private ResearchFilesDTO result;
 	public AdminResearchAdvancedFilesEditView(long research_id,ResearchFilesDTO dto) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -64,11 +63,11 @@ public class AdminResearchAdvancedFilesEditView extends Composite implements Adm
 
 		SocioResearchFilesDTO quest_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionaries),result.getFileNames(ResearchFilesDTO.CG_questionaries));
 		AdminResearchFilesEditView quest_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_questionaries, quest_dto);
-		quest_panel.add(quest_view);
+		desc_panel.add(quest_view);
 		
 		SocioResearchFilesDTO qc_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionary_cards),result.getFileNames(ResearchFilesDTO.CG_questionary_cards));
 		AdminResearchFilesEditView qc_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_questionary_cards, qc_dto);
-		quest_cards_panel.add(qc_view);
+		results_panel.add(qc_view);
 
 		SocioResearchFilesDTO pr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_protocols),result.getFileNames(ResearchFilesDTO.CG_protocols));
 		AdminResearchFilesEditView pr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_protocols,pr_dto);
@@ -76,19 +75,19 @@ public class AdminResearchAdvancedFilesEditView extends Composite implements Adm
 
 		SocioResearchFilesDTO tr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_technical_reports),result.getFileNames(ResearchFilesDTO.CG_technical_reports));
 		AdminResearchFilesEditView tr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_technical_reports, tr_dto);
-		technical_report_panel.add(tr_view);
+		ethic_report_panel.add(tr_view);
 		
-		SocioResearchFilesDTO i_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_instructions),result.getFileNames(ResearchFilesDTO.CG_instructions));
+		/*SocioResearchFilesDTO i_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_instructions),result.getFileNames(ResearchFilesDTO.CG_instructions));
 		AdminResearchFilesEditView i_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_instructions, i_dto);
 		instructions_panel.add(i_view);
 
 		SocioResearchFilesDTO ar_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_analytic_reports),result.getFileNames(ResearchFilesDTO.CG_analytic_reports));
 		AdminResearchFilesEditView ar_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_analytic_reports, ar_dto);
-		analytic_report_panel.add(ar_view);
+		analytic_report_panel.add(ar_view);*/
 		
-		SocioResearchFilesDTO p_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_publications),result.getFileNames(ResearchFilesDTO.CG_publications));
+		/*SocioResearchFilesDTO p_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_publications),result.getFileNames(ResearchFilesDTO.CG_publications));
 		AdminResearchFilesEditView p_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_publications, p_dto);
-		publications_panel.add(p_view);
+		publications_panel.add(p_view);*/
 		
 //		new RPCCall<ResearchFilesDTO>() {
 //			@Override

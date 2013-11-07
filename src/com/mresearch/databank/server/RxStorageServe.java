@@ -1,10 +1,12 @@
 package com.mresearch.databank.server;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,10 +50,26 @@ public void doGet(HttpServletRequest req, HttpServletResponse res)
         RxStoredDTO dto = eao.getFileInfo(idd);
 	
 		//res.setHeader("Content-Type", dto.getDesc());
+        res.setHeader("Content-Type", "application/octet-stream");
+
         String filename =  URLEncoder.encode(dto.getName(), "UTF8");
         res.setHeader( "Content-Disposition", "attachment; filename=\"" + filename +"\"" );
         byte[] arr = eao.getFileContents(idd);
-        res.getOutputStream().print(new String(arr));
+
+    //res.getWriter().
+        //res.getOutputStream().print(new String(arr));
+        ServletOutputStream output = res.getOutputStream();
+        //output.write(arr);
+        String str =  new String(arr);
+        res.setHeader("Content-Length", String.valueOf(arr.length));
+   // output.print(str);
+    OutputStream stream = output;
+    stream.write(arr);
+        //res.getWriter().print(str);
+        //res.getWriter().close();
+    //output.write();
+    //res.getOutputStream()
+    //res.getOutputStream().
         //res.getOutputStream().close();
         //blobstoreService.serve(blobKey, res);
        

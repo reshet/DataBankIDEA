@@ -25,20 +25,12 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.DatabankApp;
-import com.mresearch.databank.client.event.RecalculateDistributionsEvent;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
-import com.mresearch.databank.shared.SocioResearchDTO;
-import com.mresearch.databank.shared.UserAccountDTO;
-import com.mresearch.databank.shared.UserAnalysisSaveDTO;
-import com.mresearch.databank.shared.UserAnalysisSaveDTO.User2DD_Choice;
-import com.mresearch.databank.shared.SocioResearchDTO_Light;
-import com.mresearch.databank.shared.UserHistoryDTO;
-import com.mresearch.databank.shared.VarDTO;
-import com.mresearch.databank.shared.VarDTO_Detailed;
-import com.mresearch.databank.shared.VarDTO_Light;
+import com.mresearch.databank.shared.*;
+
 //There MVP pattern is ommited)
 public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 
@@ -84,15 +76,15 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		//UserAccountDTO user = DatabankApp.get().getCurrentUser();
 		anal_bar_w = new AnalisysBarView(bus, display,this.pre_saved,this);
 		analysis_bar.add(anal_bar_w);
-		
-		User2DD_Choice ch = pre_saved.getUser2dd_choice();
-		if(ch == User2DD_Choice.FREQ) showFreqChoice();
+
+        String ch = pre_saved.getUser2dd_choice();
+		if(ch == User2DD_Choices.FREQ) showFreqChoice();
 		else{
 			//show_percents.setValue(true);
 			showPercentsChoice();
-			if(ch == User2DD_Choice.PERC_COL) percentsColomnChoice();
-			if(ch == User2DD_Choice.PERC_ROW) percentsRowChoice();
-			if(ch == User2DD_Choice.PERC_ALL) percentsTableChoice();
+			if(ch == User2DD_Choices.PERC_COL) percentsColomnChoice();
+			if(ch == User2DD_Choices.PERC_ROW) percentsRowChoice();
+			if(ch == User2DD_Choices.PERC_ALL) percentsTableChoice();
 		}
 		
 		
@@ -161,10 +153,10 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		percents_colomn.setVisible(true);
 		percents_row.setVisible(true);
 		percents_table.setVisible(true);
-		User2DD_Choice ch = User2DD_Choice.PERC_COL;
-		if(percents_colomn.getValue())ch =  User2DD_Choice.PERC_COL;
-		else if(percents_row.getValue())ch =  User2DD_Choice.PERC_ROW;
-		else if(percents_table.getValue())ch =  User2DD_Choice.PERC_ALL;
+        String ch = User2DD_Choices.PERC_COL;
+		if(percents_colomn.getValue())ch = User2DD_Choices.PERC_COL;
+		else if(percents_row.getValue())ch = User2DD_Choices.PERC_ROW;
+		else if(percents_table.getValue())ch = User2DD_Choices.PERC_ALL;
 		anal_bar_w.setUser2dd_choice(ch);		
 	}
 	@UiHandler(value="show_percents")
@@ -181,7 +173,7 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		percents_table.setVisible(false);
 		show_percents.setValue(false);
 		show_frequences.setValue(true);
-		anal_bar_w.setUser2dd_choice(User2DD_Choice.FREQ);
+		anal_bar_w.setUser2dd_choice(User2DD_Choices.FREQ);
 	}
 	@UiHandler(value="show_frequences")
 	public void onShowFrequencesChoice(ClickEvent e)
@@ -195,7 +187,7 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		percents_colomn.setValue(true);
 		percents_row.setValue(false);
 		percents_table.setValue(false);
-		anal_bar_w.setUser2dd_choice(User2DD_Choice.PERC_COL);
+		anal_bar_w.setUser2dd_choice(User2DD_Choices.PERC_COL);
 	}
 	@UiHandler(value="percents_colomn")
 	public void onPercentsColomnChoice(ClickEvent e)
@@ -208,7 +200,7 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		percents_row.setValue(true);
 		percents_colomn.setValue(false);
 		percents_table.setValue(false);
-		anal_bar_w.setUser2dd_choice(User2DD_Choice.PERC_ROW);
+		anal_bar_w.setUser2dd_choice(User2DD_Choices.PERC_ROW);
 	}
 
 	@UiHandler(value="percents_row")
@@ -222,7 +214,7 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		percents_table.setValue(true);
 		percents_colomn.setValue(false);
 		percents_row.setValue(false);
-		anal_bar_w.setUser2dd_choice(User2DD_Choice.PERC_ALL);
+		anal_bar_w.setUser2dd_choice(User2DD_Choices.PERC_ALL);
 	}
 	@UiHandler(value="percents_table")
 	public void onPercentsTableChoice(ClickEvent e)
