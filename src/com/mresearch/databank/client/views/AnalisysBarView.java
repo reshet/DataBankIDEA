@@ -1,11 +1,8 @@
 package com.mresearch.databank.client.views;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -13,14 +10,9 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -28,34 +20,19 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
-import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.event.RecalculateDistributionsEvent;
-import com.mresearch.databank.client.event.RecalculateDistributionsEventHandler;
-import com.mresearch.databank.client.event.SaveHTMLEvent;
-import com.mresearch.databank.client.event.ShowPlaceEvent;
-import com.mresearch.databank.client.event.ShowVarDetailsEvent;
 import com.mresearch.databank.client.event.ShowVarPlotEvent;
 import com.mresearch.databank.client.event.ShowVar2DDEvent;
 
 import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
 import com.mresearch.databank.client.service.UserAccountService;
 import com.mresearch.databank.client.service.UserAccountServiceAsync;
-import com.mresearch.databank.shared.IPickableElement;
-import com.mresearch.databank.shared.ShowResearchSavedParameters;
-import com.mresearch.databank.shared.UserAccountDTO;
-import com.mresearch.databank.shared.UserAnalysisSaveDTO.User2DD_Choice;
-import com.mresearch.databank.shared.UserHistoryDTO;
-
-import com.mresearch.databank.shared.UserAnalysisSaveDTO;
-import com.mresearch.databank.shared.UserResearchSettingDTO;
-import com.mresearch.databank.shared.VarDTO_Detailed;
-
-
+import com.mresearch.databank.shared.*;
 
 
 public class AnalisysBarView extends Composite implements UserResearchPerspectivePresenter.AnalisysDisplay{
@@ -88,13 +65,13 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 	private UserAnalysisSaveDTO save_dto = null;
 	private ArrayList<String> weights_names;
 	private HTML_Saver saver;
-	public User2DD_Choice user2dd_choice = User2DD_Choice.FREQ;
+	public String user2dd_choice = User2DD_Choices.FREQ;
 	
-	public User2DD_Choice getUser2dd_choice() {
+	public String getUser2dd_choice() {
 		return user2dd_choice;
 	}
 
-	public void setUser2dd_choice(User2DD_Choice user2dd_choice) {
+	public void setUser2dd_choice(String user2dd_choice) {
 		this.user2dd_choice = user2dd_choice;
 	}
 

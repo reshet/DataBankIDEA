@@ -14,9 +14,9 @@
     </facet>
     <facet type="gwt" name="GWT">
       <configuration>
-        <setting name="compilerParameters" value="-localWorkers 3" />
+        <setting name="compilerParameters" value="-localWorkers 2" />
         <setting name="compilerMaxHeapSize" value="2048" />
-        <setting name="gwtScriptOutputStyle" value="PRETTY" />
+        <setting name="gwtScriptOutputStyle" value="OBF" />
         <setting name="gwtSdkUrl" value="file://$USER_HOME$/GWT" />
         <setting name="webFacet" value="Web" />
       </configuration>
@@ -35,16 +35,6 @@
       <configuration>
         <descriptors>
           <deploymentDescriptor name="ejb-jar.xml" url="file://$MODULE_DIR$/META-INF/ejb-jar.xml" />
-        </descriptors>
-        <ejbRoots>
-          <root url="file://$MODULE_DIR$/src" />
-        </ejbRoots>
-      </configuration>
-    </facet>
-    <facet type="ejb" name="EJB2">
-      <configuration>
-        <descriptors>
-          <deploymentDescriptor name="ejb-jar.xml" url="file://$MODULE_DIR$/WebContent/WEB-INF/classes/META-INF/ejb-jar.xml" />
         </descriptors>
         <ejbRoots>
           <root url="file://$MODULE_DIR$/src" />

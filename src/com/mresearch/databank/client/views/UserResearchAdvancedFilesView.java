@@ -1,36 +1,17 @@
 package com.mresearch.databank.client.views;
 
-import gwtupload.client.IUploader;
-import gwtupload.client.SingleUploader;
-import gwtupload.client.IUploader.OnFinishUploaderHandler;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.presenters.AdminResearchDetailedPresenter;
-import com.mresearch.databank.client.service.AdminSocioResearchService;
-import com.mresearch.databank.client.service.AdminSocioResearchServiceAsync;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
 import com.mresearch.databank.shared.ResearchFilesDTO;
 import com.mresearch.databank.shared.SocioResearchFilesDTO;
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 public class UserResearchAdvancedFilesView extends Composite implements AdminResearchDetailedPresenter.FilesEditDisplay{
 	private static AdminResearchFilesEditViewUiBinder uiBinder = GWT
@@ -44,8 +25,8 @@ public class UserResearchAdvancedFilesView extends Composite implements AdminRes
 	
 	private long research_id;
 	private ResearchFilesDTO result;
-	@UiField VerticalPanel arrays_panel,quest_panel,quest_cards_panel,protocol_panel,technical_report_panel;
-	@UiField VerticalPanel instructions_panel,analytic_report_panel,publications_panel;
+	@UiField VerticalPanel arrays_panel,desc_panel, results_panel,protocol_panel, ethic_report_panel;
+	@UiField VerticalPanel mailto_panel,publications_panel;
 	public UserResearchAdvancedFilesView(long research_id,ResearchFilesDTO dto) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.research_id = research_id;
@@ -76,13 +57,13 @@ public class UserResearchAdvancedFilesView extends Composite implements AdminRes
 		UserResearchFilesView arr_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_arrays, arr_dto);
 		arrays_panel.add(arr_view);
 
-		SocioResearchFilesDTO quest_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionaries),result.getFileNames(ResearchFilesDTO.CG_questionaries));
-		UserResearchFilesView quest_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_questionaries, quest_dto);
-		quest_panel.add(quest_view);
+		SocioResearchFilesDTO desc_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionaries),result.getFileNames(ResearchFilesDTO.CG_questionaries));
+		UserResearchFilesView desc_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_questionaries, desc_dto);
+		desc_panel.add(desc_view);
 		
 		SocioResearchFilesDTO qc_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionary_cards),result.getFileNames(ResearchFilesDTO.CG_questionary_cards));
 		UserResearchFilesView qc_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_questionary_cards, qc_dto);
-		quest_cards_panel.add(qc_view);
+		results_panel.add(qc_view);
 
 		SocioResearchFilesDTO pr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_protocols),result.getFileNames(ResearchFilesDTO.CG_protocols));
 		UserResearchFilesView pr_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_protocols,pr_dto);
@@ -90,19 +71,20 @@ public class UserResearchAdvancedFilesView extends Composite implements AdminRes
 
 		SocioResearchFilesDTO tr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_technical_reports),result.getFileNames(ResearchFilesDTO.CG_technical_reports));
 		UserResearchFilesView tr_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_technical_reports, tr_dto);
-		technical_report_panel.add(tr_view);
+		ethic_report_panel.add(tr_view);
 		
-		SocioResearchFilesDTO i_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_instructions),result.getFileNames(ResearchFilesDTO.CG_instructions));
+		/*SocioResearchFilesDTO i_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_instructions),result.getFileNames(ResearchFilesDTO.CG_instructions));
 		UserResearchFilesView i_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_instructions, i_dto);
-		instructions_panel.add(i_view);
+		*/
+        mailto_panel.add(new HTML("<a href=\"mailto:reshet.ukr@gmail.com?subject=Запит на отримання масиву даних за дослідженням "+research_id+"&body=Прошу надати мені доступ до даних.\">Надіслати лист-запит</a>"));
 
-		SocioResearchFilesDTO ar_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_analytic_reports),result.getFileNames(ResearchFilesDTO.CG_analytic_reports));
+		/*SocioResearchFilesDTO ar_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_analytic_reports),result.getFileNames(ResearchFilesDTO.CG_analytic_reports));
 		UserResearchFilesView ar_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_analytic_reports, ar_dto);
-		analytic_report_panel.add(ar_view);
-		
+		analytic_report_panel.add(ar_view);*/
+		/*
 		SocioResearchFilesDTO p_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_publications),result.getFileNames(ResearchFilesDTO.CG_publications));
 		UserResearchFilesView p_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_publications, p_dto);
-		publications_panel.add(p_view);
+		publications_panel.add(p_view);*/
 
 	}
 }

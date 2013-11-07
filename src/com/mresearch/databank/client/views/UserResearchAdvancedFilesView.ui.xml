@@ -13,33 +13,29 @@
 						<td><g:VerticalPanel ui:field="arrays_panel"></g:VerticalPanel></td>
 					</tr>
 					<tr>
-						<td>Опросник: </td>
-						<td><g:VerticalPanel ui:field="quest_panel"></g:VerticalPanel></td>
+						<td>Краткое описание исследования: </td>
+						<td><g:VerticalPanel ui:field="desc_panel"></g:VerticalPanel></td>
 					</tr>
 					<tr>
-						<td>Карточки к опроснику: </td>
-						<td><g:VerticalPanel ui:field="quest_cards_panel"></g:VerticalPanel></td>
+						<td>Результаты исследования: </td>
+						<td><g:VerticalPanel ui:field="results_panel"></g:VerticalPanel></td>
 					</tr>
 					<tr>
-						<td>Протокол исследования или описание методологии: </td>
+						<td>Протокол исследования, инструментарий: </td>
 						<td><g:VerticalPanel ui:field="protocol_panel"></g:VerticalPanel></td>
 					</tr>
 					<tr>
-						<td>Технический отчет: </td>
-						<td><g:VerticalPanel ui:field="technical_report_panel"></g:VerticalPanel></td>
+						<td>Заключение этической экспертизы исследования: </td>
+						<td><g:VerticalPanel ui:field="ethic_report_panel"></g:VerticalPanel></td>
 					</tr>
 					<tr>
-						<td>Инструкции интервьюверу: </td>
-						<td><g:VerticalPanel ui:field="instructions_panel"></g:VerticalPanel></td>
-					</tr>
-					<tr>
-						<td>Аналитический отчет по исследованию: </td>
-						<td><g:VerticalPanel ui:field="analytic_report_panel"></g:VerticalPanel></td>
+						<td>Запрос массива данных: </td>
+						<td><g:VerticalPanel ui:field="mailto_panel"></g:VerticalPanel></td>
 					</tr>
 					<tr>
 						<td>Публикации, связанные с исследованием: </td>
 						<td><g:VerticalPanel ui:field="publications_panel"></g:VerticalPanel></td>
-					</tr>				
+					</tr>
 				</table>
 			</g:HTMLPanel>
 		</g:VerticalPanel>
