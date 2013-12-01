@@ -231,6 +231,7 @@ public class Var {
         dto.setVar_type(var_type);
 
         SocioResearch r = em.find(SocioResearch.class, research_id);
+        if(r == null) return null;
         dto.setResearch_name(r.getName());
         dto.setResearch_id(research_id);
         if (entity_item != null) {
