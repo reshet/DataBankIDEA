@@ -825,7 +825,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         }
         JsonObjectNodeBuilder obj_b = anObjectBuilder()
                 .withField("ids", anObjectBuilder()
-                    .withField("type", aStringBuilder("research"))
+                    //.withField("type", aStringBuilder("sociovar"))
                     .withField("values", arr_values)
                  );
         arr_contains.withElement(obj_b);
@@ -855,10 +855,14 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             
             BigDecimal totalRoyalties = asBigDecimal(hits.getNumberValue("total"));
             Integer tot = totalRoyalties.intValue();
-            
-            BigDecimal max_sc = asBigDecimal(hits.getNumberValue("max_score"));
-            Double max_score = max_sc.doubleValue();
-            
+
+
+            if(tot > 0){
+                BigDecimal max_sc = asBigDecimal(hits.getNumberValue("max_score"));
+                Double max_score = max_sc.doubleValue();
+
+            }
+
             //Double score_barrier = max_score/variance;
             
             //JSONArray hits_arr = (JSONArray)hits.getJSONArray("hits");
@@ -873,7 +877,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             for (int i = 0; i < hiters.size(); i++)
             {
                 JsonNode hit = (JsonNode)hiters.get(i);
-                BigDecimal id = asBigDecimal(hit.getNode("_source").getNumberValue("research_ID"));
+                BigDecimal id = asBigDecimal(hit.getNode("_id").getStringValue());
                 long resid = id.longValue();
                 
                 //BigDecimal sc = asBigDecimal(hit.getNumberValue("_score"));
@@ -934,20 +938,28 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         JsonArrayNodeBuilder arr_contains = anArrayBuilder();
         buildTextPhraseVarTextPart(arr_contains, origin_var);
         buildTextPhraseVarAlternativesTextPart(arr_contains, origin_var);
-        
-        if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("")){
+
+        JsonObjectNodeBuilder obj_bool_contains = null;
+         if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("")){
             ArrayList<Long> ids = prefilterVarsOnResearchMetadata(params.getResearch_filter());
-            buildTextVarIdsFilter(arr_contains, ids);
+            JsonArrayNodeBuilder arr_must_ids = anArrayBuilder();
+            buildTextVarIdsFilter(arr_must_ids, ids);
+             obj_bool_contains = anObjectBuilder()
+                     .withField("bool", anObjectBuilder()
+                             .withField("must", arr_must_ids)
+                             .withField("should", arr_contains)
+                     );
+        }else{
+             obj_bool_contains = anObjectBuilder()
+                     .withField("bool", anObjectBuilder()
+                             .withField("should", arr_contains)
+                     );
         }
         
         //int index_c=0,index_c2=0,index_c3=0;
         
         
-        JsonObjectNodeBuilder obj_bool_contains = anObjectBuilder()
-                .withField("bool", anObjectBuilder()
-                    .withField("should", arr_contains)
-                );
-        
+
         //JSONObject obj_bool_contains = new JSONObject();
         //JsonObjectNodeBuilder obj_contains = anObjectBuilder();
         
@@ -987,7 +999,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             Double max_score = 0.0;
             Integer tot = totalRoyalties.intValue();
             if(tot > 0){
-                BigDecimal max_sc = asBigDecimal(hits.getNumberValue());
+                BigDecimal max_sc = asBigDecimal(hits.getNullableNumberValue("max_score"));
                 max_score = max_sc.doubleValue();
             }
             //String st = hits.getNullableNumberValue("max_score");
