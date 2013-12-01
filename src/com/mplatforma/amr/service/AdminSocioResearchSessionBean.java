@@ -940,7 +940,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         buildTextPhraseVarAlternativesTextPart(arr_contains, origin_var);
 
         JsonObjectNodeBuilder obj_bool_contains = null;
-         if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("")){
+         if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("") && !params.getResearch_filter().equals("{\"text\":{\"_all\":\"*\"}}") ){
             ArrayList<Long> ids = prefilterVarsOnResearchMetadata(params.getResearch_filter());
             JsonArrayNodeBuilder arr_must_ids = anArrayBuilder();
             buildTextVarIdsFilter(arr_must_ids, ids);
