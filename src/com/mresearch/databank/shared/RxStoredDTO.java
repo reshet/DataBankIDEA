@@ -9,14 +9,15 @@ public class RxStoredDTO implements Serializable{
 	private long id;
 	private String name;
 	private String desc;
-        private long size;
-	public RxStoredDTO()
-	{}
+    private long size;
+	public RxStoredDTO(){
+
+    }
 	public RxStoredDTO(String name,String desc,long size)
 	{
 		this.name = name;
-                this.desc = desc;
-                this.size = size;
+        this.desc = desc;
+        this.size = size;
 	}
 
     /**

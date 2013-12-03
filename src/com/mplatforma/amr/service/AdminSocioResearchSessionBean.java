@@ -838,21 +838,21 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         return ids;
      }
      private ArrayList<Long> doParseResearchMetaFilterSearchResult(String result)
-     {  
+     {
          ArrayList<Long> var_ids = new ArrayList<Long>();
          ArrayList<Long> research_ids = new ArrayList<Long>();
-         
-        
+
+
         try {
             JsonRootNode res = JDOM_PARSER.parse(result);
             JsonNode hits = res.getNode("hits");
             List<JsonNode> hiters = hits.getArrayNode("hits");
-            
+
             //JSONObject res = JSONObject.fromObject(result);
            // JSONObject res = (JSONObject)JSONParser.parse(result);
             //JSONObject hits = (JSONObject)res.get("hits");
             //JSONObject total = hits.get("total");
-            
+
             BigDecimal totalRoyalties = asBigDecimal(hits.getNumberValue("total"));
             Integer tot = totalRoyalties.intValue();
 
@@ -864,7 +864,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             }
 
             //Double score_barrier = max_score/variance;
-            
+
             //JSONArray hits_arr = (JSONArray)hits.getJSONArray("hits");
            // if(hiters.isEmpty())
            // {
@@ -872,23 +872,23 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
                         //display.getCenterPanel().add(new HTML("<H2>По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска</H2>"));
                     //return;
            // }
-            
+
             Set<Long> ids_no_clones = new TreeSet<Long>();
             for (int i = 0; i < hiters.size(); i++)
             {
                 JsonNode hit = (JsonNode)hiters.get(i);
                 BigDecimal id = asBigDecimal(hit.getNode("_id").getStringValue());
                 long resid = id.longValue();
-                
+
                 //BigDecimal sc = asBigDecimal(hit.getNumberValue("_score"));
                 //Double score = sc.doubleValue();
                 ids_no_clones.add(resid);
             }
-            
+
             for(Long id:ids_no_clones){
                 research_ids.add(id);
             }
-            
+
         } catch (InvalidSyntaxException ex) {
             Logger.getLogger(AdminSocioResearchSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -898,28 +898,28 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
                 var_ids.add(varid);
             }
         }
-        
+
         return var_ids;
      }
      private String constructSearchLikewiseQuery(VarDTO_Detailed origin_var, ComparativeSearchParamsDTO params)
      {
         //here we compose first likewise search query
          // simplest form - search for question
-         
-         
+
+
          //for(String st:sublabels)
          //{
          //   morphSearchString(st);
          //}
          //ArrayList<String> sublabels = morphSearchString(question_label);
-         
+
          //here filter vars by research metadata
-         
-         
+
+
          String query = "";
-        
-        
-        
+
+
+
         //JSONObject obj_bool = new JSONObject();
         //JSONObject obj_must = new JSONObject();
         //JSONArray arr_must = new JSONArray();
@@ -932,15 +932,15 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 //                .withElement(aStringBuilder("Superman"))
 //                .withElement(aStringBuilder("Agadoo"))
 //        );
-        
-       
-        
+
+
+
         JsonArrayNodeBuilder arr_contains = anArrayBuilder();
         buildTextPhraseVarTextPart(arr_contains, origin_var);
         buildTextPhraseVarAlternativesTextPart(arr_contains, origin_var);
 
         JsonObjectNodeBuilder obj_bool_contains = null;
-         if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("") && !params.getResearch_filter().equals("{\"text\":{\"_all\":\"*\"}}") ){
+         if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("")){
             ArrayList<Long> ids = prefilterVarsOnResearchMetadata(params.getResearch_filter());
             JsonArrayNodeBuilder arr_must_ids = anArrayBuilder();
             buildTextVarIdsFilter(arr_must_ids, ids);
@@ -955,23 +955,23 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
                              .withField("should", arr_contains)
                      );
         }
-        
+
         //int index_c=0,index_c2=0,index_c3=0;
-        
-        
+
+
 
         //JSONObject obj_bool_contains = new JSONObject();
         //JsonObjectNodeBuilder obj_contains = anObjectBuilder();
-        
 
-      
+
+
         //obj_contains_too.put("should", arr_contains_too);
         //obj_bool_contains_too.put("bool", obj_contains_too);
 
-       
+
         //if(arr_contains.size()>0)arr_must.set(0, obj_bool_contains);
         //if(arr_contains_too.size()>0)arr_must.set(1, obj_bool_contains_too);
-       
+
         //obj_must.put("must", arr_must);
         //obj_bool.put("bool", obj_must);
 //	      String quer = obj_bool.toString();
@@ -980,21 +980,21 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
          query = JSON_FORMATTER.format(json);
          return query;
      }
-     
+
      private ArrayList<Long> doParseLikewiseSearchResult(VarDTO_Detailed origin_var, ComparativeSearchParamsDTO params,String result,double variance)
-     {  
+     {
          ArrayList<Long> var_ids = new ArrayList<Long>();
-        
+
         try {
             JsonRootNode res = JDOM_PARSER.parse(result);
             JsonNode hits = res.getNode("hits");
             List<JsonNode> hiters = hits.getArrayNode("hits");
-            
+
             //JSONObject res = JSONObject.fromObject(result);
            // JSONObject res = (JSONObject)JSONParser.parse(result);
             //JSONObject hits = (JSONObject)res.get("hits");
             //JSONObject total = hits.get("total");
-            
+
             BigDecimal totalRoyalties = asBigDecimal(hits.getNumberValue("total"));
             Double max_score = 0.0;
             Integer tot = totalRoyalties.intValue();

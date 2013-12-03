@@ -6,32 +6,41 @@ package com.mplatforma.amr.entity;
 
 import com.mresearch.databank.shared.RxStoredDTO;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  *
  * @author reshet
  */
 @Entity
+/*@NamedQueries({
+        @NamedQuery(name = "Blob.getAllContents", query = "SELECT x.id,x.contents FROM RxBlobStored x"),
+})*/
 public class RxBlobStored implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    //@Transient
     private byte[] contents;
     private String filename;
     private long filesize;
     private String description;
     
     public RxBlobStored(){}
-    public RxBlobStored(byte[] contents,String name,String desc)
+   /* public RxBlobStored(Long id,byte[] contents)
     {
         this.contents = contents;
-        this.filename = name;
+        //this.filename = name;
         this.filesize = contents.length;
+        //this.description = desc;
+        this.id = id;
+    }*/
+    public RxBlobStored(long length,String name,String desc)
+    {
+        //this.contents = contents;
+        this.filename = name;
+        this.filesize = length;
         this.description = desc;
     }
     public RxStoredDTO toDTO()
