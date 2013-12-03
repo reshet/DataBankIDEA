@@ -1,13 +1,12 @@
 package com.mresearch.databank.server;
 
+import com.mplatforma.amr.entity.RxBlobStored;
+import com.mplatforma.amr.service.AdminSocioResearchMDB;
 import gwtupload.server.UploadAction;
 import gwtupload.server.UploadServlet;
 import gwtupload.server.exceptions.UploadActionException;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -33,8 +32,7 @@ import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
 public class RxUploadServlet extends UploadAction {
 
 	
-	@EJB
-    private RxStorageBeanRemote eao;
+	@EJB private RxStorageBeanRemote eao;
 	@EJB private AdminSocioResearchBeanRemote eao2;
 	/*static
 	{
@@ -101,7 +99,8 @@ public class RxUploadServlet extends UploadAction {
 	          String name =item.getName(); 
 	          String ext = name.substring(name.lastIndexOf(".")+1,name.length());
 	          int spss_extracted = 0;
-	          if(ext.equals("zip"))
+
+	          /*if(ext.equals("zip"))
 	          {
 	        	  System.out.println("HEREJO");
 	        	  receivedContentTypes.put(item.getFieldName(), item.getContentType());
@@ -118,7 +117,6 @@ public class RxUploadServlet extends UploadAction {
 	              
 	              while (zipentry != null) 
 	              { 
-	                  //for each entry to be extracted
 	                  String entryName = zipentry.getName();
 	                  System.out.println(entryName);
 		        	  String sav_ext = entryName.substring(entryName.length()-3,entryName.length());
@@ -138,7 +136,7 @@ public class RxUploadServlet extends UploadAction {
 		                  }
 		                  System.out.println("Here done reading zipped spss");
 		                  System.out.println(arr_file.length);
-		                  long id = eao.storeFile(arr_file, entryName, zipentry.getComment());
+		                  long id = eao.storeFile(zipentry.getSize(), entryName, zipentry.getComment());
 		                  eao2.parseSPSS(id, zipentry.getSize());
 		                  spss_extracted++;
 		 		      }
@@ -150,15 +148,45 @@ public class RxUploadServlet extends UploadAction {
 	              
 	        	  response += "<ZipUploaded>" +spss_extracted+"</ZipUploaded>";
 	          }else
-	          {
+	          */
+              //{
 	        	  receivedContentTypes.put(item.getFieldName(), item.getContentType());
-		          byte [] arr = new byte[(int) item.getSize()];
-		          item.getInputStream().read(arr);
-		          long id = eao.storeFile(arr, item.getName(), item.getContentType());
+		          //byte [] arr = new byte[(int) item.getSize()];
+
+                  FileOutputStream outputStream = null;
+                  long id = eao.storeFile(item.getSize(), item.getName(), item.getContentType());
+
+                  try
+                  {
+                      //inputStream = new FileInputStream(path);
+                      outputStream = getSaveFileStream(id);
+
+                      byte[] buffer = new byte[4096];
+                      int bytesRead = 0;
+                      InputStream input =  item.getInputStream();
+
+                      do
+                      {
+                          bytesRead = input.read(buffer, 0, buffer.length);
+                          outputStream.write(buffer, 0, bytesRead);
+                      }
+                      while (bytesRead == buffer.length);
+
+                      outputStream.flush();
+                     // item.getInputStream().close();
+                  }
+                  finally
+                  {
+                      if(outputStream != null)
+                          outputStream.close();
+                  }
+
+		          //item.getInputStream().read(arr);
+
 		          receivedFileIds.put(item.getFieldName(),id);
 			      /// Send a customized message to the client.
 		          response += "<RxStoreId>" + id+"</RxStoreId>";
-		       }
+		       //}
 	        //  receivedFiles.put(item.getFieldName(), file);
 	          //response += "File saved as " + file.getAbsolutePath();
 	          	     
@@ -207,4 +235,19 @@ public class RxUploadServlet extends UploadAction {
 //	      file.delete();
 //	    }
 	  }
+
+
+    private FileOutputStream getSaveFileStream(long idd) {
+        File content = new File("/home/reshet/databank/"+ AdminSocioResearchMDB.INDEX_NAME+"/"+idd);
+        FileOutputStream fos = null;
+        try {
+            content.createNewFile();
+            fos = new FileOutputStream(content);
+          } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return fos;
+
+    }
 	}
