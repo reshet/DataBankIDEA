@@ -60,7 +60,7 @@ public class RxStorageSessionBean implements RxStorageBeanRemote{
         for(Long bl:lst){
             long id = bl;
             RxBlobStored blob = em.find(RxBlobStored.class,id);
-            File content = new File("/home/reshet/databank/"+AdminSocioResearchMDB.INDEX_NAME+"/"+id);
+            File content = new File(AdminSocioResearchMDB.STORAGE_VAULT+id);
             try {
                 content.createNewFile();
                 FileOutputStream fos = new FileOutputStream(content);
@@ -82,7 +82,7 @@ public class RxStorageSessionBean implements RxStorageBeanRemote{
         byte [] store = stored.getContents();
         if(store != null) return store;
         byte [] arr = new byte[0];
-        File content = new File("/home/reshet/databank/"+AdminSocioResearchMDB.INDEX_NAME+"/"+id);
+        File content = new File(AdminSocioResearchMDB.STORAGE_VAULT+id);
         try {
             arr = new byte[(int)content.length()];
             FileInputStream fis = new FileInputStream(content);
@@ -110,7 +110,7 @@ public class RxStorageSessionBean implements RxStorageBeanRemote{
          {
             RxBlobStored stored = em.find(RxBlobStored.class, file_id);
             em.remove(stored);
-             File content = new File("/home/reshet/databank/"+AdminSocioResearchMDB.INDEX_NAME+"/"+file_id);
+             File content = new File(AdminSocioResearchMDB.STORAGE_VAULT+file_id);
              content.delete();
              return true;
          }

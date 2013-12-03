@@ -1,50 +1,49 @@
-package org.opendatafoundation.data.spss;
+package org.opendatafoundation.data.spss.original;
 
 /*
  * Author(s): Pascal Heus (pheus@opendatafoundation.org)
- *
- * This product has been developed with the financial and
- * technical support of the UK Data Archive Data Exchange Tools
- * project (http://www.data-archive.ac.uk/dext/) and the
- * Open Data Foundation (http://www.opendatafoundation.org)
- *
- * Copyright 2007 University of Essex (http://www.esds.ac.uk)
- *
- * This program is free software; you can redistribute it and/or modify it
+ *  
+ * This product has been developed with the financial and 
+ * technical support of the UK Data Archive Data Exchange Tools 
+ * project (http://www.data-archive.ac.uk/dext/) and the 
+ * Open Data Foundation (http://www.opendatafoundation.org) 
+ * 
+ * Copyright 2007 University of Essex (http://www.esds.ac.uk) 
+ * 
+ * This program is free software; you can redistribute it and/or modify it 
  * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * the Free Software Foundation; either version 2.1 of the License, or 
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * 
+ * This program is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ *  
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this library; if not, write to the 
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
  * Boston, MA  02110-1301  USA
- * The full text of the license is also available on the Internet at
+ * The full text of the license is also available on the Internet at 
  * http://www.gnu.org/copyleft/lesser.html
- *
+ * 
  */
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * SPSS Record Type 3 - Value labels
- *
+ * 
  * @author Pascal Heus (pheus@opendatafoundation.org)
  */
 public class SPSSRecordType3 extends SPSSAbstractRecordType {
     int     recordTypeCode;
     int     numberOfLabels;
     Map<byte[],String> valueLabel = new LinkedHashMap<byte[],String>();
-
+    
     public void read(SPSSFile is) throws IOException, SPSSFileException {
         // position in file
         fileLocation = is.getFilePointer();
@@ -61,8 +60,8 @@ public class SPSSRecordType3 extends SPSSAbstractRecordType {
             // read the label value
             byte[] value = new byte[8];
             is.read(value);
-
-            if(is.isBigEndian) {
+            
+            if(is.isBigEndian) { 
             	// flip value
             	// TODO: don't do this for string variables (but we don't know the type here....)
             	for(int j=0; j<3; j++) {
@@ -72,7 +71,7 @@ public class SPSSRecordType3 extends SPSSAbstractRecordType {
             		value[7-j]=tmp;
             	}
             }
-
+            
             // the following byte in an unsigned integer (max value is 60)
             int labelLength = is.read();
 
@@ -98,40 +97,8 @@ public class SPSSRecordType3 extends SPSSAbstractRecordType {
            Map.Entry entry = (Map.Entry)iter.next();
            byte[] value = (byte[]) entry.getKey();
            String label = (String) entry.getValue();
-           str += "\n "+SPSSUtils.byte8ToDouble(value)+"="+label;
+           str += "\n "+ SPSSUtils.byte8ToDouble(value)+"="+label;
         }
         return(str);
-    }
-    public ArrayList<Double> getVLabelCodes()
-    {
-        ArrayList<Double> codes = new ArrayList<Double>();
-        @SuppressWarnings("rawtypes")
-        Iterator iter = valueLabel.entrySet().iterator();
-        while(iter.hasNext()) {
-            @SuppressWarnings("rawtypes")
-            Map.Entry entry = (Map.Entry)iter.next();
-            byte[] value = (byte[]) entry.getKey();
-            //String label = (String) entry.getValue();
-            Double key = org.opendatafoundation.data.mod.SPSSUtils.byte8ToDouble(value);
-            codes.add(key);
-        }
-        return codes;
-    }
-    // IS IT CONSISTENT OR SAFE????????????
-    public ArrayList<String> getVLabelValues()
-    {
-        ArrayList<String> values = new ArrayList<String>();
-        @SuppressWarnings("rawtypes")
-        Iterator iter = valueLabel.entrySet().iterator();
-        while(iter.hasNext()) {
-            @SuppressWarnings("rawtypes")
-            Map.Entry entry = (Map.Entry)iter.next();
-            @SuppressWarnings("unused")
-            byte[] value = (byte[]) entry.getKey();
-            String label = (String) entry.getValue();
-            //Double key = SPSSUtils.byte8ToDouble(value);
-            values.add(label);
-        }
-        return values;
     }
 }

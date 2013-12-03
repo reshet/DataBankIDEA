@@ -1,4 +1,4 @@
-package org.opendatafoundation.data.spss;
+package org.opendatafoundation.data.mod3;
 
 /*
  * Author(s): Pascal Heus (pheus@opendatafoundation.org)
@@ -29,16 +29,17 @@ package org.opendatafoundation.data.spss;
  * 
  */
 
+import org.opendatafoundation.data.FileFormatInfo;
+import org.opendatafoundation.data.Utils;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.opendatafoundation.data.FileFormatInfo;
-import org.opendatafoundation.data.Utils;
 //import org.opendatafoundation.data.spss.SPSSRecordType3;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Abstract base class for SPSS variable
@@ -58,7 +59,7 @@ public abstract class SPSSVariable {
     static enum DDI3RepresentationType {TEXT,NUMERIC,DATETIME}; //< The SPSS variable type enumeration
 
     int variableNumber=0;        //< The variable number in the dataset (1-based index, 0 means not set)
-    String variableName="";      //< The full variable name set from SPSSRecordType2 or SPSSRecordType7Subtype13 
+    String variableName="";      //< The full variable name set from SPSSRecordType2 or SPSSRecordType7Subtype13
     String variableShortName=""; //< The short variable name (8 characters max) set from SPSSRecordType2 or SPSSRecordType7Subtype13
 
     int measure=-1;              //< 1=nominal, 2=ordinal, 3=scale (copied from record type 7 subtype 11) */
@@ -78,7 +79,7 @@ public abstract class SPSSVariable {
     }
 
     /**
-     * Adds a category to the variable  
+     * Adds a category to the variable
      */
     public abstract SPSSVariableCategory addCategory(byte[] byteValue, String label) throws SPSSFileException;
 
@@ -101,9 +102,9 @@ public abstract class SPSSVariable {
     public abstract SPSSVariableCategory getCategory(byte[] byteValue) throws SPSSFileException;
 
     /**
-     * Generates a DDI 2 <var> element for this variable based on the SPSS data format. 
-     * @param doc  the document wrapping this element  
-     * @param offset the variable offset for starting position in the file   
+     * Generates a DDI 2 <var> element for this variable based on the SPSS data format.
+     * @param doc  the document wrapping this element
+     * @param offset the variable offset for starting position in the file
      * @return the genarated Element
      * @throws org.opendatafoundation.data.mod.SPSSFileException
      */
@@ -116,7 +117,7 @@ public abstract class SPSSVariable {
      *
      * @param doc the document wrapping this element
      * @param dataFormat the SPSSFile.DataFormat this DDI is being generated for
-     * @param offset the variable offset for starting position in the file   
+     * @param offset the variable offset for starting position in the file
      *
      * @return the generated Element
      * @throws org.opendatafoundation.data.mod.SPSSFileException
@@ -129,7 +130,7 @@ public abstract class SPSSVariable {
         if(this.getDecimals()>0) var.setAttribute("dcml", ""+this.getDecimals());
 
         // interval
-        if(this.type==VariableType.NUMERIC) {
+        if(this.type== VariableType.NUMERIC) {
             switch(this.measure) {
                 case 1: // nominal
                 case 2: // ordinal
@@ -181,7 +182,7 @@ public abstract class SPSSVariable {
         // format
         elem = (Element) var.appendChild(doc.createElementNS(SPSSFile.DDI2_NAMESPACE,"varFormat"));
         // format type
-        if(this.type==VariableType.NUMERIC) elem.setAttribute("type","numeric");
+        if(this.type== VariableType.NUMERIC) elem.setAttribute("type","numeric");
         else elem.setAttribute("type","character");
         // format category
         // TODO: add format category
@@ -196,7 +197,7 @@ public abstract class SPSSVariable {
     /**
      * Returns a default Category Scheme ID based on the file unique identifier.
      *
-     * @return a String containing the r:ID 
+     * @return a String containing the r:ID
      */
     public String getDDI3DefaultCategorySchemeID() {
         return(file.getUniqueID()+"_"+file.categorySchemeIDSuffix+"_V"+this.variableNumber);
@@ -205,7 +206,7 @@ public abstract class SPSSVariable {
     /**
      * Returns a default Code Scheme ID based on the file unique identifier.
      *
-     * @return a String containing the r:ID 
+     * @return a String containing the r:ID
      */
     public String getDDI3DefaultCodeSchemeID() {
         return(file.getUniqueID()+"_"+file.codeSchemeIDSuffix+"_V"+this.variableNumber);
@@ -517,7 +518,7 @@ public abstract class SPSSVariable {
             }
             else {
                 String dataType = getDDI3DataType();
-                if(getDDI3RepresentationType()==DDI3RepresentationType.NUMERIC) {
+                if(getDDI3RepresentationType()== DDI3RepresentationType.NUMERIC) {
                     // numeric representation
                     elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"NumericRepresentation"));
                     if(dataType!=null) elem.setAttribute("type", dataType);
@@ -525,13 +526,13 @@ public abstract class SPSSVariable {
                     // TODO: DDI3: add @format attribute to schema
                     // elem.setAttribute("format", this.getSPSSFormat());
                 }
-                if(getDDI3RepresentationType()==DDI3RepresentationType.DATETIME) {
+                if(getDDI3RepresentationType()== DDI3RepresentationType.DATETIME) {
                     // datetime representation
                     elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"DateTimeRepresentation"));
                     if(dataType!=null) elem.setAttribute("type", dataType);
                     elem.setAttribute("format", this.getSPSSFormat());
                 }
-                if(getDDI3RepresentationType()==DDI3RepresentationType.TEXT) {
+                if(getDDI3RepresentationType()== DDI3RepresentationType.TEXT) {
                     // string representation
                     elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"TextRepresentation"));
                     elem.setAttribute("maxLength", ""+this.getLength());
@@ -554,7 +555,7 @@ public abstract class SPSSVariable {
             case 2:
             case 26:
             case 27:
-                type=DDI3RepresentationType.TEXT;
+                type= DDI3RepresentationType.TEXT;
                 break;
             case 3:
             case 4:
@@ -567,7 +568,7 @@ public abstract class SPSSVariable {
             case 36:
             case 37:
             case 17:
-                type=DDI3RepresentationType.NUMERIC;
+                type= DDI3RepresentationType.NUMERIC;
                 break;
             case 20:
             case 23:
@@ -580,7 +581,7 @@ public abstract class SPSSVariable {
             case 25:
             case 38:
             case 39:
-                type=DDI3RepresentationType.DATETIME;
+                type= DDI3RepresentationType.DATETIME;
                 break;
         }
         return(type);

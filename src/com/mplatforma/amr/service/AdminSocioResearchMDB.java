@@ -34,11 +34,13 @@ import org.elasticsearch.action.bulk.BulkResponse;
 //import org.opendatafoundation.data.FileFormatInfo;
 //import org.opendatafoundation.data.FileFormatInfo.Format;
 
-import org.opendatafoundation.data.mod.SPSSFile;
-import org.opendatafoundation.data.mod.SPSSFileException;
-import org.opendatafoundation.data.mod.SPSSNumericVariable;
-import org.opendatafoundation.data.mod.SPSSStringVariable;
-import org.opendatafoundation.data.mod.SPSSVariable;
+//import org.opendatafoundation.data.mod.SPSSFile;
+//import org.opendatafoundation.data.mod.SPSSFileException;
+//import org.opendatafoundation.data.mod.SPSSNumericVariable;
+//import org.opendatafoundation.data.mod.SPSSStringVariable;
+//import org.opendatafoundation.data.mod.SPSSVariable;
+
+import org.opendatafoundation.data.mod3.*;
 
 import org.w3c.dom.Document;
 import org.elasticsearch.action.index.IndexResponse;
@@ -85,6 +87,7 @@ public class AdminSocioResearchMDB implements MessageListener {
     @EJB
     private RxStorageBeanRemote store;
     public static String INDEX_NAME = "databankalliance";
+    public static String STORAGE_VAULT = "/home/reshet/databank/"+INDEX_NAME+"/";
     /*@Resource(name="indexname")
     public  String INDEX_NAME;
 */
@@ -566,21 +569,22 @@ public class AdminSocioResearchMDB implements MessageListener {
     
           
             Long socioresearch_key = null;
-            byte[] arr = new byte[(int) length];
+            //byte[] arr = new byte[(int) length];
 
 
 
 
 
             RxStoredDTO dto = store.getFileInfo(blobkey);
-            arr = store.getFileContents(blobkey);
+            File spssfile = new File(AdminSocioResearchMDB.STORAGE_VAULT+blobkey);
+            //arr = store.getFileContents(blobkey);
 
 
             //byte [] arr2 = makeSyntax(arr);
             //here make syntax
 
 
-            byte[] buf = new byte[4096];
+/*            byte[] buf = new byte[4096];
             UniversalDetector detector = new UniversalDetector(null);
 //
             ByteArrayInputStream fis = new ByteArrayInputStream(arr);
@@ -590,14 +594,14 @@ public class AdminSocioResearchMDB implements MessageListener {
                 detector.handleData(buf, 0, nread);
             }
             // (3)
-            detector.dataEnd();
+            detector.dataEnd();*/
 
             // (4)
-            String encoding = detector.getDetectedCharset();
+            //String encoding = detector.getDetectedCharset();
             boolean isCP1251 = false;
             boolean isKOI8_R = false;
 
-            if (encoding != null) {
+            /*if (encoding != null) {
                 System.out.println("Detected encoding = " + encoding);
                 if (encoding.equals("WINDOWS-1251")) {
                     isCP1251 = true;
@@ -607,9 +611,9 @@ public class AdminSocioResearchMDB implements MessageListener {
                 }
             } else {
                 System.out.println("No encoding detected.");
-            }
+            }*/
 
-            String fileName = "/home/reshet/spssfiles/" + dto.getName();
+            //String fileName = "/home/reshet/spssfiles/" + dto.getName();
 
 //            BufferedOutputStream bs = null;
 //            File file = new File(fileName);
@@ -627,7 +631,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 //            if (bs != null) try { bs.close(); } catch (Exception e) {}
 //            
 
-            SPSSFile s = new SPSSFile(arr);
+            SPSSFile s = new SPSSFile(spssfile);
             String st = s.getDDI3DefaultPhysicalDataProductID(new FileFormatInfo(Format.SPSS));
             String ans = "";
             String answer = "";
@@ -644,21 +648,21 @@ public class AdminSocioResearchMDB implements MessageListener {
 
 
             try {
-                s.setIsCP1251(isCP1251);
-                s.setIsKOI8_R(isKOI8_R);
+                //s.setIsCP1251(isCP1251);
+               // s.setIsKOI8_R(isKOI8_R);
                 s.loadMetadata();
                 //        ans+=" meta_loaded";
-                s.setIsCP1251(false);
-                s.setIsKOI8_R(false);
+                //s.setIsCP1251(false);
+                //s.setIsKOI8_R(false);
                 
                 s.loadData();
                 //        ans+=" data_loaded";
                 //org.w3c.dom.Document doc1 = s.getDDI3LogicalProduct();
-                Document doc2 = s.getDDI3PhysicalDataProduct(new FileFormatInfo(Format.SPSS));
+                //Document doc2 = s.getDDI3PhysicalDataProduct(new FileFormatInfo(Format.SPSS));
                 //        ans+=" doc created";
 
                 socioresearch_key = createEmptyResearch(dto.getName(), blobkey);
-                addSPSStoSocioResearch(socioresearch_key, s, blobkey, doc2, "");
+                addSPSStoSocioResearch(socioresearch_key, s, blobkey, "");
 
             } catch (SPSSFileException ex) {
                 Logger.getLogger(AdminSocioResearchMDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -691,7 +695,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         return research_id;
     }
 
-    private String addSPSStoSocioResearch(long socioresearch_id, SPSSFile spss, long spss_blobkey, Document doc, String ans) {
+    private String addSPSStoSocioResearch(long socioresearch_id, SPSSFile spss, long spss_blobkey, String ans) {
         String ans1 = "";
         ArrayList<Long> var_ids = new ArrayList<Long>();
         vars_waiting_indexing = new ArrayList<VarDTO_Detailed>(100);

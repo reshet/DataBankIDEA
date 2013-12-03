@@ -1,4 +1,4 @@
-package org.opendatafoundation.data.spss;
+package org.opendatafoundation.data.mod3;
 
 /*
  * Author(s): Pascal Heus (pheus@opendatafoundation.org)
