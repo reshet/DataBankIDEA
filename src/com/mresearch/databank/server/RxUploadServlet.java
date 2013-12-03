@@ -238,7 +238,7 @@ public class RxUploadServlet extends UploadAction {
 
 
     private FileOutputStream getSaveFileStream(long idd) {
-        File content = new File("/home/reshet/databank/"+ AdminSocioResearchMDB.INDEX_NAME+"/"+idd);
+        File content = new File(AdminSocioResearchMDB.STORAGE_VAULT+idd);
         FileOutputStream fos = null;
         try {
             content.createNewFile();

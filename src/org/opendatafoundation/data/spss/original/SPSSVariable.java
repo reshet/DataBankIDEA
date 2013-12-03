@@ -1,4 +1,4 @@
-package org.opendatafoundation.data.spss;
+package org.opendatafoundation.data.spss.original;
 
 /*
  * Author(s): Pascal Heus (pheus@opendatafoundation.org)
@@ -29,46 +29,44 @@ package org.opendatafoundation.data.spss;
  * 
  */
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.opendatafoundation.data.FileFormatInfo;
 import org.opendatafoundation.data.Utils;
-//import org.opendatafoundation.data.spss.SPSSRecordType3;
+import org.opendatafoundation.data.spss.*;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Abstract base class for SPSS variable
- *
+ * 
  * @author Pascal Heus (pheus@opendatafoundation.org)
  */
 public abstract class SPSSVariable {
-    SPSSFile file;             //< The SPSS file this variable belongs to
+    SPSSFile               file;             //< The SPSS file this variable belongs to
     public SPSSRecordType2 variableRecord;   //< The SPSS type 2 record describing this variable
     public SPSSRecordType3 valueLabelRecord; //< The optional SPSS type 3 record holding this variable value labels
-
-
-
+    
     static enum VariableType {NUMERIC,STRING}; //< The SPSS variable type enumeration
     VariableType type; /** The type of variable */
 
     static enum DDI3RepresentationType {TEXT,NUMERIC,DATETIME}; //< The SPSS variable type enumeration
-
+    
     int variableNumber=0;        //< The variable number in the dataset (1-based index, 0 means not set)
     String variableName="";      //< The full variable name set from SPSSRecordType2 or SPSSRecordType7Subtype13 
     String variableShortName=""; //< The short variable name (8 characters max) set from SPSSRecordType2 or SPSSRecordType7Subtype13
-
+    
     int measure=-1;              //< 1=nominal, 2=ordinal, 3=scale (copied from record type 7 subtype 11) */
     int displayWidth=-1;         //< display width (copied from record type 7 subtype 11) */
     int alignment=-1;            //< 0=left 1=right, 2=center (copied from record type 7 subtype 11) */
-
+    
 
     /** The map of categories. Note that the key is always a string, even for numeric variables */
     public Map<String,SPSSVariableCategory> categoryMap = new LinkedHashMap<String,SPSSVariableCategory>();
-
+    
     /**
      * Constructor
      * @param file the SPSSFile this variable belongs to
@@ -76,7 +74,7 @@ public abstract class SPSSVariable {
     public SPSSVariable(SPSSFile file) {
         this.file = file;
     }
-
+    
     /**
      * Adds a category to the variable  
      */
@@ -86,12 +84,12 @@ public abstract class SPSSVariable {
      * @return A string containing the kind of measure
      */
     public String getAlignmentLabel() {
-        String label="";
-        switch(this.alignment) {
-            case 0: label="Left"; break;
-            case 1: label="Center"; break;
-            case 2: label="Right"; break;
-        }
+    	String label="";
+    	switch(this.alignment) {
+    	case 0: label="Left"; break;
+    	case 1: label="Center"; break;
+    	case 2: label="Right"; break;
+    	}
         return(label);
     }
 
@@ -105,7 +103,7 @@ public abstract class SPSSVariable {
      * @param doc  the document wrapping this element  
      * @param offset the variable offset for starting position in the file   
      * @return the genarated Element
-     * @throws org.opendatafoundation.data.mod.SPSSFileException
+     * @throws org.opendatafoundation.data.spss.SPSSFileException
      */
     public Element getDDI2(Document doc, int offset) throws SPSSFileException {
         return(getDDI2(doc,new FileFormatInfo(), offset));
@@ -116,10 +114,10 @@ public abstract class SPSSVariable {
      *
      * @param doc the document wrapping this element
      * @param dataFormat the SPSSFile.DataFormat this DDI is being generated for
-     * @param offset the variable offset for starting position in the file   
+     * @param offset the variable offset for starting position in the file
      *
      * @return the generated Element
-     * @throws org.opendatafoundation.data.mod.SPSSFileException
+     * @throws org.opendatafoundation.data.spss.SPSSFileException
      */
     public Element getDDI2(Document doc, FileFormatInfo dataFormat, int offset) throws SPSSFileException {
         Element elem;
@@ -129,15 +127,15 @@ public abstract class SPSSVariable {
         if(this.getDecimals()>0) var.setAttribute("dcml", ""+this.getDecimals());
 
         // interval
-        if(this.type==VariableType.NUMERIC) {
+        if(this.type== VariableType.NUMERIC) {
             switch(this.measure) {
-                case 1: // nominal
-                case 2: // ordinal
-                    var.setAttribute("intrvl", "discrete");
-                    break;
-                case 3: //scale
-                    var.setAttribute("intrvl", "contin");
-                    break;
+            case 1: // nominal
+            case 2: // ordinal
+                var.setAttribute("intrvl", "discrete");
+                break;
+            case 3: //scale
+                var.setAttribute("intrvl", "contin");
+                break;
             }
         }
 
@@ -161,7 +159,6 @@ public abstract class SPSSVariable {
         // categories
         if(!this.categoryMap.isEmpty()) {
             // iterate over categories
-            @SuppressWarnings("rawtypes")
             Iterator catIterator = categoryMap.keySet().iterator();
             while(catIterator.hasNext()) {
                 String key = (String) catIterator.next();
@@ -181,7 +178,7 @@ public abstract class SPSSVariable {
         // format
         elem = (Element) var.appendChild(doc.createElementNS(SPSSFile.DDI2_NAMESPACE,"varFormat"));
         // format type
-        if(this.type==VariableType.NUMERIC) elem.setAttribute("type","numeric");
+        if(this.type== VariableType.NUMERIC) elem.setAttribute("type","numeric");
         else elem.setAttribute("type","character");
         // format category
         // TODO: add format category
@@ -196,7 +193,7 @@ public abstract class SPSSVariable {
     /**
      * Returns a default Category Scheme ID based on the file unique identifier.
      *
-     * @return a String containing the r:ID 
+     * @return a String containing the r:ID
      */
     public String getDDI3DefaultCategorySchemeID() {
         return(file.getUniqueID()+"_"+file.categorySchemeIDSuffix+"_V"+this.variableNumber);
@@ -205,7 +202,7 @@ public abstract class SPSSVariable {
     /**
      * Returns a default Code Scheme ID based on the file unique identifier.
      *
-     * @return a String containing the r:ID 
+     * @return a String containing the r:ID
      */
     public String getDDI3DefaultCodeSchemeID() {
         return(file.getUniqueID()+"_"+file.codeSchemeIDSuffix+"_V"+this.variableNumber);
@@ -234,7 +231,7 @@ public abstract class SPSSVariable {
 
         // only for variables with a value label set
         if(!this.categoryMap.isEmpty()) {
-            // CategoryScheme
+        	// CategoryScheme
             scheme = doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"CategoryScheme");
             if(categorySchemeID==null) categorySchemeID = getDDI3DefaultCategorySchemeID();
             Utils.setDDIMaintainableId(scheme,categorySchemeID);
@@ -242,7 +239,6 @@ public abstract class SPSSVariable {
             // iterate over categories
             int categoryNumber = 0;
             //Iterator catIterator = valueLabelRecord.valueLabel.keySet().iterator();
-            @SuppressWarnings("rawtypes")
             Iterator catIterator = categoryMap.keySet().iterator();
 
             boolean missingCreated=false;
@@ -250,15 +246,15 @@ public abstract class SPSSVariable {
                 String key = (String) catIterator.next();
                 SPSSVariableCategory cat = categoryMap.get(key);
                 if(cat.isMissing && cat.label=="") {
-                    if(!missingCreated) {
-                        // add a category for missing values without label
-                        // category element
-                        Element category = (Element) scheme.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"Category"));
-                        Utils.setDDIVersionableId(category,"MISSING");
+                	if(!missingCreated) {
+	            		// add a category for missing values without label
+	                    // category element
+	                    Element category = (Element) scheme.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"Category"));
+	                    Utils.setDDIVersionableId(category,"MISSING");
 
-                        category.setAttribute("missing","true");
-                        missingCreated=true;
-                    }
+	                    category.setAttribute("missing","true");
+	                	missingCreated=true;
+                	}
                 }
                 else {
                     categoryNumber++;
@@ -282,7 +278,7 @@ public abstract class SPSSVariable {
      *
      * @param doc
      * @return a org.w3c.dom.Element containing the scheme
-     * @throws org.opendatafoundation.data.mod.SPSSFileException
+     * @throws org.opendatafoundation.data.spss.SPSSFileException
      * @throws org.w3c.dom.DOMException
      */
     public Element getDDI3CodeScheme(Document doc) throws DOMException, SPSSFileException {
@@ -296,7 +292,7 @@ public abstract class SPSSVariable {
      * @param categorySchemeID
      * @param codeSchemeID
      * @return
-     * @throws org.opendatafoundation.data.mod.SPSSFileException
+     * @throws org.opendatafoundation.data.spss.SPSSFileException
      * @throws org.w3c.dom.DOMException
      */
     private Element getDDI3CodeScheme(Document doc, String categorySchemeID, String codeSchemeID) throws DOMException, SPSSFileException {
@@ -316,7 +312,6 @@ public abstract class SPSSVariable {
             elem.setTextContent(categorySchemeID);
 
             // iterate over categories
-            @SuppressWarnings("rawtypes")
             Iterator catIterator = categoryMap.keySet().iterator();
             int categoryNumber = 0;
             while(catIterator.hasNext()) {
@@ -330,11 +325,11 @@ public abstract class SPSSVariable {
                 Element categoryReference = (Element) code.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"CategoryReference"));
                 elem = (Element) categoryReference.appendChild(doc.createElementNS(SPSSFile.DDI3_REUSABLE_NAMESPACE,"ID"));
                 if(cat.isMissing && cat.label=="") {
-                    elem.setTextContent("MISSING");
+                	elem.setTextContent("MISSING");
                 }
                 else {
                     categoryNumber++;
-                    elem.setTextContent(file.variableCategoryPrefix+"_"+categoryNumber);
+                	elem.setTextContent(file.variableCategoryPrefix+"_"+categoryNumber);
                 }
 
                 // value
@@ -363,7 +358,7 @@ public abstract class SPSSVariable {
      * @param dataFormat
      * @param offset
      * @return a org.w3c.dom.Element containing the data item
-     * @throws org.opendatafoundation.data.mod.SPSSFileException
+     * @throws org.opendatafoundation.data.spss.SPSSFileException
      * @throws org.w3c.dom.DOMException
      */
     public Element getDDI3DataItem(Document doc, FileFormatInfo dataFormat, int offset) throws DOMException, SPSSFileException {
@@ -399,7 +394,7 @@ public abstract class SPSSVariable {
      *
      * @param doc
      * @return a org.w3c.dom.Element containing the proprietary data item
-     * @throws org.opendatafoundation.data.mod.SPSSFileException
+     * @throws org.opendatafoundation.data.spss.SPSSFileException
      * @throws org.w3c.dom.DOMException
      */
     public Element getDDI3ProprietaryDataItem(Document doc) throws DOMException, SPSSFileException {
@@ -433,12 +428,12 @@ public abstract class SPSSVariable {
             elem = (Element) proprietaryInfo.appendChild(doc.createElementNS(SPSSFile.DDI3_REUSABLE_NAMESPACE,"ProprietaryProperty"));
             elem.setAttribute("name", "MissingFormatCode");
             elem.setTextContent(""+variableRecord.missingValueFormatCode);
-            for(int i=0; i < Math.abs(variableRecord.missingValueFormatCode) ; i++) {
-                elem = (Element) proprietaryInfo.appendChild(doc.createElementNS(SPSSFile.DDI3_REUSABLE_NAMESPACE,"ProprietaryProperty"));
-                elem.setAttribute("name", "MissingValue" + i);
-                if(variableRecord.variableTypeCode==0) elem.setTextContent(""+SPSSUtils.byte8ToDouble(variableRecord.missingValue[i]));
-                else elem.setTextContent(SPSSUtils.byte8ToString(variableRecord.missingValue[i]));
-            }
+	        for(int i=0; i < Math.abs(variableRecord.missingValueFormatCode) ; i++) {
+	             elem = (Element) proprietaryInfo.appendChild(doc.createElementNS(SPSSFile.DDI3_REUSABLE_NAMESPACE,"ProprietaryProperty"));
+	             elem.setAttribute("name", "MissingValue" + i);
+	             if(variableRecord.variableTypeCode==0) elem.setTextContent(""+SPSSUtils.byte8ToDouble(variableRecord.missingValue[i]));
+	             else elem.setTextContent(SPSSUtils.byte8ToString(variableRecord.missingValue[i]));
+	        }
         }
         if(this.displayWidth != -1) {
             elem = (Element) proprietaryInfo.appendChild(doc.createElementNS(SPSSFile.DDI3_REUSABLE_NAMESPACE,"ProprietaryProperty"));
@@ -504,7 +499,7 @@ public abstract class SPSSVariable {
 
             // measurementUnit
             if(variableRecord.writeFormatType==4) {
-                representation.setAttribute("measurementUnit", "$");
+            	representation.setAttribute("measurementUnit", "$");
             }
 
             // code list representation
@@ -516,26 +511,26 @@ public abstract class SPSSVariable {
                 elem.setTextContent(codeSchemeReferenceID);
             }
             else {
-                String dataType = getDDI3DataType();
-                if(getDDI3RepresentationType()==DDI3RepresentationType.NUMERIC) {
-                    // numeric representation
-                    elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"NumericRepresentation"));
-                    if(dataType!=null) elem.setAttribute("type", dataType);
-                    elem.setAttribute("decimalPositions",""+this.getDecimals());
-                    // TODO: DDI3: add @format attribute to schema
-                    // elem.setAttribute("format", this.getSPSSFormat());
-                }
-                if(getDDI3RepresentationType()==DDI3RepresentationType.DATETIME) {
-                    // datetime representation
-                    elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"DateTimeRepresentation"));
-                    if(dataType!=null) elem.setAttribute("type", dataType);
-                    elem.setAttribute("format", this.getSPSSFormat());
-                }
-                if(getDDI3RepresentationType()==DDI3RepresentationType.TEXT) {
-                    // string representation
-                    elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"TextRepresentation"));
-                    elem.setAttribute("maxLength", ""+this.getLength());
-                }
+	            String dataType = getDDI3DataType();
+	            if(getDDI3RepresentationType()== DDI3RepresentationType.NUMERIC) {
+	                // numeric representation
+	                elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"NumericRepresentation"));
+	                if(dataType!=null) elem.setAttribute("type", dataType);
+	                elem.setAttribute("decimalPositions",""+this.getDecimals());
+	                // TODO: DDI3: add @format attribute to schema
+	                // elem.setAttribute("format", this.getSPSSFormat());
+	            }
+	            if(getDDI3RepresentationType()== DDI3RepresentationType.DATETIME) {
+	                // datetime representation
+	                elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"DateTimeRepresentation"));
+	                if(dataType!=null) elem.setAttribute("type", dataType);
+	                elem.setAttribute("format", this.getSPSSFormat());
+	            }
+	            if(getDDI3RepresentationType()== DDI3RepresentationType.TEXT) {
+	                // string representation
+	                elem = (Element) representation.appendChild(doc.createElementNS(SPSSFile.DDI3_LOGICAL_PRODUCT_NAMESPACE,"TextRepresentation"));
+	                elem.setAttribute("maxLength", ""+this.getLength());
+	            }
             }
         }
         return(var);
@@ -549,39 +544,39 @@ public abstract class SPSSVariable {
         DDI3RepresentationType type=null;
 
         switch(this.variableRecord.writeFormatType) {
-            case 0:
-            case 1:
-            case 2:
-            case 26:
-            case 27:
-                type=DDI3RepresentationType.TEXT;
-                break;
-            case 3:
-            case 4:
-            case 5:
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
-            case 37:
-            case 17:
-                type=DDI3RepresentationType.NUMERIC;
-                break;
-            case 20:
-            case 23:
-            case 24:
-            case 28:
-            case 29:
-            case 30:
-            case 21:
-            case 22:
-            case 25:
-            case 38:
-            case 39:
-                type=DDI3RepresentationType.DATETIME;
-                break;
+        case 0:
+        case 1:
+        case 2:
+        case 26:
+        case 27:
+            type= DDI3RepresentationType.TEXT;
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+        case 36:
+        case 37:
+        case 17:
+            type= DDI3RepresentationType.NUMERIC;
+            break;
+        case 20:
+        case 23:
+        case 24:
+        case 28:
+        case 29:
+        case 30:
+        case 21:
+        case 22:
+        case 25:
+        case 38:
+        case 39:
+            type= DDI3RepresentationType.DATETIME;
+            break;
         }
         return(type);
 
@@ -595,48 +590,48 @@ public abstract class SPSSVariable {
     public String getDDI3DataType() {
         String typeStr = null;
         switch(this.variableRecord.writeFormatType) {
-            case  0:
-            case  1:
-            case  2:
-            case 26:
-            case 27:
-                typeStr="String"; break;
-            case 3:
-            case 4:
-            case 5:
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
-            case 37:
-                if(this.getDecimals()>0) typeStr="Decimal";
-                else typeStr="BigInteger"; // TODO: check length and return smaller types like Integer, Short, etc.
-                break;
-            case 17:
-                typeStr="Double";
-                break;
-            case 20:
-            case 23:
-            case 24:
-            case 28:
-            case 29:
-            case 30:
-            case 38:
-            case 39:
-                typeStr="Date";
-                break;
-            case 21:
-                typeStr="Time";
-                break;
-            case 22:
-            case 25:
-                typeStr="DateTime";
-                break;
-            //TODO: 6,7,8,9,10,11,12,15,16
-            default:
-                typeStr=null;
+        case  0:
+        case  1:
+        case  2:
+        case 26:
+        case 27:
+            typeStr="String"; break;
+        case 3:
+        case 4:
+        case 5:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+        case 36:
+        case 37:
+            if(this.getDecimals()>0) typeStr="Decimal";
+            else typeStr="BigInteger"; // TODO: check length and return smaller types like Integer, Short, etc.
+            break;
+        case 17:
+            typeStr="Double";
+            break;
+        case 20:
+        case 23:
+        case 24:
+        case 28:
+        case 29:
+        case 30:
+        case 38:
+        case 39:
+            typeStr="Date";
+            break;
+        case 21:
+            typeStr="Time";
+            break;
+        case 22:
+        case 25:
+            typeStr="DateTime";
+            break;
+        //TODO: 6,7,8,9,10,11,12,15,16
+        default:
+            typeStr=null;
         }
         return(typeStr);
     }
@@ -645,7 +640,7 @@ public abstract class SPSSVariable {
     /**
      * Retrieves the SPSS write format number of decimals.
      *
-     * @return the length 
+     * @return the length
      */
     public int getDecimals() {
         return(this.variableRecord.writeFormatDecimals);
@@ -662,7 +657,7 @@ public abstract class SPSSVariable {
      * Retrieves the SPSS write format width.
      * This is the same as the getWidth method
      *
-     * @return the variable length 
+     * @return the variable length
      */
     public int getLength() {
         return(getLength(new FileFormatInfo(FileFormatInfo.Format.SPSS)));
@@ -671,7 +666,7 @@ public abstract class SPSSVariable {
     /**
      * Computes the variable length in the specific format
      *
-     * @return the variable length 
+     * @return the variable length
      */
     public int getLength(FileFormatInfo format) {
         // TODO: compute generic ascii length
@@ -682,12 +677,12 @@ public abstract class SPSSVariable {
      * @return A string containing the kind of measure
      */
     public String getMeasureLabel() {
-        String label="";
-        switch(this.measure) {
-            case 1: label="Nominal"; break;
-            case 2: label="Ordinal"; break;
-            case 3: label="Scale"; break;
-        }
+    	String label="";
+    	switch(this.measure) {
+    	case 1: label="Nominal"; break;
+    	case 2: label="Ordinal"; break;
+    	case 3: label="Scale"; break;
+    	}
         return(label);
     }
 
@@ -699,7 +694,7 @@ public abstract class SPSSVariable {
     }
 
     /**
-     * @return A string representing variable in SPSS syntax  
+     * @return A string representing variable in SPSS syntax
      */
     public abstract String getSPSSFormat();
 
@@ -714,13 +709,13 @@ public abstract class SPSSVariable {
     /**
      * @param recordNumber
      * @return the value of the observation in a string
-     * @throws org.opendatafoundation.data.mod.SPSSFileException
+     * @throws org.opendatafoundation.data.spss.SPSSFileException
      */
-
+    
     public abstract String getValueAsString(int recordNumber, FileFormatInfo dataFormat) throws SPSSFileException;
     /**
      * Determines if a variable is associated with a set of value labels
-     *
+     *   
      * @return boolean true if a SPSSRecordtype3 exists for this variable 
      */
     public boolean hasValueLabels() {
@@ -729,7 +724,7 @@ public abstract class SPSSVariable {
 
     /**
      * Determines if a variable is a date without time information
-     *
+     *   
      * @return boolean true if this is a date  
      */
     public boolean isDate() {
@@ -739,7 +734,7 @@ public abstract class SPSSVariable {
 
     /**
      * Determines if a numeric value is a missing value "code" (not a SYSMISS)
-     *
+     *   
      * @return boolean true if this value is found in the missing value code list 
      */
     public boolean isMissingValueCode(double value) {
@@ -766,7 +761,7 @@ public abstract class SPSSVariable {
 
     /**
      * Determines if a String value is a missing value "code" (not a SYSMISS)
-     *
+     *   
      * @return boolean true if this value is found in the missing value code list 
      */
     public boolean isMissingValueCode(String str) {
@@ -784,46 +779,4 @@ public abstract class SPSSVariable {
         return(rc);
     }
 
-    public String getMissing1(){
-
-        if(this.variableRecord.missingValueFormatCode>0) {
-            if(variableRecord.variableTypeCode==0) return ""+String.valueOf(SPSSUtils.byte8ToDouble(variableRecord.missingValue[0]));
-            else return SPSSUtils.byte8ToString(variableRecord.missingValue[0]);
-            // return SPSSUtils.byte8ToString(this.variableRecord.missingValue[0]);
-        }
-
-//        else if(this.variableRecord.missingValueFormatCode <= -2) {
-//            // -2 --> range of missing value codes
-//            return SPSSUtils.byte8ToString(this.variableRecord.missingValue[1]);
-//        } else if(this.variableRecord.missingValueFormatCode==-3) {
-//                // -3 --> an extra discrete value is also specified 
-//                return SPSSUtils.byte8ToString(this.variableRecord.missingValue[2]);
-//            }
-        else return null;
-    }
-    public String getMissing2(){
-        if(this.variableRecord.missingValueFormatCode>0) {
-            if(variableRecord.variableTypeCode==0) return ""+String.valueOf(SPSSUtils.byte8ToDouble(variableRecord.missingValue[1]));
-            else return SPSSUtils.byte8ToString(variableRecord.missingValue[1]);
-        }
-        else if(this.variableRecord.missingValueFormatCode <= -2) {
-            // -2 --> range of missing value codes
-            if(variableRecord.variableTypeCode==0) return ""+String.valueOf(SPSSUtils.byte8ToDouble(variableRecord.missingValue[1]));
-            else return SPSSUtils.byte8ToString(variableRecord.missingValue[1]);
-        }
-        else return null;
-    }
-
-    public String getMissing3(){
-        if(this.variableRecord.missingValueFormatCode>0) {
-            if(variableRecord.variableTypeCode==0) return ""+String.valueOf(SPSSUtils.byte8ToDouble(variableRecord.missingValue[2]));
-            else return SPSSUtils.byte8ToString(variableRecord.missingValue[2]);
-        }
-        else if(this.variableRecord.missingValueFormatCode==-3) {
-            // -3 --> an extra discrete value is also specified
-            if(variableRecord.variableTypeCode==0) return ""+String.valueOf(SPSSUtils.byte8ToDouble(variableRecord.missingValue[2]));
-            else return SPSSUtils.byte8ToString(variableRecord.missingValue[2]);
-        }
-        else return null;
-    }
 }

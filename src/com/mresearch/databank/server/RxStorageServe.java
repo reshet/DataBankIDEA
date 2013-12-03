@@ -91,7 +91,7 @@ public void doGet(HttpServletRequest req, HttpServletResponse res)
     }
 
     private FileInputStream getFileStream(long id) {
-        File content = new File("/home/reshet/databank/"+ AdminSocioResearchMDB.INDEX_NAME+"/"+id);
+        File content = new File(AdminSocioResearchMDB.STORAGE_VAULT+id);
         FileInputStream fis = null;
         try {
            fis = new FileInputStream(content);
