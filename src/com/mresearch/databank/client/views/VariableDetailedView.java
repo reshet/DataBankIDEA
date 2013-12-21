@@ -139,8 +139,15 @@ public class VariableDetailedView extends Composite implements HTML_Saver{
 		setResearchMeta();
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
 		save_dto.setDistr_type(save_dto.DISTR_TYPE_1D);
-		anal_bar_w = new AnalisysBarView(bus, display,save_dto,this);
-		analysis_bar.add(anal_bar_w);
+        //String user_class  = "simpleUser";
+        if(DatabankApp.get().getCurrentUser().getId()!=0)
+        {
+            String user_class = DatabankApp.get().getCurrentUser().getAccountType();
+            if(user_class.equals("grantedUser")){
+                anal_bar_w = new AnalisysBarView(bus, display,save_dto,this);
+                analysis_bar.add(anal_bar_w);
+            }
+        }
 		//form.a
 		
 		

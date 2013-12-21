@@ -40,7 +40,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author reshet
  */
-@WebService
+//@WebService
 @Stateless(mappedName="AdminSocioResearchRemoteBean",name="AdminSocioResearchRemoteBean")
 public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemote{
 
@@ -89,11 +89,14 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             r_id.add(r.getID());
             launchDeleteIndexing(r_id, "research");
             launchDeleteIndexing(Var.getResearchVarsIDs(em, id), "sociovar");
-            Var.deleteResearchVars(em,id);
-            DatabankStartPage sp = DatabankStartPage.getStartPageSingleton(em);
-            if(sp.getRes().contains(r))sp.getRes().remove(r);
-            em.persist(sp);
+            em.flush();
+            //DatabankStartPage sp = DatabankStartPage.getStartPageSingleton(em);
+            //if(sp.getRes().contains(r))sp.getRes().remove(r);
+            //em.persist(sp);
+            //em.flush();
             em.remove(r);
+            em.flush();
+            Var.deleteResearchVars(em,id);
             return true;
         }catch(Exception e)
         {
@@ -288,11 +291,13 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             message.setStringProperty("title", "command to delete index "+type+" "+ids.size()+" elements");
             // here we create NewsEntity, that will be sent in JMS message
            // ParseSpssJob job = new ParseSpssJob(blobkey, length);
-            
-            DeleteIndexiesJob job = new DeleteIndexiesJob(ids, type);
-            message.setObject(job);    
-           // message.setJMSDestination(queue);
-            q_sender.send(message);
+            if(ids.size()>0){
+                DeleteIndexiesJob job = new DeleteIndexiesJob(ids, type);
+                message.setObject(job);
+                message.setJMSDestination(queue);
+                q_sender.send(message);
+            }
+
 //            q_sender.close();
 //            connection.close();
             //response.sendRedirect("ListNews");
@@ -940,7 +945,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         buildTextPhraseVarAlternativesTextPart(arr_contains, origin_var);
 
         JsonObjectNodeBuilder obj_bool_contains = null;
-         if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("")){
+         if(params.getResearch_filter()!=null && !params.getResearch_filter().equals("{\"text\":{\"_all\":\"*\"}}")){
             ArrayList<Long> ids = prefilterVarsOnResearchMetadata(params.getResearch_filter());
             JsonArrayNodeBuilder arr_must_ids = anArrayBuilder();
             buildTextVarIdsFilter(arr_must_ids, ids);

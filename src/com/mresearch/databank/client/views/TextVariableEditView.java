@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.google.gwt.user.client.ui.*;
 import org.opendatafoundation.data.spss.mod.SPSSUtils;
 
 import com.google.gwt.core.client.GWT;
@@ -20,18 +21,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DoubleBox;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.presenters.AdminResearchPerspectivePresenter;
@@ -73,11 +62,13 @@ public class TextVariableEditView extends Composite implements HTML_Saver{
 	@UiField DoubleBox param_box;
 	@UiField VerticalPanel research_link;
 	@UiField FlexTable to_generalizeTbl;
+    @UiField Tree F_S_tree;
 	private VarMultiValuedField mv;
 	private MetaUnitMultivaluedEntityDTO db;
 	private VarDTO_Detailed dto;
 	private AdminResearchPerspectivePresenter.Display displ;
 	private ArrayList<VarDTO_Detailed> vars_to_generalize;
+    private RootFilterItemQueryBuilder f1;
 	public TextVariableEditView(TextVarDTO_Detailed dto,MetaUnitMultivaluedEntityDTO dt,AdminResearchPerspectivePresenter.Display display) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.displ = display;
@@ -109,6 +100,8 @@ public class TextVariableEditView extends Composite implements HTML_Saver{
 						
        renderGeneralizedVars();
 		renderDBfillers();
+        f1 = new RootFilterItemQueryBuilder("socioresearch","Фильтровать по исследованиям");
+        F_S_tree.addItem(f1);
 		confirmBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent arg0) {
@@ -252,6 +245,7 @@ public class TextVariableEditView extends Composite implements HTML_Saver{
 			protected void callService(AsyncCallback<ArrayList<VarDTO_Detailed>> cb) {
 				ComparativeSearchParamsDTO dt = new ComparativeSearchParamsDTO();
 				dt.setBarrier_variance(param_box.getValue());
+                dt.setResearch_filter(f1.getFilters());
 				AdminSocioResearchService.Util.getInstance().findVarsLikeThis(dto.getId(),dt, cb);
 			}
 		}.retry(2);

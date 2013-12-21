@@ -1,6 +1,8 @@
 package com.mplatforma.amr.entity;
 
 import com.mresearch.databank.shared.*;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
+
 import java.util.ArrayList;
 
 import java.util.List;
@@ -33,16 +35,25 @@ public class SocioResearch extends AbstractSearchable{
 	private Long spssFile_blobkey;
 	private Long file_accessor_id;
     @ElementCollection
-	private List<Long> var_ids;
+    @CascadeOnDelete
+    private List<Long> var_ids;
 //	private ArrayList<String> case_ids;
 //	private Long org_order_id;
 //	private Long org_impl_id;
 //	private String org_order_name;
 //	private String org_impl_name;
     @ElementCollection
+    @CascadeOnDelete
 	private List<Long> var_weight_ids;
     @ElementCollection
+    @CascadeOnDelete
     private List<String> var_weight_names;
+    @ElementCollection
+    @CascadeOnDelete
+    private List<String> files_descs;
+    @ElementCollection
+    @CascadeOnDelete
+    private List<String> files_ids;
         
 	private int selection_size;
         
@@ -84,7 +95,7 @@ public class SocioResearch extends AbstractSearchable{
 	}
        
 	
-        @ElementCollection private List<String> files_ids;
+
 	
         public List<String> getFiles_ids() {
 		return files_ids;
@@ -93,8 +104,7 @@ public class SocioResearch extends AbstractSearchable{
 		return files_descs;
 	}
 
-    @ElementCollection
-	private List<String> files_descs;
+
 	
 	public long getID(){return id;}
 	public void setSpssFile(long spssFile) {

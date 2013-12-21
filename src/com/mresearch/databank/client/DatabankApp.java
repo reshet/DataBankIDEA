@@ -177,7 +177,7 @@ public class DatabankApp implements EntryPoint {
            
            
            
-   		if (getCurrentUser().getAccountType().equals("simpleUser"))
+   		if (getCurrentUser().getAccountType().equals("simpleUser")||getCurrentUser().getAccountType().equals("registeredUser")||getCurrentUser().getAccountType().equals("grantedUser"))
    		{
    			StartPageServiceAsync startpageService = GWT.create(StartPageService.class);
    			appController = new UserAppController(startpageService, eventBus,DatabankApp.this);

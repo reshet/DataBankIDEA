@@ -140,7 +140,8 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
   
   
 	
-  @UiField Anchor mainNav,researchNav,pubNav;
+  @UiField Anchor mainNav,researchNav;
+          //,pubNav;
   //,lawNav,juryNav,pubNav;
   //@UiField Anchor mainNav,newsNav,researchNav,lawNav,juryNav,
   @UiField Anchor loginNav;
@@ -237,12 +238,12 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
 //			doViewUserLaw();
 //		}
 //	});
-    pubNav.addClickHandler(new ClickHandler() {
+   /* pubNav.addClickHandler(new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
 			doViewUserPub();
 		}
-	});
+	});*/
 //    juryNav.addClickHandler(new ClickHandler() {
 //		@Override
 //		public void onClick(ClickEvent event) {

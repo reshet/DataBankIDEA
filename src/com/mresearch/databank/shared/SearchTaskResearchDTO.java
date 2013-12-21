@@ -121,7 +121,7 @@ public class SearchTaskResearchDTO implements Serializable,ISearchTask{
 		if (date == null) return null;
 //		str+=String.valueOf(date.getDate());
 //		str+="-"+String.valueOf(date.getTime());
-		str+=String.valueOf(date.getYear())+"-"+String.valueOf(date.getMonth())+"-"+String.valueOf(date.getDate())+" ";
+		str+=String.valueOf(1900+date.getYear())+"-"+String.valueOf(1+date.getMonth())+"-"+String.valueOf(date.getDate())+"'T'";
 		str+=String.valueOf(date.getHours())+":"+String.valueOf(date.getMinutes())+":"+String.valueOf(date.getSeconds());
 		return str;
 	}
@@ -131,7 +131,7 @@ public class SearchTaskResearchDTO implements Serializable,ISearchTask{
 //		String [] str = dat.split("-");
 //		date.setDate(Integer.parseInt(str[0]));
 //		date.setTime(Integer.parseInt(str[1]));
-		String [] str = dat.split(" ");
+		String [] str = dat.split("T");
 		String [] da = str[0].split("-");
 		String [] ta = str[1].split(":");
 		date.setYear(Integer.parseInt(da[0]));

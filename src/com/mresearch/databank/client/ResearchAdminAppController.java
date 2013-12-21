@@ -79,7 +79,9 @@ public class ResearchAdminAppController implements ValueChangeHandler<String>, A
 			UiBinder<VerticalPanel, ResearchAdminAppController> {
 	}
 	
-  @UiField Anchor bankNav,startupNav,logoutNav;
+  @UiField Anchor bankNav,logoutNav;
+  @UiField Anchor accessNav;
+          //,startupNav,
   @UiField VerticalPanel centerPanel;
   private VerticalPanel thisDock;
   private final UserSocioResearchServiceAsync researchUserService = GWT.create(UserSocioResearchService.class);
@@ -108,14 +110,20 @@ public class ResearchAdminAppController implements ValueChangeHandler<String>, A
 			doViewDatabank();
 		}
 	});
-    startupNav.addClickHandler(new ClickHandler() {
+/*    startupNav.addClickHandler(new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
 			//eventBus.fireEvent(new ShowStartPageMainEvent());
 			doViewStartupConfig();
 		}
-	});
-    
+	});*/
+      accessNav.addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event) {
+              //eventBus.fireEvent(new ShowStartPageMainEvent());
+              doViewAccessConfig();
+          }
+      });
     logoutNav.addClickHandler(new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
@@ -150,6 +158,9 @@ public class ResearchAdminAppController implements ValueChangeHandler<String>, A
   private void doViewStartupConfig() {
 	    History.newItem("researchadmin-startup");
   }
+    private void doViewAccessConfig() {
+        History.newItem("researchadmin-access");
+    }
   //public void go(DockLayoutPanel mainPanel)
   
   public void go(VerticalPanel mainPanel)
@@ -179,6 +190,11 @@ public class ResearchAdminAppController implements ValueChangeHandler<String>, A
       }else
 	  if(token.equals("researchadmin-startup")){
     	  presenter = new AdminStartupPerspectivePresenter(userSPService, researchAdminService, eventBus, new AdminStartupPerspectiveView(eventBus));
+          presenter.go(centerPanel,null,null);
+      }
+      else
+      if(token.equals("researchadmin-access")){
+          presenter = new AdminStartupPerspectivePresenter(userSPService, researchAdminService, eventBus, new AdminStartupPerspectiveView(eventBus));
           presenter.go(centerPanel,null,null);
       }
     }

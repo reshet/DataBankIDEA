@@ -1,6 +1,7 @@
 package com.mplatforma.amr.entity;
 
 import com.mresearch.databank.shared.*;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,14 +41,24 @@ public class Var {
     private String code_schema_id;
     private String var_type;
 
-    @ElementCollection private List<Double> v_label_codes;
-    @ElementCollection private List<String> v_label_values;
-    @ElementCollection private List<Long> generalized_var_ids  = new ArrayList<Long>();
-    @ElementCollection private List<Double> cortage = new ArrayList<Double>();
-    @ElementCollection private List<String> cortage_string  = new ArrayList<String>();
+    @ElementCollection
+    @CascadeOnDelete
+    private List<String> files_ids;
+    @ElementCollection
+    @CascadeOnDelete
+    private List<Double> v_label_codes;
+    @ElementCollection @CascadeOnDelete
+    private List<String> v_label_values;
+    @ElementCollection @CascadeOnDelete
+    private List<Long> generalized_var_ids  = new ArrayList<Long>();
+    @ElementCollection @CascadeOnDelete
+    private List<Double> cortage = new ArrayList<Double>();
+    @ElementCollection @CascadeOnDelete
+    private List<String> cortage_string  = new ArrayList<String>();
     @OneToOne(cascade = CascadeType.ALL)
     private MetaUnitEntityItem entity_item;
-    @ElementCollection private Map<String, String> filling = new HashMap<String, String>();
+    @ElementCollection @CascadeOnDelete
+    private Map<String, String> filling = new HashMap<String, String>();
 
     public Map<String, String> getFilling() {
         return filling;

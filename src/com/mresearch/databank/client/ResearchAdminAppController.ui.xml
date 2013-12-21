@@ -28,13 +28,20 @@
 								</div>
 							</div>
 						</g:Anchor>
-						<g:Anchor href="javascript:;" ui:field="startupNav">
+						<!--<g:Anchor href="javascript:;" ui:field="startupNav">
 							<div class="mm-item mm-41 mm-hover">
 								<div class="mm-caption">
 									Содержание главной страницы
 								</div>
 							</div>
-						</g:Anchor>
+						</g:Anchor>-->
+                        <g:Anchor href="javascript:;" ui:field="accessNav">
+                            <div class="mm-item mm-31 mm-hover">
+                                <div class="mm-caption">
+                                   Права доступа пользователей
+                                </div>
+                            </div>
+                        </g:Anchor>
 	
 					<table><tr>
 						<td><g:Label ui:field="username" styleName="{style.loginfo}"></g:Label></td>

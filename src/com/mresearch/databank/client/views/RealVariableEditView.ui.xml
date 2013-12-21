@@ -141,9 +141,11 @@
 		<g:HorizontalPanel>
 				<g:Label text="Параметр:"></g:Label>
 				<g:DoubleBox ui:field="param_box"></g:DoubleBox>
-				<g:Button ui:field="searchBtn">Поиск примерно похожих переменных</g:Button>
 		</g:HorizontalPanel>
-		<g:FlexTable ui:field="to_generalizeTbl"></g:FlexTable>
+        <g:Tree ui:field="F_S_tree" animationEnabled="true"></g:Tree>
+        <g:Button ui:field="searchBtn">Поиск примерно похожих переменных</g:Button>
+
+        <g:FlexTable ui:field="to_generalizeTbl"></g:FlexTable>
 		<g:Button ui:field="generalizeBtn" visible="false">Унифицировать выбранные переменные</g:Button>
 		</g:HTMLPanel>
 </ui:UiBinder> 

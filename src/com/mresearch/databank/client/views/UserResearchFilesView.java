@@ -1,5 +1,6 @@
 package com.mresearch.databank.client.views;
 
+import com.mresearch.databank.client.DatabankApp;
 import gwtupload.client.IUploader;
 import gwtupload.client.SingleUploader;
 import gwtupload.client.IUploader.OnFinishUploaderHandler;
@@ -60,14 +61,21 @@ public class UserResearchFilesView extends Composite implements AdminResearchDet
 	{
 		files_table.clear();
 		String realPath = GWT.getModuleBaseURL();
-		for(int i = 0; i < dto.getFiles_ids().size();i++)
+        String user_class  = "simpleUser";
+        if(DatabankApp.get().getCurrentUser().getId()!=0)
+        {
+            user_class = DatabankApp.get().getCurrentUser().getAccountType();
+        }
+
+        for(int i = 0; i < dto.getFiles_ids().size();i++)
 		{
 			files_table.setWidget(i, 0, new Label(String.valueOf(i)));
 			files_table.setWidget(i, 1, new Label(dto.getFiles_descs().get(i)));		
 			final long file_id = dto.getFiles_ids().get(i);
-			
-			files_table.setWidget(i, 2, new HTML("<a href=\""+realPath+"serve?blob-key="+file_id+"\">Скачать</a>"));
-		}
+			if(user_class.equals("grantedUser")){
+                files_table.setWidget(i, 2, new HTML("<a href=\""+realPath+"serve?blob-key="+file_id+"\">Скачать</a>"));
+            }
+    	}
 	}
 	
 	
