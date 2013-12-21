@@ -28,7 +28,7 @@ import javax.persistence.TypedQuery;
  *
  * @author reshet
  */
-@WebService
+//@WebService
 @Stateless(mappedName="AdminJuryRemoteBean",name="AdminJuryRemoteBean")
 public class AdminJurySessionBean implements AdminJuryBeanRemote{
 

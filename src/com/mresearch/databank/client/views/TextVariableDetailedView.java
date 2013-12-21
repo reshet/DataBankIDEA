@@ -63,8 +63,14 @@ public class TextVariableDetailedView extends Composite implements HTML_Saver{
 		this.dto = dto;
 		this.db = dt;
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
-		analysis_bar.add(new AnalisysBarView(bus, display,sv_dt,this));
-		
+        if(DatabankApp.get().getCurrentUser().getId()!=0)
+        {
+            String user_class = DatabankApp.get().getCurrentUser().getAccountType();
+            if(user_class.equals("grantedUser")){
+                analysis_bar.add(new AnalisysBarView(bus, display,sv_dt,this));
+            }
+        }
+
 		research_link.add(new ResearchDescItemView(new SocioResearchDTO_Light(dto.getResearch_id(),dto.getResearch_name())));
 		
 		//varCode.setText(dto.getCode());

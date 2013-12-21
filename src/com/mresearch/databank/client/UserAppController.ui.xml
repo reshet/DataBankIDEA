@@ -270,13 +270,13 @@
 <!-- 							</div> -->
 <!-- 						</g:Anchor> -->
 						
-						<g:Anchor href="javascript:;" ui:field="pubNav">
+						<!--<g:Anchor href="javascript:;" ui:field="pubNav">
 							<div class="mm-item mm-41 mm-hover">
 								<div class="mm-caption">
 									Публикации
 								</div>
 							</div>
-						</g:Anchor>
+						</g:Anchor>-->
 						<div class="mm-search">
 							<g:TextBox ui:field="searchBox" stylePrimaryName="{style.mm-search}" text="Поиск"></g:TextBox>
 <!-- 							<g:Button ui:field="searchCmd" styleName="{style.search-submit}"></g:Button> -->

@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author reshet
  */
-@WebService
+//@WebService
 @Stateless(mappedName="AdminLawRemoteBean",name="AdminLawRemoteBean")
 public class AdminLawSessionBean implements AdminLawBeanRemote{
 
