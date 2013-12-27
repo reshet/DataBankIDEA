@@ -12,7 +12,7 @@ public class ResearchFilesDTO implements Serializable{
 	private ArrayList<Long> file_ids = new ArrayList<Long>();
 	private ArrayList<String> file_categs = new ArrayList<String>();
 	private ArrayList<String> file_names = new ArrayList<String>();
-	
+	private String requestAccessEmail;
 	public static String CG_arrays = "CG_arrays";
 	public ArrayList<String> getFile_names() {
 		return file_names;
@@ -117,5 +117,12 @@ public class ResearchFilesDTO implements Serializable{
 	public void setFile_categs(ArrayList<String> file_categs) {
 		this.file_categs = file_categs;
 	}
-	
+
+    public String getRequestAccessEmail() {
+        return requestAccessEmail;
+    }
+
+    public void setRequestAccessEmail(String requestAccessEmail) {
+        this.requestAccessEmail = requestAccessEmail;
+    }
 }

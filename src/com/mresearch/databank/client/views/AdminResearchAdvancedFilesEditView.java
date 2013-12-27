@@ -77,6 +77,34 @@ public class AdminResearchAdvancedFilesEditView extends Composite implements Adm
 		AdminResearchFilesEditView tr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_technical_reports, tr_dto);
 		ethic_report_panel.add(tr_view);
 		
+		final TextBox mailbox = new TextBox();
+        mailbox.setText(result.getRequestAccessEmail());
+        mailto_panel.add(mailbox);
+        Button saveemail = new Button("Сохранить email");
+        saveemail.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                result.setRequestAccessEmail(mailbox.getText());
+                new RPCCall<Boolean>() {
+                    @Override
+                    protected void callService(AsyncCallback<Boolean> cb) {
+                        adminResearchService.updateFileAccessor(research_id,result,cb);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+
+                    }
+                }.retry(1);
+
+            }
+        });
+        mailto_panel.add(saveemail);
 		/*SocioResearchFilesDTO i_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_instructions),result.getFileNames(ResearchFilesDTO.CG_instructions));
 		AdminResearchFilesEditView i_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_instructions, i_dto);
 		instructions_panel.add(i_view);

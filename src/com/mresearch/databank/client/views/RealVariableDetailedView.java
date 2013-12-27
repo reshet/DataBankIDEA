@@ -71,6 +71,16 @@ public class RealVariableDetailedView extends Composite implements HTML_Saver{
 		this.dto = dto;
 		this.db = dt;
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
+
+        //String user_class  = "simpleUser";
+        if(DatabankApp.get().getCurrentUser().getId()!=0)
+        {
+            String user_class = DatabankApp.get().getCurrentUser().getAccountType();
+            if(user_class.equals("grantedUser")){
+                AnalisysBarView anal_bar_w = new AnalisysBarView(bus, display,save_Dto,this);
+                analysis_bar.add(anal_bar_w);
+            }
+        }
 		analysis_bar.add(new AnalisysBarView(bus, display,save_Dto,this));
 		
 		//target_panel.add(new SaveHTMLAddon(content_panel));
