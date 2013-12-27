@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.presenters.AdminResearchDetailedPresenter;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
@@ -76,8 +77,16 @@ public class UserResearchAdvancedFilesView extends Composite implements AdminRes
 		/*SocioResearchFilesDTO i_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_instructions),result.getFileNames(ResearchFilesDTO.CG_instructions));
 		UserResearchFilesView i_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_instructions, i_dto);
 		*/
-        mailto_panel.add(new HTML("<a href=\"mailto:reshet.ukr@gmail.com?subject=Запит на отримання масиву даних за дослідженням "+research_id+"&body=Прошу надати мені доступ до даних.\">Надіслати лист-запит</a>"));
 
+        String user_class  = "simpleUser";
+        if(DatabankApp.get().getCurrentUser().getId()!=0)
+        {
+            user_class = DatabankApp.get().getCurrentUser().getAccountType();
+        }
+        if(!user_class.equals("grantedUser")){
+            mailto_panel.add(new HTML("<a href=\"mailto:"+result.getRequestAccessEmail()+"?subject=Запит на отримання масиву даних за дослідженням "+research_id+"&body=Прошу надати мені доступ до даних.\">Надіслати лист-запит</a>"));
+            mailto_panel.add(new HTML("<p>e-mail відповідальної особи "+result.getRequestAccessEmail()+"</p>"));
+        }
 		/*SocioResearchFilesDTO ar_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_analytic_reports),result.getFileNames(ResearchFilesDTO.CG_analytic_reports));
 		UserResearchFilesView ar_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_analytic_reports, ar_dto);
 		analytic_report_panel.add(ar_view);*/

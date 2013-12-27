@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.crypto.Data;
+
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -200,11 +200,15 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 		}
 		public abstract void doPostAction();
 	}
+    boolean inited = false;
 	@Override
 	public void go(HasWidgets container,ArrayList<String> p_names,ArrayList<String> p_values) {
-		 container.clear();
-		 container.add(display.asWidget());
-		 fetchResearchListData();
+         if(!inited){
+             container.clear();
+             container.add(display.asWidget());
+             fetchResearchListData();
+             inited = true;
+         }
 		 if (p_names.contains("showResearch"))
 		 {
 			 int index = p_names.indexOf("showResearch");
@@ -226,7 +230,7 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 					fetchResearchDetailes(current_research_id);
 			 }
 			  // eventBus.fireEvent(new ShowResearchDetailsEvent(id));
-		 }
+		 }else
 		 if (p_names.contains("showVar"))
 		 {
 			 int index = p_names.indexOf("showVar");
@@ -234,7 +238,7 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 			 display.getCenterPanel().clear();
 			 display.getCenterPanel().add(new HTML("<h2>Загрузка данных...</h2>"));
 			 fetchVariableDetailes(Long.parseLong(id));
-		 }
+		 }else
 		 if (p_names.contains("action"))
 		 {
 			 int index = p_names.indexOf("action");

@@ -96,8 +96,10 @@
 	
 	<g:HTMLPanel styleName="{style.pad_left}">
 		<h2>Сравнение переменных</h2>
-		<g:HTMLPanel ui:field="main_html">
-			<g:FlexTable ui:field="compareTbl" styleName="{style.tableStyle}"></g:FlexTable>
+        <g:HorizontalPanel ui:field="savePanel"/>
+
+        <g:HTMLPanel ui:field="main_html">
+            <g:FlexTable ui:field="compareTbl" styleName="{style.tableStyle}"></g:FlexTable>
 			<br/>
 		</g:HTMLPanel>		
 	</g:HTMLPanel>

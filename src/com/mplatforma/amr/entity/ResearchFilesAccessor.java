@@ -18,6 +18,7 @@ public class ResearchFilesAccessor {
 	private ArrayList<Long> file_ids = new ArrayList<Long>();
 	private ArrayList<String> file_names = new ArrayList<String>();
 	private ArrayList<String> file_categs = new ArrayList<String>();
+    private String requestAccessEmail = "office@aidsalliance.org.ua";
 	public ResearchFilesAccessor()
 	{}
 	
@@ -36,6 +37,7 @@ public class ResearchFilesAccessor {
 		this.file_ids = dto.getFile_ids();
 		this.file_categs = dto.getFile_categs();
 		this.file_names = dto.getFile_names();
+        this.requestAccessEmail = dto.getRequestAccessEmail();
 	}
 	public ResearchFilesDTO toDTO()
 	{
@@ -44,9 +46,18 @@ public class ResearchFilesAccessor {
 		dto.setFile_categs(file_categs);
 		dto.setFile_ids(file_ids);
 		dto.setFile_names(file_names);
+        dto.setRequestAccessEmail(requestAccessEmail);
 		return dto;
 	}
 	public Long getId() {
 		return id;
 	}
+
+    public String getRequestAccessEmail() {
+        return requestAccessEmail;
+    }
+
+    public void setRequestAccessEmail(String requestAccessEmail) {
+        this.requestAccessEmail = requestAccessEmail;
+    }
 }

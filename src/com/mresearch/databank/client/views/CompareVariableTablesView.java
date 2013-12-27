@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
+import com.google.gwt.user.client.ui.*;
+import com.mresearch.databank.client.views.helper.GenericHtmlSaver;
+import com.mresearch.databank.client.views.helper.HTMLSaveProvider;
 import org.moxieapps.gwt.highcharts.client.Chart;
 import org.moxieapps.gwt.highcharts.client.ChartTitle;
 import org.moxieapps.gwt.highcharts.client.Legend.Align;
@@ -28,15 +30,6 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.event.ShowVarPlotEvent;
 import com.mresearch.databank.client.event.ShowVarPlotEventHandler;
@@ -53,31 +46,41 @@ import com.mresearch.databank.shared.UserResearchSettingDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 import com.smartgwt.client.types.ChartType;
 
-public class CompareVariableTablesView extends Composite {
+public class CompareVariableTablesView extends Composite implements HTML_Saver {
 
 	private static VariableDetailedViewUiBinder uiBinder = GWT
 			.create(VariableDetailedViewUiBinder.class);
 
-	interface VariableDetailedViewUiBinder extends
+    @Override
+    public String composeSpecificContent() {
+        return main_html.toString();  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    interface VariableDetailedViewUiBinder extends
 			UiBinder<Widget, CompareVariableTablesView> {
 	}
 
 	@UiField FlexTable compareTbl;
 	@UiField HTMLPanel main_html;
+    @UiField HorizontalPanel savePanel;
 	private MetaUnitMultivaluedEntityDTO db;
 	private List<Long> dtos_detailed_ids;
 	private AnalisysBarView anal_bar_w;
 	private final UserResearchPerspectivePresenter.Display display;
 	int i = 0;
-	
+
+
+
+
 	public CompareVariableTablesView(List<Long> dtos_detailed_ids,UserResearchPerspectivePresenter.Display display)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		this.dtos_detailed_ids = dtos_detailed_ids;
 		this.display = display;
+        savePanel.add(new GenericHtmlSaver(this));
 		final UserResearchSettingDTO setting = DatabankApp.get().getCurrentUserHistory().getCurrent_research();
 		final UserResearchSettingDTO pre_setting = setting;
-		
+
 		for(final Long dto_id:dtos_detailed_ids)
         {
 		   new RPCCall<VarDTO_Detailed>() {
