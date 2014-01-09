@@ -404,7 +404,7 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 		        		gr = new SearchResultsGrid(true,link_code,false,650,eventBus,tot, hiters, mapping);
 				    }else
 			        {
-			        	gr = new SearchResultsGrid(true,link_code,false,650,eventBus,tot, hiters, mapping);
+			        	gr = new SearchResultsGrid(false,link_code,false,650,eventBus,tot, hiters, mapping);
 				    }
 		        	display.getCenterPanel().clear();
 				    if(gr!=null)display.getCenterPanel().add(gr);

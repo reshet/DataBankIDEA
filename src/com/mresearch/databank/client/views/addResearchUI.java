@@ -75,6 +75,8 @@ public class addResearchUI extends Composite {
 	private ArrayList<Long> uploaded_files = new ArrayList<Long>();
 	private long blob_length;
 	private String upload_url = "/upload";
+    @UiField TextBox name;
+    @UiField Button createEmpty;
 	@UiConstructor
 	public addResearchUI(String firstName) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -183,7 +185,25 @@ public class addResearchUI extends Composite {
 			}
 		    });
 		    */
-		
+		createEmpty.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new RPCCall<Long>() {
+                    @Override
+                    protected void callService(AsyncCallback<Long> cb) {
+                        adminResearchService.createEmptyResearch(name.getText(),cb);
+                    }
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Не удалось добавить исследование.");
+                    }
+                    @Override
+                    public void onSuccess(Long result) {
+                        Window.alert("Исследование успешно создано");
+                    }
+                }.retry(1);
+            }
+        });
 	}
 	private String getUploadedName(String response)
 	{

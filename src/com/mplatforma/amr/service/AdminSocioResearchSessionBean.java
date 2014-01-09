@@ -711,7 +711,25 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
          if(varids.size()>0) lst = user_bean.getVarDTOsAsOrdered(varids);
          return lst;
      }
-     private ArrayList<String> cropSearchString(String str, int granularity, boolean overlap)
+
+    @Override
+    public long createEmptyResearch(String name) {
+        SocioResearch research = null;
+        Long research_id = null;
+        try {
+            research = new SocioResearch(em);
+            research.setName(name);
+            //ResearchFilesDTO dto = new ResearchFilesDTO();
+            //research.updateFileAccessor(em, dto);
+            em.persist(research);
+            research_id = research.getID();
+            // currentUser.getFriends().add(friend);
+        } finally {
+        }
+        return research_id;
+    }
+
+    private ArrayList<String> cropSearchString(String str, int granularity, boolean overlap)
      {
         ArrayList<String> strs = new ArrayList<String>();
         
