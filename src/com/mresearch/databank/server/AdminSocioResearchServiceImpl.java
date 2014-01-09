@@ -197,6 +197,10 @@ public class AdminSocioResearchServiceImpl extends RemoteServiceServlet implemen
 	public void generalizeVars(ArrayList<Long> gen_var_ids) {
 		eao.generalizeVars(gen_var_ids);
 	}
+    @Override
+    public long createEmptyResearch(String name) {
+        return eao.createEmptyResearch(name);
+    }
 	
 /*	
   public FriendsServiceImpl() {

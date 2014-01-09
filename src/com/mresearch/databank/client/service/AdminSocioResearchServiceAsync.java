@@ -70,6 +70,7 @@ public interface AdminSocioResearchServiceAsync {
 			AsyncCallback<ArrayList<VarDTO_Detailed>> callback);
 	void generalizeVars(ArrayList<Long> gen_var_ids,
 			AsyncCallback<Void> callback);
-	
-	
+
+
+    void createEmptyResearch(String name, AsyncCallback<Long> async);
 }

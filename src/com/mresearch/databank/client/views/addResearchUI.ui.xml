@@ -30,6 +30,11 @@
 				</g:VerticalPanel>
 				<g:VerticalPanel ui:field="states_panel">
 				</g:VerticalPanel>
+                <g:VerticalPanel>
+                    <g:Label text="Новое исследование без массива"></g:Label>
+                    <g:TextBox ui:field="name"></g:TextBox>
+                    <g:Button ui:field="createEmpty" text="Создать"></g:Button>
+                </g:VerticalPanel>
 			</g:HorizontalPanel>
 			<br/><br/>
 <!-- 			<g:Button ui:field="submitButton"> Добавить исследование!</g:Button> -->
