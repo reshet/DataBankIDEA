@@ -85,7 +85,7 @@ public class UserResearchAdvancedFilesView extends Composite implements AdminRes
         }
         if(!user_class.equals("grantedUser")){
             mailto_panel.add(new HTML("<a href=\"mailto:"+result.getRequestAccessEmail()+"?subject=Запит на отримання масиву даних за дослідженням "+research_id+"&body=Прошу надати мені доступ до даних.\">Надіслати лист-запит</a>"));
-            mailto_panel.add(new HTML("<p>e-mail відповідальної особи "+result.getRequestAccessEmail()+"</p>"));
+            if(result.getRequestAccessEmail()!=null)mailto_panel.add(new HTML("<p>e-mail відповідальної особи "+result.getRequestAccessEmail()+"</p>"));
         }
 		/*SocioResearchFilesDTO ar_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_analytic_reports),result.getFileNames(ResearchFilesDTO.CG_analytic_reports));
 		UserResearchFilesView ar_view = new UserResearchFilesView(research_id, ResearchFilesDTO.CG_analytic_reports, ar_dto);
