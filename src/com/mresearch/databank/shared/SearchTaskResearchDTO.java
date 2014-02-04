@@ -114,32 +114,43 @@ public class SearchTaskResearchDTO implements Serializable,ISearchTask{
 	}
 	public void setSel_appr_c(String sel_appr_c) {
 		this.sel_appr_c = sel_appr_c;
-	}	
-	public static String date_serialize(Date date)
-	{
-		String str = "";
-		if (date == null) return null;
+	}
+    public static String date_serialize(Date date)
+    {
+        String str = "";
+        if (date == null) return null;
 //		str+=String.valueOf(date.getDate());
 //		str+="-"+String.valueOf(date.getTime());
-		str+=String.valueOf(1900+date.getYear())+"-"+String.valueOf(1+date.getMonth())+"-"+String.valueOf(date.getDate())+"'T'";
-		str+=String.valueOf(date.getHours())+":"+String.valueOf(date.getMinutes())+":"+String.valueOf(date.getSeconds());
-		return str;
-	}
+
+        str+=String.valueOf(1900+date.getYear())+""+addZero(String.valueOf(1+date.getMonth()))+""+addZero(String.valueOf(date.getDate()));//+"T";
+        //str+=String.valueOf(date.getHours())+""+String.valueOf(date.getMinutes())+""+String.valueOf(date.getSeconds());
+        return str;
+    }
+    private static String addZero(String st){
+        if(st.length()==1)return "0"+st;
+        return st;
+    }
 	public static void date_deserialize(Date date,String dat)
 	{
-		
+		if(dat.contains("T")){
+            String [] str = dat.split("T");
+            String [] da = str[0].split("-");
+            String [] ta = str[1].split(":");
+            date.setYear(Integer.parseInt(da[0]));
+            date.setMonth(Integer.parseInt(da[1]));
+            date.setDate(Integer.parseInt(da[2]));
+            date.setHours(Integer.parseInt(ta[0]));
+            date.setMinutes(Integer.parseInt(ta[1]));
+            date.setSeconds(Integer.parseInt(ta[2]));
+        }else{
+            date.setYear(Integer.parseInt(dat.substring(0,4)));
+            date.setMonth(Integer.parseInt(dat.substring(4,6)));
+            date.setDate(Integer.parseInt(dat.substring(6,8)));
+        }
 //		String [] str = dat.split("-");
 //		date.setDate(Integer.parseInt(str[0]));
 //		date.setTime(Integer.parseInt(str[1]));
-		String [] str = dat.split("T");
-		String [] da = str[0].split("-");
-		String [] ta = str[1].split(":");
-		date.setYear(Integer.parseInt(da[0]));
-		date.setMonth(Integer.parseInt(da[1]));
-		date.setDate(Integer.parseInt(da[2]));
-		date.setHours(Integer.parseInt(ta[0]));
-		date.setMinutes(Integer.parseInt(ta[1]));
-		date.setSeconds(Integer.parseInt(ta[2]));
+
 //		
 		//date.s
 		//date.set

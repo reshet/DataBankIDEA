@@ -2,7 +2,20 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-
+        .category
+        {
+            color: #772222;
+            font-weight: bold;
+            font: 16px;
+            vertical-align: text-top;
+        }
+        .tableResearch
+        {
+            font-weight: normal;
+            background-color: #88AA66;
+            padding: 7px;
+            margin-left: 20px;
+        }
 		
 	</ui:style>
 	<g:VerticalPanel>
@@ -10,21 +23,23 @@
 			<h3>Метаданные исследования</h3>
 			<g:VerticalPanel ui:field="elasticDBfieldNames"></g:VerticalPanel>
 				
-<!-- 			<table> -->
-<!-- 				<tr> -->
-<!-- 					<td> -->
-<!-- 					</td> -->
-<!-- 					<td> -->
-<!-- 						<g:VerticalPanel ui:field="elasticDBfieldValues"></g:VerticalPanel> -->
-<!-- 					</td> -->
-<!-- 				</tr> -->
-<!-- 			</table> -->
+ 			<table>
+ 				<tr>
+ 					<td>
+                        <div class="gray25 bold">
+                            <g:Label>Взвешивание:</g:Label>
+                        </div>
+ 					</td>
+ 					<td>
+                        <g:Label ui:field="weights" styleName="{style.tableResearch}"/>
+ 					</td>
+ 				</tr>
+ 			</table>
+
+
 		</g:HTMLPanel>	
 		
-		<g:HorizontalPanel>
-				<g:Label>Взвешивание:</g:Label>
-				<g:Label ui:field="weights"/>
-		</g:HorizontalPanel>
+
 		
 	</g:VerticalPanel>
 </ui:UiBinder> 

@@ -177,11 +177,11 @@
 		}
 		.mm-search-highlight{ 
 		    border-color: #696969; 
-		    background: transparent url(i/search-submit.png) right center no-repeat;*/
+		    background: transparent url(i/search-submit.png) right center no-repeat;
 		}
 		.mm-search-hovering{ 
 		    border-color: #696969; 
-		    background: transparent url(i/search-submit.png) right center no-repeat;*/
+		    background: transparent url(i/search-submit.png) right center no-repeat;
 		}
 		.search-submit {
 		    position: absolute;

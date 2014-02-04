@@ -44,7 +44,8 @@ public class AdminResearchAdvancedFilesEditView extends Composite implements Adm
 		      .create(UserSocioResearchService.class);
 	
 	private long research_id;
-	@UiField VerticalPanel arrays_panel,desc_panel, results_panel,protocol_panel, ethic_report_panel;
+    @UiField VerticalPanel arrays_panel,desc_panel, pretest_panel,instrument_panel, sample_panel;
+
     @UiField VerticalPanel mailto_panel,publications_panel;
 	private ResearchFilesDTO result;
 	public AdminResearchAdvancedFilesEditView(long research_id,ResearchFilesDTO dto) {
@@ -56,26 +57,38 @@ public class AdminResearchAdvancedFilesEditView extends Composite implements Adm
 
 	private void doFetchFiles()
 	{
-		
-		SocioResearchFilesDTO arr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_arrays),result.getFileNames(ResearchFilesDTO.CG_arrays));
-		AdminResearchFilesEditView arr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_arrays, arr_dto);
-		arrays_panel.add(arr_view);
 
-		SocioResearchFilesDTO quest_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionaries),result.getFileNames(ResearchFilesDTO.CG_questionaries));
-		AdminResearchFilesEditView quest_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_questionaries, quest_dto);
-		desc_panel.add(quest_view);
-		
-		SocioResearchFilesDTO qc_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionary_cards),result.getFileNames(ResearchFilesDTO.CG_questionary_cards));
-		AdminResearchFilesEditView qc_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_questionary_cards, qc_dto);
-		results_panel.add(qc_view);
+        SocioResearchFilesDTO arr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_arrays),result.getFileNames(ResearchFilesDTO.CG_arrays));
+        AdminResearchFilesEditView arr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_arrays, arr_dto);
+        arrays_panel.add(arr_view);
 
-		SocioResearchFilesDTO pr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_protocols),result.getFileNames(ResearchFilesDTO.CG_protocols));
-		AdminResearchFilesEditView pr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_protocols,pr_dto);
-		protocol_panel.add(pr_view);
+        SocioResearchFilesDTO quest_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionaries),result.getFileNames(ResearchFilesDTO.CG_questionaries));
+        AdminResearchFilesEditView quest_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_questionaries, quest_dto);
+        desc_panel.add(quest_view);
 
-		SocioResearchFilesDTO tr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_technical_reports),result.getFileNames(ResearchFilesDTO.CG_technical_reports));
-		AdminResearchFilesEditView tr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_technical_reports, tr_dto);
-		ethic_report_panel.add(tr_view);
+        SocioResearchFilesDTO qc_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_questionary_cards),result.getFileNames(ResearchFilesDTO.CG_questionary_cards));
+        AdminResearchFilesEditView qc_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_questionary_cards, qc_dto);
+        pretest_panel.add(qc_view);
+
+        SocioResearchFilesDTO pr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_protocols),result.getFileNames(ResearchFilesDTO.CG_protocols));
+        AdminResearchFilesEditView pr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_protocols,pr_dto);
+        instrument_panel.add(pr_view);
+
+        SocioResearchFilesDTO tr_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_technical_reports),result.getFileNames(ResearchFilesDTO.CG_technical_reports));
+        AdminResearchFilesEditView tr_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_technical_reports, tr_dto);
+        sample_panel.add(tr_view);
+
+		/*SocioResearchFilesDTO i_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_instructions),result.getFileNames(ResearchFilesDTO.CG_instructions));
+		AdminResearchFilesEditView i_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_instructions, i_dto);
+		instructions_panel.add(i_view);
+
+		SocioResearchFilesDTO ar_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_analytic_reports),result.getFileNames(ResearchFilesDTO.CG_analytic_reports));
+		AdminResearchFilesEditView ar_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_analytic_reports, ar_dto);
+		analytic_report_panel.add(ar_view);*/
+
+        SocioResearchFilesDTO p_dto = new SocioResearchFilesDTO(result.getFileIds(ResearchFilesDTO.CG_publications),result.getFileNames(ResearchFilesDTO.CG_publications));
+        AdminResearchFilesEditView p_view = new AdminResearchFilesEditView(research_id, ResearchFilesDTO.CG_publications, p_dto);
+        publications_panel.add(p_view);
 		
 		final TextBox mailbox = new TextBox();
         mailbox.setText(result.getRequestAccessEmail());

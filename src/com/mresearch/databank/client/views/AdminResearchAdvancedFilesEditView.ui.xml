@@ -17,25 +17,26 @@
                         <td><g:VerticalPanel ui:field="desc_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Результаты исследования: </td>
-                        <td><g:VerticalPanel ui:field="results_panel"></g:VerticalPanel></td>
+                        <td>Претест (анкеты, карточки, инструкции, отчет): </td>
+                        <td><g:VerticalPanel ui:field="pretest_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Протокол исследования, инструментарий: </td>
-                        <td><g:VerticalPanel ui:field="protocol_panel"></g:VerticalPanel></td>
+                        <td>Инструментарий (анкеты, карточки, инструкции): </td>
+                        <td><g:VerticalPanel ui:field="instrument_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Заключение этической экспертизы исследования: </td>
-                        <td><g:VerticalPanel ui:field="ethic_report_panel"></g:VerticalPanel></td>
+                        <td>Файл выборки исследования, базы данных: </td>
+                        <td><g:VerticalPanel ui:field="sample_panel"></g:VerticalPanel></td>
+                    </tr>
+                    <tr>
+                        <td>Отчеты, презентации, публикации: </td>
+                        <td><g:VerticalPanel ui:field="publications_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
                         <td>Запрос массива данных: </td>
                         <td><g:VerticalPanel ui:field="mailto_panel"></g:VerticalPanel></td>
                     </tr>
-                    <tr>
-                        <td>Публикации, связанные с исследованием: </td>
-                        <td><g:VerticalPanel ui:field="publications_panel"></g:VerticalPanel></td>
-                    </tr>
+
                 </table>
 			</g:HTMLPanel>
 		</g:VerticalPanel>

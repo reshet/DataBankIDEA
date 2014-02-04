@@ -349,7 +349,7 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
     private Node node;
 
     //@Resource(name="indexname")
-    public  String INDEX_NAME = "databankalliance";
+    public  String INDEX_NAME = "databankkiis";
 
     @PostConstruct
     private void init()
@@ -399,7 +399,7 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
 //                .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
             
-            SearchResponse response = client.prepareSearch("databankalliance").setTypes(types_to_search)
+            SearchResponse response = client.prepareSearch("databankkiis").setTypes(types_to_search)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .setQuery(json_query)
                 .setExplain(true)
