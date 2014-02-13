@@ -6,6 +6,8 @@ package com.mplatforma.amr.service;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.PostConstruct;
+
+import com.mplatforma.amr.service.remote.SearchServicesBeanRemote;
 import com.mresearch.databank.jobs.IndexResearchJob;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,14 +44,10 @@ import org.elasticsearch.action.bulk.BulkResponse;
 
 import org.opendatafoundation.data.mod3.*;
 
-import org.w3c.dom.Document;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
-import org.elasticsearch.node.Node;
 
-import static org.elasticsearch.node.NodeBuilder.*;
-import org.mozilla.universalchardet.UniversalDetector;
 import org.opendatafoundation.data.FileFormatInfo;
 import org.opendatafoundation.data.FileFormatInfo.Format;
 //import org.opendatafoundation.data.mod2.SPSSNumericVariable;
@@ -63,7 +61,10 @@ import org.opendatafoundation.data.FileFormatInfo.Format;
  *
  * @author reshet
  */
-@MessageDriven(mappedName = "jms/alliance/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
+@MessageDriven(mappedName = "jms/alliance/spss_parse", name="AdminSocioResearchMDBRemote", activationConfig = {
+        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
+})
 /*@MessageDriven(name = "admin_mdb",activationConfig = {
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")*/
@@ -140,7 +141,11 @@ public class AdminSocioResearchMDB implements MessageListener {
 //    {
 //        new AdminSocioResearchMDB().perform_indexing(0);
 //    }
-    private Node node;
+//    private Node node;
+    private Client client;
+
+    @EJB ESClientBean clientbean;
+
     @Resource(mappedName = "jms/alliance/myQCF")
     //@Resource(name = "jmsQCF")
     private QueueConnectionFactory connectionFactory;
@@ -153,7 +158,13 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     @PostConstruct
     public void init() {
-        node = nodeBuilder().clusterName("elasticsearch_" + INDEX_NAME + "_Prj_Cluster").client(false).node();
+        client = clientbean.getClient();
+//       Settings settings = ImmutableSettings.settingsBuilder()
+//                .put("cluster.name", "elasticsearch_" + INDEX_NAME + "_Prj_Cluster").build();
+//       client = new TransportClient(settings)
+//                .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+
+        //node = nodeBuilder().clusterName("elasticsearch_" + INDEX_NAME + "_Prj_Cluster").client(false).node();
         try {
             connection = connectionFactory.createQueueConnection();
             session = connection.createQueueSession(false, 0);
@@ -166,8 +177,8 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     @PreDestroy
     public void release() {
-        node.close();
-
+        //node.close();
+        //client.close();
         try {
             q_sender.close();
             connection.close();
@@ -178,7 +189,7 @@ public class AdminSocioResearchMDB implements MessageListener {
     @EJB
     UserSocioResearchBeanRemote U_bean;
 
-    private void perform_delete_indexies(ArrayList<Long> ids, String type) {
+    public void perform_delete_indexies(ArrayList<Long> ids, String type) {
         //SocioResearchDTO dto = new SocioResearchDTO();
         //dto.setId((long)1);
         //dto.setName("name");
@@ -189,7 +200,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
             BulkRequestBuilder bulkRequest = client.prepareBulk();
 
             String[] indecies = new String[ids.size()];
@@ -219,7 +230,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         }
     }
 
-    private void perform_indexing(long id_research) {
+    public void perform_indexing(long id_research) {
 
         SocioResearchDTO dto = U_bean.getResearch(id_research);
         //SocioResearchDTO dto = new SocioResearchDTO();
@@ -232,7 +243,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
 
             // on shutdown
 
@@ -301,14 +312,17 @@ public class AdminSocioResearchMDB implements MessageListener {
     }
     private ArrayList<VarDTO_Detailed> vars_waiting_indexing;
 
-    private void launchIndexingVarBULKED(VarDTO_Detailed dto) {
+    public void init_bulk_indexing(){
+       vars_waiting_indexing = new ArrayList<VarDTO_Detailed>(100);
+    }
+    public void launchIndexingVarBULKED(VarDTO_Detailed dto) {
         vars_waiting_indexing.add(dto);
     }
 
-    private void perform_var_bulk_indexing() {
+    public void perform_var_bulk_indexing() {
         try {
             if (vars_waiting_indexing != null) {
-                Client client = node.client();
+                //Client client = node.client();
                 BulkRequestBuilder bulkRequest = client.prepareBulk();
                 for (VarDTO_Detailed dto : vars_waiting_indexing) {
                     bulkRequest.add(client.prepareIndex(INDEX_NAME, "sociovar", String.valueOf(dto.getId())).setSource(generateVarJSONDesc(dto)));
@@ -368,7 +382,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
 
             // on shutdown
 
@@ -414,7 +428,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
 
             // on shutdown
 
@@ -448,7 +462,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     private void perform_indexing_pub(PublicationDTO dto) {
         try {
-            Client client = node.client();
+            //Client client = node.client();
             IndexResponse response = client.prepareIndex(INDEX_NAME, "publication", String.valueOf(dto.getId())).setSource(dto.getJson_desctiptor()).execute().actionGet();
             System.out.println(response.toString());
 
@@ -460,7 +474,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     private void perform_indexing_jury(ConsultationDTO dto) {
         try {
-            Client client = node.client();
+            //Client client = node.client();
             IndexResponse response = client.prepareIndex(INDEX_NAME, "consultation", String.valueOf(dto.getId())).setSource(dto.getJson_desctiptor()).execute().actionGet();
             System.out.println(response.toString());
 

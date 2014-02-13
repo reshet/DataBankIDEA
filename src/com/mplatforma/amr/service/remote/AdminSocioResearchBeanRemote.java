@@ -40,5 +40,6 @@ public interface AdminSocioResearchBeanRemote {
       
       ArrayList<VarDTO_Detailed> findVarsLikeThis(Long var_id, ComparativeSearchParamsDTO params);
     long createEmptyResearch(String name);
+    long reindexAll();
     
 }

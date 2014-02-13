@@ -73,4 +73,6 @@ public interface AdminSocioResearchServiceAsync {
 
 
     void createEmptyResearch(String name, AsyncCallback<Long> async);
+
+    void reindexAll(AsyncCallback<Long> cb);
 }

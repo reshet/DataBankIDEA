@@ -47,6 +47,7 @@
 										<div class="line-separator"></div>
 									</g:HTMLPanel>
 									<g:Button ui:field="addBtn" enabled="true">Добавить исследование</g:Button>
+                                    <g:Button ui:field="reindexBtn" enabled="true">Перестроить индекс</g:Button>
 								</g:HorizontalPanel>	
 						</g:VerticalPanel>
 					</g:ScrollPanel>

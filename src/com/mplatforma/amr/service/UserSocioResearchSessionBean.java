@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
@@ -346,21 +347,29 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
 	//return Var.getResearchVarsLightDTOsUnordered(em, ids);
     }
     
-    private Node node;
-
+    //private Node node;
+    private Client client;
+    @EJB
+    ESClientBean clientbean;
     //@Resource(name="indexname")
     public  String INDEX_NAME = "databankalliance";
 
     @PostConstruct
     private void init()
     {
-        node = nodeBuilder().clusterName("elasticsearch_"+INDEX_NAME+"_Prj_Cluster").client(true).node();
+        client = clientbean.getClient();
+//        Settings settings = ImmutableSettings.settingsBuilder()
+//                .put("cluster.name", "elasticsearch_" + INDEX_NAME + "_Prj_Cluster").build();
+//        //node = nodeBuilder().clusterName("elasticsearch_"+INDEX_NAME+"_Prj_Cluster").client(true).node();
+//        client = new TransportClient(settings)
+//                .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
     }
     
     @PreDestroy
     private void release()
     {
-      node.close();
+      //node.close();
+      //client.close();
     }
     @Override
     public String doIndexSearch(String json_query,String [] types_to_search)
@@ -392,7 +401,7 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
 //                );
     
             
-            Client client = node.client();
+            //Client client = node.client();
 //            Settings settings = ImmutableSettings.settingsBuilder()
 //                .put("cluster.name", "elasticsearch_DataBankPrj_Cluster").build();
 //             Client client = new TransportClient(settings)

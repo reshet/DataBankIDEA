@@ -106,7 +106,6 @@ import com.mresearch.databank.shared.IPickableElement;
 import com.mresearch.databank.shared.ConceptBinder;
 
 
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 public class AdminResearchPerspectivePresenter implements Presenter
 {
@@ -133,7 +132,9 @@ public class AdminResearchPerspectivePresenter implements Presenter
 		 //HasClickHandlers getDeleteButton();
 		 HasEnabled getAddResearchBtn();
 		 HasClickHandlers getAddResearchBt();
-		 //HasEnabled getCreateConceptBtn();
+         HasClickHandlers getReindexBtn();
+
+         //HasEnabled getCreateConceptBtn();
 		 //HasEnabled getDeleteConceptBtn();
 		 //HasClickHandlers getCreateConceptBt();
 		 VerticalPanel asRoot();
@@ -435,6 +436,32 @@ public class AdminResearchPerspectivePresenter implements Presenter
 				display.getCenterPanel().add(new addResearchUI("First name"));
 			}
 		});
+        display.getReindexBtn().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new RPCCall<Long>() {
+                    @Override
+                    protected void callService(AsyncCallback<Long> cb) {
+                        rpcAdminService.reindexAll(cb);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        display.getCenterPanel().clear();
+                        display.getCenterPanel().add(new HTML("<h2>Не удалось выполнить операцию</h2>"));
+                    }
+
+                    @Override
+                    public void onSuccess(Long result) {
+                        display.getCenterPanel().clear();
+                        double donetime = result/1000.0;
+                        display.getCenterPanel().add(new HTML("<h2>Перестройка поискового индекса выполнена успешно.</h2>" +
+                                "<br/>" +
+                                "<p>Операция выполнена за "+donetime+"с</p>"));
+                    }
+                }.retry(1);
+            }
+        });
 		eventBus.addHandler(ShowResearchDetailsEvent.TYPE, new ShowResearchDetailsEventHandler() {
 			@Override
 			public void onShowResearchDetails(ShowResearchDetailsEvent event) {
