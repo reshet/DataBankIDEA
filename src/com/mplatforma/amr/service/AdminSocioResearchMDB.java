@@ -140,7 +140,10 @@ public class AdminSocioResearchMDB implements MessageListener {
 //    {
 //        new AdminSocioResearchMDB().perform_indexing(0);
 //    }
-    private Node node;
+//    private Node node;
+    private Client client;
+
+    @EJB ESClientBean clientbean;
     @Resource(mappedName = "jms/kiis/myQCF")
     //@Resource(name = "jmsQCF")
     private QueueConnectionFactory connectionFactory;
@@ -153,7 +156,8 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     @PostConstruct
     public void init() {
-        node = nodeBuilder().clusterName("elasticsearch_databankalliance_Prj_Cluster").client(false).node();
+        client = clientbean.getClient();
+        //node = nodeBuilder().clusterName("elasticsearch_databankalliance_Prj_Cluster").client(false).node();
         try {
             connection = connectionFactory.createQueueConnection();
             session = connection.createQueueSession(false, 0);
@@ -166,7 +170,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     @PreDestroy
     public void release() {
-        node.close();
+        //node.close();
 
         try {
             q_sender.close();
@@ -189,7 +193,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
             BulkRequestBuilder bulkRequest = client.prepareBulk();
 
             String[] indecies = new String[ids.size()];
@@ -232,7 +236,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
 
             // on shutdown
 
@@ -308,7 +312,7 @@ public class AdminSocioResearchMDB implements MessageListener {
     private void perform_var_bulk_indexing() {
         try {
             if (vars_waiting_indexing != null) {
-                Client client = node.client();
+                //Client client = node.client();
                 BulkRequestBuilder bulkRequest = client.prepareBulk();
                 for (VarDTO_Detailed dto : vars_waiting_indexing) {
                     bulkRequest.add(client.prepareIndex(INDEX_NAME, "sociovar", String.valueOf(dto.getId())).setSource(generateVarJSONDesc(dto)));
@@ -368,7 +372,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
 
             // on shutdown
 
@@ -414,7 +418,7 @@ public class AdminSocioResearchMDB implements MessageListener {
         try {
 
 
-            Client client = node.client();
+            //Client client = node.client();
 
             // on shutdown
 
@@ -448,7 +452,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     private void perform_indexing_pub(PublicationDTO dto) {
         try {
-            Client client = node.client();
+            //Client client = node.client();
             IndexResponse response = client.prepareIndex(INDEX_NAME, "publication", String.valueOf(dto.getId())).setSource(dto.getJson_desctiptor()).execute().actionGet();
             System.out.println(response.toString());
 
@@ -460,7 +464,7 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     private void perform_indexing_jury(ConsultationDTO dto) {
         try {
-            Client client = node.client();
+            //Client client = node.client();
             IndexResponse response = client.prepareIndex(INDEX_NAME, "consultation", String.valueOf(dto.getId())).setSource(dto.getJson_desctiptor()).execute().actionGet();
             System.out.println(response.toString());
 

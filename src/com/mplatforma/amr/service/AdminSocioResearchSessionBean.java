@@ -12,6 +12,7 @@ import argo.jdom.*;
 import argo.saj.InvalidSyntaxException;
 import com.mplatforma.amr.service.remote.AdminSocioResearchBeanRemote;
 import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
+import com.mplatforma.amr.service.remote.SearchServicesBeanRemote;
 import com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote;
 import com.mplatforma.amr.entity.*;
 import com.mresearch.databank.jobs.DeleteIndexiesJob;
@@ -727,6 +728,40 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         } finally {
         }
         return research_id;
+    }
+
+    @EJB
+    SearchServicesBeanRemote searchBean;
+    @Override
+    public synchronized long reindexAll() {
+        long startTime = System.currentTimeMillis();
+        //delete step
+        List<SocioResearchDTO_Light> researches = SocioResearch.getResearchsLight(em);
+        ArrayList<Long> res_ids = new ArrayList<Long>();
+        for(SocioResearchDTO_Light res_dto:researches){
+            res_ids.add(res_dto.getId());
+            ArrayList<Long> var_ids = Var.getResearchVarsIDs(em,res_dto.getId());
+            searchBean.perform_delete_indexies(var_ids,"sociovar");
+        }
+        searchBean.perform_delete_indexies(res_ids,"research");
+        //index step
+        for(Long res_id:res_ids){
+            searchBean.perform_indexing(res_id);
+            ArrayList<Long> var_ids = Var.getResearchVarsIDs(em,res_id);
+            if(var_ids.size() > 0){
+                searchBean.init_bulk_indexing();
+                for(Long var_id:var_ids){
+                    Var var = em.find(Var.class,var_id);
+                    VarDTO_Detailed var_dto = var.toDTO_Detailed(null,null,em);
+                    searchBean.launchIndexingVarBULKED(var_dto);
+                }
+                searchBean.perform_var_bulk_indexing();
+            }
+
+        }
+
+        return System.currentTimeMillis() - startTime;
+
     }
 
     private ArrayList<String> cropSearchString(String str, int granularity, boolean overlap)

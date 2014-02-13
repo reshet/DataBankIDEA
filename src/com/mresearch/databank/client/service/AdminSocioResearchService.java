@@ -45,7 +45,9 @@ import com.mresearch.databank.shared.VarDTO_Light;
 @RemoteServiceRelativePath("adminResearchService")
 public interface AdminSocioResearchService extends RemoteService {
 
-	public static class Util {
+    long reindexAll();
+
+    public static class Util {
 		private static AdminSocioResearchServiceAsync instance;
 		public static AdminSocioResearchServiceAsync getInstance(){
 			if (instance == null) {

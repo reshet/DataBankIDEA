@@ -40,7 +40,7 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 	@UiField Tree tree;
 	//@UiField Button createBtn,deleteBtn,
 	@UiField Button addBtn;
-	
+    @UiField Button reindexBtn;
 	
 	
 	
@@ -229,5 +229,15 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 	public void setPrevCenterState(Widget w) {
 		previous_centerpanel_state = w;
 	}
+
+    @Override
+    public HasClickHandlers getReindexBtn() {
+        return reindexBtn;
+    }
+
+    @Override
+    public HasEnabled getReindexEnabledBtn() {
+        return reindexBtn;
+    }
 
 }

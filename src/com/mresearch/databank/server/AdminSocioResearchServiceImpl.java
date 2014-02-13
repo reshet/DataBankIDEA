@@ -58,8 +58,13 @@ public class AdminSocioResearchServiceImpl extends RemoteServiceServlet implemen
 		}
 		
 	}*/
-	
-      @Override
+
+    @Override
+    public long reindexAll() {
+        return eao.reindexAll();
+    }
+
+    @Override
 	  public Boolean deleteResearch(long id)
 	  {
 	    return eao.deleteResearch(id);
