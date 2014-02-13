@@ -165,7 +165,13 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
     public HasClickHandlers getReindexBtn() {
         return reindexBtn;
     }
-//	@Override
+
+    @Override
+    public HasEnabled getReindexEnabledBtn() {
+        return reindexBtn;
+    }
+
+    //	@Override
 //	public HasEnabled getCreateConceptBtn() {
 //		return createBtn;
 //	}

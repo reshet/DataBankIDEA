@@ -133,6 +133,8 @@ public class AdminResearchPerspectivePresenter implements Presenter
 		 HasEnabled getAddResearchBtn();
 		 HasClickHandlers getAddResearchBt();
          HasClickHandlers getReindexBtn();
+         HasEnabled getReindexEnabledBtn();
+
 
          //HasEnabled getCreateConceptBtn();
 		 //HasEnabled getDeleteConceptBtn();
@@ -442,6 +444,7 @@ public class AdminResearchPerspectivePresenter implements Presenter
                 new RPCCall<Long>() {
                     @Override
                     protected void callService(AsyncCallback<Long> cb) {
+                        display.getReindexEnabledBtn().setEnabled(false);
                         rpcAdminService.reindexAll(cb);
                     }
 
@@ -449,10 +452,12 @@ public class AdminResearchPerspectivePresenter implements Presenter
                     public void onFailure(Throwable caught) {
                         display.getCenterPanel().clear();
                         display.getCenterPanel().add(new HTML("<h2>Не удалось выполнить операцию</h2>"));
+                        display.getReindexEnabledBtn().setEnabled(true);
                     }
 
                     @Override
                     public void onSuccess(Long result) {
+                        display.getReindexEnabledBtn().setEnabled(true);
                         display.getCenterPanel().clear();
                         double donetime = result/1000.0;
                         display.getCenterPanel().add(new HTML("<h2>Перестройка поискового индекса выполнена успешно.</h2>" +

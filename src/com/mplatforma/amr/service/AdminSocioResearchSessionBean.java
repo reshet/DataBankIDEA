@@ -734,10 +734,8 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 
     @EJB SearchServicesBeanRemote searchBean;
     @Override
-    public long reindexAll() {
+    public synchronized long reindexAll() {
         long startTime = System.currentTimeMillis();
-        try{
-
             //delete step
             List<SocioResearchDTO_Light> researches = SocioResearch.getResearchsLight(em);
             ArrayList<Long> res_ids = new ArrayList<Long>();
@@ -745,32 +743,25 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
                res_ids.add(res_dto.getId());
                ArrayList<Long> var_ids = Var.getResearchVarsIDs(em,res_dto.getId());
                searchBean.perform_delete_indexies(var_ids,"sociovar");
-               //launchDeleteIndexing(var_ids,"sociovar");
             }
             searchBean.perform_delete_indexies(res_ids,"research");
-            //launchDeleteIndexing(res_ids,"research");
-
             //index step
             for(Long res_id:res_ids){
-                //SocioResearch res = em.find(SocioResearch.class,res_id);
-                //SocioResearchDTO res_dto = res.toDTO();
                 searchBean.perform_indexing(res_id);
-                //launchIndexing(res_dto);
                 ArrayList<Long> var_ids = Var.getResearchVarsIDs(em,res_id);
-                searchBean.init_bulk_indexing();
-
-                for(Long var_id:var_ids){
-                    Var var = em.find(Var.class,var_id);
-                    VarDTO_Detailed var_dto = var.toDTO_Detailed(null,null,em);
-                    searchBean.launchIndexingVarBULKED(var_dto);
-                    //launchIndexingVar(var_dto);
+                if(var_ids.size() > 0){
+                    searchBean.init_bulk_indexing();
+                    for(Long var_id:var_ids){
+                        Var var = em.find(Var.class,var_id);
+                        VarDTO_Detailed var_dto = var.toDTO_Detailed(null,null,em);
+                        searchBean.launchIndexingVarBULKED(var_dto);
+                    }
+                    searchBean.perform_var_bulk_indexing();
                 }
-                searchBean.perform_var_bulk_indexing();
+
             }
 
-        }finally{
-            return System.currentTimeMillis() - startTime;
-        }
+        return System.currentTimeMillis() - startTime;
 
         //return 4200;
     }
