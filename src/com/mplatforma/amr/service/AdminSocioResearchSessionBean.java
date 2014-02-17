@@ -349,6 +349,9 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
         try {
           research = em.find(SocioResearch.class, rDTO.getId());
           research.updateFromDTOGrouped(rDTO,em);
+          em.persist(research);
+          SocioResearchDTO resDTO = research.toDTO();
+          launchIndexing(resDTO);
         } catch (Exception e) {
           e.printStackTrace();
         } finally {
