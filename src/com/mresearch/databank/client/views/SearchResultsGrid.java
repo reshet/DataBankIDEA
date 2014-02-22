@@ -142,13 +142,16 @@ public class SearchResultsGrid extends VerticalPanel
       {
     	  if(hit.containsKey("socioresearch_dates_start_date") && hit.containsKey("socioresearch_dates_end_date")){
     		  String date1 = ((JSONString)hit.get("socioresearch_dates_start_date")).stringValue();
-    		  date1 = date1.substring(0, date1.indexOf("T"));
+          if(date1.contains("T")){
+            date1 = date1.substring(0, date1.indexOf("T"));
+          }
     		  String date2 = ((JSONString)hit.get("socioresearch_dates_end_date")).stringValue();
-    		  date2 = date2.substring(0, date2.indexOf("T"));
-    		  
+
+          if(date2.contains("T")){
+            date2 = date2.substring(0, date2.indexOf("T"));
+          }
         	  hit.put("socioresearch_dates", new JSONString(date1+" - "+date2));
-        		  
-    	  }
+        }
     	  
       }
       //ADD RESEARCH NAMES IF NEED
