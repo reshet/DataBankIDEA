@@ -337,24 +337,27 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 	return 0;
     }
 
-   
-    @Override
-    public SocioResearchDTO updateResearchGrouped(SocioResearchDTO rDTO) {
-        if (rDTO.getId() == 0){ // create new
-            return rDTO;
-        }
 
-        SocioResearch research = null;
-        try {
-          research = em.find(SocioResearch.class, rDTO.getId());
-          research.updateFromDTOGrouped(rDTO,em);
-        } catch (Exception e) {
-          e.printStackTrace();
-        } finally {
-            
-        }
-        return rDTO;
+  @Override
+  public SocioResearchDTO updateResearchGrouped(SocioResearchDTO rDTO) {
+    if (rDTO.getId() == 0){ // create new
+      return rDTO;
     }
+
+    SocioResearch research = null;
+    try {
+      research = em.find(SocioResearch.class, rDTO.getId());
+      research.updateFromDTOGrouped(rDTO,em);
+      em.persist(research);
+      SocioResearchDTO resDTO = research.toDTO();
+      launchIndexing(resDTO);
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+
+    }
+    return rDTO;
+  }
 
     @Override
     public VarDTO_Detailed generalizeVar(long var_id, ArrayList<Long> gen_var_ids,UserAccountDTO user) {

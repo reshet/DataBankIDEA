@@ -2,15 +2,16 @@ DatabankIDEA.iml
 .idea/
 .gwt/
 .settings/
+!WebContent/WEB-INF/classes/META-INF/persistence.xml
+!WebContent/DatabankNewest.html
+!WebContent/DatabankNewest.css
+!WebContent/CoolStyles.css
 WebContent/
 out/
 gwt-unitCache/
 extras/
 lib/
-!WebContent/WEB-INF/classes/META-INF/persistence.xml
-!WebContent/DatabankNewest.html
-!WebContent/DatabankNewest.css
-!WebContent/CoolStyles.css
+
 
 
 

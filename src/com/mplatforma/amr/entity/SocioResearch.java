@@ -1,5 +1,9 @@
 package com.mplatforma.amr.entity;
 
+import argo.format.CompactJsonFormatter;
+import argo.format.JsonFormatter;
+import argo.jdom.*;
+import argo.saj.InvalidSyntaxException;
 import com.mresearch.databank.shared.*;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
@@ -7,6 +11,10 @@ import java.util.ArrayList;
 
 import java.util.List;
 import javax.persistence.*;
+
+import static argo.jdom.JsonNodeBuilders.aNumberBuilder;
+import static argo.jdom.JsonNodeBuilders.aStringBuilder;
+import static argo.jdom.JsonNodeBuilders.anObjectBuilder;
 
 @Entity
 @NamedQueries({
@@ -274,7 +282,47 @@ public class SocioResearch extends AbstractSearchable{
 		//if (vars_tagcloud_created==0)generateVarsTagCloud();
 		//this.org_prompter =rDTO.getOrg_prompter();
 	}
-	
+  private static final JdomParser JDOM_PARSER = new JdomParser();
+  private static final JsonFormatter JSON_FORMATTER = new CompactJsonFormatter();
+  private void mergeJsonDescriptor(String other_json){
+    try {
+      JsonRootNode res_this = JDOM_PARSER.parse(this.getJson_desctiptor());
+      JsonRootNode res = JDOM_PARSER.parse(other_json);
+      JsonObjectNodeBuilder result_json_builder = anObjectBuilder();
+
+      for(JsonField f:res.getFieldList()){
+        JsonNodeType type = f.getValue().getType();
+        String name = f.getName().getText();
+        if(!name.equals("socioresearch_name") && !name.equals("socioresearch_sel_size")){
+          if(type.equals(JsonNodeType.STRING)){
+            String val = f.getValue().getStringValue();
+            result_json_builder.withField(name,aStringBuilder(val));
+          }else
+          if(type.equals(JsonNodeType.NUMBER)){
+            String val = f.getValue().getNumberValue();
+            result_json_builder.withField(name,aNumberBuilder(val));
+          }
+        }
+      }
+      // Get from this only sel_size and name
+      for(JsonField f:res_this.getFieldList()){
+        String name = f.getName().getText();
+        if(name.equals("socioresearch_name")){
+          String val = f.getValue().getStringValue();
+          result_json_builder.withField(name,aStringBuilder(val));
+        }else
+        if(name.equals("socioresearch_sel_size")){
+          String val = f.getValue().getNumberValue();
+          result_json_builder.withField(name,aNumberBuilder(val));
+        }
+      }
+
+      String res_json_total = JSON_FORMATTER.format(result_json_builder.build());
+      this.setJson_desctiptor(res_json_total);
+    } catch (InvalidSyntaxException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    }
+  }
 	public void updateFromDTOGrouped(SocioResearchDTO rDTO,EntityManager em)
 	{
                 this.em= em;
@@ -291,6 +339,7 @@ public class SocioResearch extends AbstractSearchable{
 		//this.setVar_weight_name(rDTO.getVar_weight_name());
 		if(this.entity_item == null) this.entity_item = new MetaUnitEntityItem(rDTO.getName());
                 this.entity_item.setMapped_values(rDTO.getFilling());
+    mergeJsonDescriptor(rDTO.getJson_descriptor());
 		//updateEntityRepresent(id_search_repres, name);
 		//if (vars_tagcloud_created==0)generateVarsTagCloud();
 		//this.org_prompter =rDTO.getOrg_prompter();
