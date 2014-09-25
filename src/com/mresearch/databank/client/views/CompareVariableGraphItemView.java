@@ -1,58 +1,25 @@
 package com.mresearch.databank.client.views;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-
-import org.moxieapps.gwt.highcharts.client.AxisTitle;
-import org.moxieapps.gwt.highcharts.client.Chart;
-import org.moxieapps.gwt.highcharts.client.ChartTitle;
-import org.moxieapps.gwt.highcharts.client.Legend;
-import org.moxieapps.gwt.highcharts.client.Legend.Align;
-import org.moxieapps.gwt.highcharts.client.Point;
-import org.moxieapps.gwt.highcharts.client.Series;
-import org.moxieapps.gwt.highcharts.client.Style;
-import org.moxieapps.gwt.highcharts.client.ToolTip;
-import org.moxieapps.gwt.highcharts.client.ToolTipData;
-import org.moxieapps.gwt.highcharts.client.ToolTipFormatter;
-import org.moxieapps.gwt.highcharts.client.labels.DataLabels;
-import org.moxieapps.gwt.highcharts.client.labels.PieDataLabels;
-import org.moxieapps.gwt.highcharts.client.labels.XAxisLabels;
-import org.moxieapps.gwt.highcharts.client.labels.YAxisLabels;
-import org.moxieapps.gwt.highcharts.client.plotOptions.BarPlotOptions;
-import org.moxieapps.gwt.highcharts.client.plotOptions.PiePlotOptions;
-import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dev.jjs.Correlation.Axis;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.mresearch.databank.client.DatabankApp;
-import com.mresearch.databank.client.event.ShowVarPlotEvent;
-import com.mresearch.databank.client.event.ShowVarPlotEventHandler;
 import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
-import com.mresearch.databank.shared.MetaUnitDTO;
 import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
-import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
-import com.smartgwt.client.types.ChartType;
+import org.moxieapps.gwt.highcharts.client.*;
+import org.moxieapps.gwt.highcharts.client.labels.XAxisLabels;
+import org.moxieapps.gwt.highcharts.client.labels.YAxisLabels;
+import org.moxieapps.gwt.highcharts.client.plotOptions.BarPlotOptions;
+import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions;
+
+import java.util.ArrayList;
 
 public class CompareVariableGraphItemView extends Composite {
 

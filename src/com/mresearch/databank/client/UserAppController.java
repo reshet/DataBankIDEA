@@ -19,95 +19,31 @@
  */
 package com.mresearch.databank.client;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dev.js.rhino.ObjToIntMap.Iterator;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.mresearch.databank.client.event.RecalculateDistributionsEvent;
-import com.mresearch.databank.client.event.RecalculateDistributionsEventHandler;
-import com.mresearch.databank.client.event.ShowConsultationDetailsEvent;
-import com.mresearch.databank.client.event.ShowPlaceEvent;
-import com.mresearch.databank.client.event.ShowPlaceEventHandler;
-import com.mresearch.databank.client.event.ShowPublicationDetailsEvent;
-import com.mresearch.databank.client.event.ShowPublicationDetailsEventHandler;
-import com.mresearch.databank.client.event.ShowConsultationDetailsEventHandler;
-import com.mresearch.databank.client.event.ShowResearchDetailsEvent;
-import com.mresearch.databank.client.event.ShowResearchDetailsEventHandler;
-import com.mresearch.databank.client.event.ShowStartPageMainEvent;
-import com.mresearch.databank.client.event.ShowVar2DDEvent;
-import com.mresearch.databank.client.event.ShowVarDetailsEvent;
-import com.mresearch.databank.client.event.ShowVarDetailsEventHandler;
-import com.mresearch.databank.client.event.ShowZaconDetailsEvent;
-import com.mresearch.databank.client.event.ShowZaconDetailsEventHandler;
+import com.google.gwt.user.client.ui.*;
+import com.mresearch.databank.client.event.*;
 import com.mresearch.databank.client.helper.RPCCall;
-import com.mresearch.databank.client.presenters.Presenter;
-import com.mresearch.databank.client.presenters.StartPagePerspectivePresenter;
-import com.mresearch.databank.client.presenters.UpdateUserHistoryActor;
-import com.mresearch.databank.client.presenters.UserLawPerspectivePresenter;
-import com.mresearch.databank.client.presenters.UserPubPerspectivePresenter;
-import com.mresearch.databank.client.presenters.UserJuryPerspectivePresenter;
-//import com.mresearch.databank.client.presenters.UserNewsPerspectivePresenter;
-import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
-import com.mresearch.databank.client.presenters.UserSearchPerspectivePresenter;
-//import com.mresearch.databank.client.service.AdminArticleService;
-//import com.mresearch.databank.client.service.AdminArticleServiceAsync;
-import com.mresearch.databank.client.service.AdminArticleService;
-import com.mresearch.databank.client.service.AdminArticleServiceAsync;
-import com.mresearch.databank.client.service.SearchService;
-import com.mresearch.databank.client.service.SearchServiceAsync;
-import com.mresearch.databank.client.service.StartPageServiceAsync;
-import com.mresearch.databank.client.service.UserSocioResearchService;
-import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
-import com.mresearch.databank.client.views.StartPagePerspectiveView;
-import com.mresearch.databank.client.views.UserLawPerspectiveView;
-
-import com.mresearch.databank.client.views.UserPublicationPerspectiveView;
-import com.mresearch.databank.client.views.UserConsultationPerspectiveView;
-//import com.mresearch.databank.client.views.UserNewsPerspectiveView;
-import com.mresearch.databank.client.views.UserResearchPerspectiveView;
-import com.mresearch.databank.client.views.UserSearchPerspectiveView;
+import com.mresearch.databank.client.presenters.*;
+import com.mresearch.databank.client.service.*;
+import com.mresearch.databank.client.views.*;
 import com.mresearch.databank.shared.IShowPlaceParameters;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
 import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.UserResearchSettingDTO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 
 

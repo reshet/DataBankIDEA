@@ -1,45 +1,30 @@
 package com.mresearch.databank.client.presenters;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.commons.collections.map.HashedMap;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.mresearch.databank.client.event.OrgListChangedEvent;
-import com.mresearch.databank.client.event.OrgListChangedEventHandler;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.service.AdminSocioResearchServiceAsync;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
 import com.mresearch.databank.client.views.AdminResearchVarGeneralizeS1View;
 import com.mresearch.databank.client.views.AdminResearchVarsView;
-import com.mresearch.databank.client.views.IPickBinder;
-import com.mresearch.databank.client.views.PickElementsTableView;
-import com.mresearch.databank.client.views.JSON_Construct;
 import com.mresearch.databank.client.views.DBfillers.MetaUnitCollector;
 import com.mresearch.databank.client.views.DBfillers.MetaUnitEntityItemRegistrator;
 import com.mresearch.databank.client.views.DBfillers.MetaUnitFiller;
-import com.mresearch.databank.shared.JSON_Representation;
-import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
-import com.mresearch.databank.shared.MetaUnitMultivaluedStructureDTO;
-import com.mresearch.databank.shared.OrgDTO;
-import com.mresearch.databank.shared.SSE_DTO;
-import com.mresearch.databank.shared.SocioResearchDTO;
-import com.mresearch.databank.shared.SocioResearchDTO_Light;
-import com.mresearch.databank.shared.VarDTO_Light;
-import com.mresearch.databank.shared.IPickableElement;
+import com.mresearch.databank.client.views.IPickBinder;
+import com.mresearch.databank.client.views.PickElementsTableView;
+import com.mresearch.databank.shared.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class AdminResearchDetailedPresenter implements Presenter{

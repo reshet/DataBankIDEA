@@ -2,33 +2,28 @@ package com.mresearch.databank.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiChild;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.mresearch.databank.client.helper.RPCCall;
-//import com.mresearch.databank.client.presenters.StartPagePerspectivePresenter;
-
-//import com.mresearch.databank.client.service.StartPageService;
-//import com.mresearch.databank.client.service.StartPageServiceAsync;
 import com.mresearch.databank.client.service.StartPageService;
 import com.mresearch.databank.client.service.StartPageServiceAsync;
 import com.mresearch.databank.client.service.UserAccountService;
 import com.mresearch.databank.client.service.UserAccountServiceAsync;
-//import com.mresearch.databank.client.views.HighChartSingleBarPanel;
-//import com.mresearch.databank.client.views.StartPagePerspectiveView;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserHistoryDTO;
-import com.smartgwt.client.widgets.HTMLPane;
+
+//import com.mresearch.databank.client.presenters.StartPagePerspectivePresenter;
+//import com.mresearch.databank.client.service.StartPageService;
+//import com.mresearch.databank.client.service.StartPageServiceAsync;
+//import com.mresearch.databank.client.views.HighChartSingleBarPanel;
+//import com.mresearch.databank.client.views.StartPagePerspectiveView;
 
 
 public class DatabankApp implements EntryPoint {
