@@ -4,22 +4,23 @@
  */
 package com.mplatforma.amr.service;
 
-import javax.annotation.PreDestroy;
-import javax.annotation.PostConstruct;
-import com.mresearch.databank.jobs.IndexResearchJob;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.elasticsearch.client.Client;
-import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
-import com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote;
 import com.mplatforma.amr.entity.SocioResearch;
 import com.mplatforma.amr.entity.Var;
+import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
+import com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote;
 import com.mresearch.databank.jobs.*;
 import com.mresearch.databank.shared.*;
-import java.io.*;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.*;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.opendatafoundation.data.FileFormatInfo;
+import org.opendatafoundation.data.FileFormatInfo.Format;
+import org.opendatafoundation.data.mod3.*;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
@@ -28,30 +29,25 @@ import javax.jms.*;
 import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.elasticsearch.action.bulk.BulkRequestBuilder;
-import org.elasticsearch.action.bulk.BulkResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 //import org.opendatafoundation.data.FileFormatInfo;
 //import org.opendatafoundation.data.FileFormatInfo.Format;
-
 //import org.opendatafoundation.data.mod.SPSSFile;
 //import org.opendatafoundation.data.mod.SPSSFileException;
 //import org.opendatafoundation.data.mod.SPSSNumericVariable;
 //import org.opendatafoundation.data.mod.SPSSStringVariable;
 //import org.opendatafoundation.data.mod.SPSSVariable;
-
-import org.opendatafoundation.data.mod3.*;
-
-import org.w3c.dom.Document;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import static org.elasticsearch.common.xcontent.XContentFactory.*;
-import org.elasticsearch.node.Node;
-
-import static org.elasticsearch.node.NodeBuilder.*;
-import org.mozilla.universalchardet.UniversalDetector;
-import org.opendatafoundation.data.FileFormatInfo;
-import org.opendatafoundation.data.FileFormatInfo.Format;
 //import org.opendatafoundation.data.mod2.SPSSNumericVariable;
 //import org.opendatafoundation.data.mod2.SPSSStringVariable;
 //import org.opendatafoundation.data.mod2.SPSSVariable;
@@ -852,11 +848,8 @@ public class AdminSocioResearchMDB implements MessageListener {
                 SPSSNumericVariable s_var_numeric = (SPSSNumericVariable) s_var;
                 for (Iterator<Double> it = s_var_numeric.data.iterator(); it.hasNext();) {
                     Double value = it.next();
-                    if(value!=null && value!=Double.NaN){
-                        double newval = Math.round(value);
-                        values.add(newval);
-                        //TODO THis is testing hack!!!
-                        //values.add(value);
+                    if(value!=null && value!=Double.NaN && value < 1E+6 && value > 1E-6){
+                        values.add(value);
                     }
                     else {
                         values.add(0.0);
