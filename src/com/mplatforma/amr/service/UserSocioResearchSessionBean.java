@@ -5,37 +5,29 @@
 package com.mplatforma.amr.service;
 
 
-import com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote;
 import com.mplatforma.amr.entity.*;
+import com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote;
 import com.mresearch.databank.shared.*;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import static org.elasticsearch.index.query.FilterBuilders.*;
-import static org.elasticsearch.index.query.QueryBuilders.*;
-import static org.elasticsearch.common.xcontent.XContentFactory.*;
-import org.elasticsearch.index.query.QueryBuilder;
-import static org.elasticsearch.node.NodeBuilder.*;
-import org.elasticsearch.node.Node;
-import org.elasticsearch.search.sort.FieldSortBuilder;
-import org.elasticsearch.search.sort.ScoreSortBuilder;
-import org.elasticsearch.search.sort.SortOrder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -55,7 +47,9 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
 //         Locale.setDefault(locale);
 //          System.out.println("After setting, Locale is = " + locale);
 //    }
-     
+
+    public static Logger logger = Logger.getLogger(UserSocioResearchSessionBean.class.getName());
+
     @PersistenceContext
     private EntityManager em; 
     //@EJB 
@@ -826,7 +820,9 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
     @Override
     public MetaUnitEntityItemDTO getEntityItemDTO(Long id) {
         MetaUnitEntityItem p_item = em.find(MetaUnitEntityItem.class, id);
-        return toEntityItemDTO_Light(p_item);
+        MetaUnitEntityItemDTO dto = toEntityItemDTO_Light(p_item);
+        logger.log(Level.INFO, "GetCatalogLinks: " + dto.toString());
+        return dto;
     }
 
     @Override

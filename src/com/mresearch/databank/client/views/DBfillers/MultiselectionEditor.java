@@ -181,15 +181,13 @@ public class MultiselectionEditor extends Composite
   {
     RecordList lst = this.selected.getDataAsRecordList();
     Record[] r = lst.toArray();
-    ArrayList new_items_selecteion_ids = new ArrayList();
-    StringBuilder bld = new StringBuilder();
-    for (int i = 0; i < r.length - 1; i++)
+    StringBuilder bld = new StringBuilder("");
+    ArrayList<Long> new_items_selecteion_ids = new ArrayList<Long>();
+    for (int i = 0; i < r.length; i++)
     {
       new_items_selecteion_ids.add(r[i].getAttributeAsLong("ID"));
       bld.append(r[i].getAttributeAsString("value") + ";");
     }
-    new_items_selecteion_ids.add(r[(r.length - 1)].getAttributeAsLong("ID"));
-    bld.append(r[(r.length - 1)].getAttributeAsString("value"));
 
     this.ent_w.selected_ids = new_items_selecteion_ids;
     return bld.toString();

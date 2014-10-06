@@ -65,9 +65,16 @@ public class MetaUnitEntityItemDTO implements Serializable{
 				ArrayList<String> tagged_entities_identifiers) {
 			this.tagged_entities_identifiers = tagged_entities_identifiers;
 		}
- 
 
-
-
-
+  @Override
+  public String toString() {
+    return "MetaUnitEntityItemDTO{" +
+            "id=" + id +
+            ", v_value='" + v_value + '\'' +
+            ", mapped_values=" + mapped_values +
+            ", subitems=" + subitems +
+            ", tagged_entities_ids=" + tagged_entities_ids +
+            ", tagged_entities_identifiers=" + tagged_entities_identifiers +
+            '}';
+  }
 }

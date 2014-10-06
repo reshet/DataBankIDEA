@@ -6,25 +6,19 @@ package com.mplatforma.amr.service;
 
 import argo.format.CompactJsonFormatter;
 import argo.format.JsonFormatter;
-import static argo.format.JsonNumberUtils.asBigDecimal;
-import static argo.jdom.JsonNodeBuilders.*;
 import argo.jdom.*;
 import argo.saj.InvalidSyntaxException;
+import com.mplatforma.amr.entity.*;
 import com.mplatforma.amr.service.remote.AdminSocioResearchBeanRemote;
 import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
 import com.mplatforma.amr.service.remote.SearchServicesBeanRemote;
 import com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote;
-import com.mplatforma.amr.entity.*;
 import com.mresearch.databank.jobs.DeleteIndexiesJob;
 import com.mresearch.databank.jobs.IndexResearchJob;
 import com.mresearch.databank.jobs.IndexVarJobFast;
 import com.mresearch.databank.jobs.ParseSpssJob;
 import com.mresearch.databank.shared.*;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
@@ -32,9 +26,15 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.*;
 import javax.jms.Queue;
-import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static argo.format.JsonNumberUtils.asBigDecimal;
+import static argo.jdom.JsonNodeBuilders.*;
 
 
 /**
@@ -58,6 +58,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
     
     private static final JsonFormatter JSON_FORMATTER = new CompactJsonFormatter();
     private static final JdomParser JDOM_PARSER = new JdomParser();
+    public static Logger logger = Logger.getLogger(AdminSocioResearchSessionBean.class.getName());
     @PersistenceContext
     private EntityManager em;
     
@@ -658,7 +659,9 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 
     @Override
     public void updateMetaUnitEntityItemLinks(MetaUnitEntityItemDTO dto) {
-         MetaUnitEntityItem item_old = em.find(MetaUnitEntityItem.class,dto.getId());
+      logger.log(Level.INFO, "UpdateCatalogLinks: " + dto.toString());
+
+      MetaUnitEntityItem item_old = em.find(MetaUnitEntityItem.class,dto.getId());
          if(item_old != null)
          {
             item_old.setTagged_entities_identifiers(dto.getTagged_entities_identifiers());

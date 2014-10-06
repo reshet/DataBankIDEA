@@ -10,32 +10,28 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.ToggleButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.service.AdminSocioResearchService;
+import com.mresearch.databank.client.service.AdminSocioResearchServiceAsync;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
-import com.mresearch.databank.client.service.AdminSocioResearchService.Util;
-import com.mresearch.databank.client.service.AdminSocioResearchServiceAsync;
 import com.mresearch.databank.shared.JSON_Representation;
 import com.mresearch.databank.shared.MetaUnitDTO;
 import com.mresearch.databank.shared.MetaUnitEntityItemDTO;
 import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class MultiValuedEntityMultiselected extends Composite
   implements MetaUnitFiller, MetaUnitEntityItemRegistrator, DependentItemsConsumer
 {
+  public static native void console(String text)
+  /*-{
+    console.log(text);
+  }-*/;
+
   private static MultiValuedEntityMultiselectedUiBinder uiBinder = (MultiValuedEntityMultiselectedUiBinder)GWT.create(MultiValuedEntityMultiselectedUiBinder.class);
 
   private AdminSocioResearchServiceAsync service = AdminSocioResearchService.Util.getInstance();
@@ -49,8 +45,8 @@ public class MultiValuedEntityMultiselected extends Composite
   private MetaUnitMultivaluedEntityDTO dto;
   private JSON_Representation current_json;
   private HashMap<String, String> filling;
-  public ArrayList<Long> initial_selected_ids = new ArrayList();
-  public ArrayList<Long> selected_ids = new ArrayList();
+  public ArrayList<Long> initial_selected_ids = new ArrayList<Long>();
+  public ArrayList<Long> selected_ids = new ArrayList<Long>();
   private String base_name;
   @UiField ToggleButton editBtn;
   public MultiValuedEntityMultiselected()
@@ -235,41 +231,50 @@ public class MultiValuedEntityMultiselected extends Composite
   public void populateItemsLinksTo(final Long id, final String identifier)
   {
     int index = 0;
+    console("Start updating item links for id = " + id);
     if (!this.initial_selected_ids.equals(this.selected_ids))
     {
-      ArrayList<Long> A = new ArrayList<Long>();
-      ArrayList<Long> B = new ArrayList<Long>();
+      console("Sets are not equal, updating");
+      ArrayList<Long> deletedItems = new ArrayList<Long>();
+      ArrayList<Long> newItems = new ArrayList<Long>();
       for (Long el : this.initial_selected_ids)
       {
-        if (this.selected_ids.contains(el)) continue; A.add(el);
+        if (!this.selected_ids.contains(el)) {
+          deletedItems.add(el);
+        }
       }
       for (Long el : this.selected_ids)
       {
-        if (this.initial_selected_ids.contains(el)) continue; B.add(el);
+        if (!this.initial_selected_ids.contains(el)) {
+          newItems.add(el);
+        }
       }
+      console("Items to delete: " + deletedItems.toString());
+      console("Items to create: " + newItems.toString());
 
-      for (final Long oldl : A) {
+      for (final Long oldItem : deletedItems)
+      {
         new RPCCall<MetaUnitEntityItemDTO>()
         {
-          public void onFailure(Throwable caught)
-          {
+          public void onFailure(Throwable caught){
+            console("Failed to get item dto: " + oldItem + "; " + caught.getMessage());
           }
-
           public void onSuccess(final MetaUnitEntityItemDTO result) {
+            console("Result: " + result.toString());
             if (result.getTagged_entities_ids().contains(id))
             {
               result.getTagged_entities_ids().remove(result.getTagged_entities_ids().indexOf(id));
               result.getTagged_entities_identifiers().remove(result.getTagged_entities_ids().indexOf(id));
+              console("Removing id " + id + " from " + result.getV_value());
             }
-
             new RPCCall<Void>()
             {
               public void onFailure(Throwable caught) {
+                Window.alert("Error link upd:"+caught.getMessage());
               }
-
-              public void onSuccess(Void result) {
+              public void onSuccess(Void res) {
+                console(result.getId() + "Links populated!");
               }
-
               protected void callService(AsyncCallback<Void> cb) {
                 MultiValuedEntityMultiselected.this.service.updateMetaUnitEntityItemLinks(result, cb);
               }
@@ -278,48 +283,45 @@ public class MultiValuedEntityMultiselected extends Composite
 
           protected void callService(AsyncCallback<MetaUnitEntityItemDTO> cb)
           {
-            MultiValuedEntityMultiselected.this.userService.getEntityItemDTO(oldl, cb);
+            MultiValuedEntityMultiselected.this.userService.getEntityItemDTO(oldItem, cb);
           }
-        }
-        .retry(2);
+        }.retry(2);
       }
-      for (final Long oldl : B)
+      for (final Long newItem : newItems) {
         new RPCCall<MetaUnitEntityItemDTO>()
         {
           public void onFailure(Throwable caught) {
+            console("Failed to get item dto: " + newItem + "; " + caught.getMessage());
           }
-
           public void onSuccess(final MetaUnitEntityItemDTO result2) {
+            console("Result 2: " + result2.toString());
             if (!result2.getTagged_entities_ids().contains(id))
             {
               result2.getTagged_entities_ids().add(id);
               result2.getTagged_entities_identifiers().add(identifier);
+              console("Adding id " + id + " to " + result2.getV_value());
             }
             new RPCCall<Void>()
             {
               public void onFailure(Throwable caught)
               {
-            	  Window.alert("Error link upd:"+caught.getMessage());
+                Window.alert("Error link upd:"+caught.getMessage());
               }
-
-              public void onSuccess(Void result) {
-            	 // Window.alert("Links populated!");
+              public void onSuccess(Void res) {
+                // Window.alert();
+                console(result2.getId() + "Links populated!");
               }
-
               protected void callService(AsyncCallback<Void> cb) {
                 MultiValuedEntityMultiselected.this.service.updateMetaUnitEntityItemLinks(result2, cb);
               }
-            }
-            .retry(2);
+            }.retry(2);
           }
-
-          
           protected void callService(AsyncCallback<MetaUnitEntityItemDTO> cb)
           {
-            MultiValuedEntityMultiselected.this.userService.getEntityItemDTO(oldl, cb);
+            MultiValuedEntityMultiselected.this.userService.getEntityItemDTO(newItem, cb);
           }
-        }
-        .retry(2);
+        }.retry(2);
+      }
     }
   }
 
