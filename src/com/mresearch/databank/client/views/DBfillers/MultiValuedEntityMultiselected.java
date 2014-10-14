@@ -263,8 +263,8 @@ public class MultiValuedEntityMultiselected extends Composite
             console("Result: " + result.toString());
             if (result.getTagged_entities_ids().contains(id))
             {
-              result.getTagged_entities_ids().remove(result.getTagged_entities_ids().indexOf(id));
               result.getTagged_entities_identifiers().remove(result.getTagged_entities_ids().indexOf(id));
+              result.getTagged_entities_ids().remove(result.getTagged_entities_ids().indexOf(id));
               console("Removing id " + id + " from " + result.getV_value());
             }
             new RPCCall<Void>()
