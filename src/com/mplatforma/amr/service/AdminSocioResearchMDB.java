@@ -746,57 +746,13 @@ public class AdminSocioResearchMDB implements MessageListener {
         Long var_id = null;
 
         try {
-            //em.getTransaction().begin();
             var = new Var();
 
             var.setResearch_id(research_id);
-            // Logger logger = Logger.getLogger("NameOfYourLogger");
-            // logger.log(Level.SEVERE, "this message should get logged "+s_var.toString());//throw new IOException(doc2.getInputEncoding());
 
-            //log();
-
-
-
-            String multistring = "";
-            multistring += s_var.getLabel();
-            System.out.println(multistring);
-           //  logger.log(Level.SEVERE, "this message should get logged "+multistring);//throw new IOException(doc2.getInputEncoding());
-
-            //      multistring+=" :: "+new String(s_var.getLabel().getBytes("Cp1251"),"Cp1251").substring(0,s_var.getLabel().length());
-//      multistring+=" :: "+new String(s_var.getLabel().getBytes("UTF-8"),"UTF-8").substring(0,s_var.getLabel().length());
-//      multistring+=" :: "+new String(s_var.getLabel().getBytes("Cp1251"),"UTF-8").substring(0,s_var.getLabel().length());
-//      multistring+=" :: "+new String(s_var.getLabel().getBytes("UTF-8"),"Cp1251").substring(0,s_var.getLabel().length());
-//      multistring+=" :: "+new String(s_var.getLabel().getBytes(),"UTF-8").substring(0,s_var.getLabel().length());
-//      multistring+=" :: "+new String(s_var.getLabel().getBytes(),"Cp1251").substring(0,s_var.getLabel().length());
-//	      multistring+=" :: "+new String(s_var.getLabel().getBytes("Cp866"),"UTF-8").substring(0,s_var.getLabel().length());
-//	      multistring+=" :: "+new String(s_var.getLabel().getBytes(),"Cp866").substring(0,s_var.getLabel().length());
-//	      multistring+=" :: "+new String(s_var.getLabel().getBytes("UTF-8"),"koi8-r").substring(0,s_var.getLabel().length());
-//	      multistring+=" :: "+new String(s_var.getLabel().getBytes("ISO-8859-1"),"cp1251").substring(0,s_var.getLabel().length());
-
-            //String step0= new String(s_var.getLabel().getBytes());
-            //String step1 = new String(s_var.getLabel().getBytes("UTF8"));
-            //String step2 = new String(step1.getBytes("CP1251"));
-            //multistring+=" :: "+step1.substring(0,s_var.getLabel().length()/10);
-            //multistring+=" :: "+step2.substring(0,s_var.getLabel().length()/10);
-            //String step3 = new String(s_var.getLabel().getBytes("CP1251"));
-            //String step4 = new String(step3.getBytes("UTF8"));
-            //String step5 = new String(step0.getBytes("UTF8"));
-            //String step6 = new String(step0.getBytes("CP1251"));
-
-            //multistring+=" :: "+step3.substring(0,s_var.getLabel().length()/10);
-            //multistring+=" :: "+step4.substring(0,s_var.getLabel().length()/10);
-            //multistring+=" :: "+step5.substring(0,s_var.getLabel().length()/10);
-            //multistring+=" :: "+step6.substring(0,s_var.getLabel().length()/10);
-
-            //   logger.log(Level.SEVERE, "this message should get logged "+multistring);//throw new IOException(doc2.getInputEncoding());
-
-//	      multistring+=" :: "+new String(s_var.getLabel().getBytes(),"koi8-r").substring(0,s_var.getLabel().length()/10);
-//	      multistring+=" :: "+new String(s_var.getLabel().getBytes("koi8-r"),"UTF-8").substring(0,s_var.getLabel().length()/10);
-//	      
-            //var.setCode(new String(s_var.getName().getBytes("CP1251"),"UTF-8"));
-            //var.setLabel(new String(s_var.getLabel().getBytes("CP1251"),"UTF-8"));
+            String label = s_var.getLabel();
             var.setCode(new String(s_var.getName()));
-            var.setLabel(multistring);
+            var.setLabel(label);
             if (s_var.valueLabelRecord != null) {
                 ArrayList<String> labels_encoding = s_var.valueLabelRecord.getVLabelValues();
                 
@@ -809,14 +765,14 @@ public class AdminSocioResearchMDB implements MessageListener {
                 
                 int missings_count = 0;
                 for (int i = 0; i < labels_encoding.size(); i++) {
-                    //  labels_encoding.set(i, new String(labels_encoding.get(i).getBytes("CP1251"),"UTF-8"));
-                    labels_encoding.set(i, new String(labels_encoding.get(i)));
-                    if(missing_codes.contains(String.valueOf(
-                        s_var.valueLabelRecord.getVLabelCodes().get(i)))
-                      )missings_count++;
+                    if(missing_codes.contains(
+                            String.valueOf(s_var.valueLabelRecord.getVLabelCodes().get(i)))) {
+                      missings_count++;
+                    }
                 }
-                if(missings_count < labels_encoding.size())var.setVar_type(VarDTO_Detailed.alt_var_type);
-                else{
+                if(missings_count < labels_encoding.size()) {
+                  var.setVar_type(VarDTO_Detailed.alt_var_type);
+                } else {
                      if (s_var instanceof SPSSNumericVariable) {
                       var.setVar_type(VarDTO_Detailed.real_var_type);
                      }
@@ -848,7 +804,7 @@ public class AdminSocioResearchMDB implements MessageListener {
                 SPSSNumericVariable s_var_numeric = (SPSSNumericVariable) s_var;
                 for (Iterator<Double> it = s_var_numeric.data.iterator(); it.hasNext();) {
                     Double value = it.next();
-                    if(value!=null && value!=Double.NaN && value < 1E+6 && value > 1E-6){
+                    if(value!=null && value!=Double.NaN && value < 1E+6 && value > (-1 * 1E+6)){
                         values.add(value);
                     }
                     else {
