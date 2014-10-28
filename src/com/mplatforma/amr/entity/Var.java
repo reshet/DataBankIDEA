@@ -3,17 +3,13 @@ package com.mplatforma.amr.entity;
 import com.mresearch.databank.shared.*;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
-
-
-
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.*;
 //import org.apache.lucene.util.fst.PairOutputs;
 
 @Entity
@@ -385,10 +381,13 @@ public class Var {
     }
     private boolean isMissingValue(double d){
         String mymis = String.valueOf(d);
-        
-        return missing1!=null && missing1.equals(mymis) 
-               || missing2!=null && missing2.equals(mymis)
-                || missing3!=null && missing3.equals(mymis);
+        if ("0.0".equals(mymis))  {
+          return false;
+        }
+
+      return (missing1!=null && missing1.equals(mymis))
+               || (missing2!=null && missing2.equals(mymis))
+                || (missing3!=null && missing3.equals(mymis));
         
 //        if(missing2.equals("\"\"") && missing3.equals("\"\""))
 //        {
