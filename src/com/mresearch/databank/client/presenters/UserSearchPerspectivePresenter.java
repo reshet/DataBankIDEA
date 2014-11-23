@@ -1,79 +1,29 @@
 package com.mresearch.databank.client.presenters;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.HasMouseDownHandlers;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.logical.shared.HasOpenHandlers;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.uibinder.client.UiFactory;
-import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.json.client.*;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.event.ShowResearchDetailsEvent;
 import com.mresearch.databank.client.event.ShowResearchDetailsEventHandler;
-import com.mresearch.databank.client.event.ShowStartPageMainEvent;
-import com.mresearch.databank.client.event.ShowStartPageMainEventHandler;
 import com.mresearch.databank.client.helper.RPCCall;
-import com.mresearch.databank.client.service.AdminSocioResearchService;
 import com.mresearch.databank.client.service.SearchServiceAsync;
-import com.mresearch.databank.client.service.StartPageServiceAsync;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
-import com.mresearch.databank.client.views.FilterDataDiapasonView;
-import com.mresearch.databank.client.views.FilterMultiMatchView;
-import com.mresearch.databank.client.views.FilterRealDiapasonView;
-import com.mresearch.databank.client.views.FilterStringContainsView;
-import com.mresearch.databank.client.views.ImprovedSearchView;
-import com.mresearch.databank.client.views.ResearchDescItem;
-import com.mresearch.databank.client.views.ResearchVarList;
-import com.mresearch.databank.client.views.RootFilterItemAdvanced;
 import com.mresearch.databank.client.views.SearchResultsGenericGrid;
 import com.mresearch.databank.client.views.SearchResultsGrid;
-import com.mresearch.databank.client.views.SimpleResearchList;
-import com.mresearch.databank.shared.ArticleDTO;
-import com.mresearch.databank.shared.FilterBaseDTO;
-import com.mresearch.databank.shared.FilterDateDiapasonDTO;
-import com.mresearch.databank.shared.FilterDiapasonDTO;
-import com.mresearch.databank.shared.FilterMatchDTO;
-import com.mresearch.databank.shared.FilterMultiDTO;
-import com.mresearch.databank.shared.MetaUnitDTO;
-import com.mresearch.databank.shared.MetaUnitDateDTO;
-import com.mresearch.databank.shared.MetaUnitDoubleDTO;
-import com.mresearch.databank.shared.MetaUnitIntegerDTO;
-import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
-import com.mresearch.databank.shared.MetaUnitMultivaluedStructureDTO;
-import com.mresearch.databank.shared.MetaUnitStringDTO;
-import com.mresearch.databank.shared.NewsDTO;
-import com.mresearch.databank.shared.NewsSummaryDTO;
-import com.mresearch.databank.shared.SearchResultDTO;
-import com.mresearch.databank.shared.SearchTaskLawDTO;
-import com.mresearch.databank.shared.SearchTaskResearchDTO;
-import com.mresearch.databank.shared.SocioResearchDTO;
-import com.mresearch.databank.shared.VarDTO;
+import com.mresearch.databank.shared.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserSearchPerspectivePresenter implements Presenter
 {
@@ -105,6 +55,7 @@ public class UserSearchPerspectivePresenter implements Presenter
 		 String getContainsNoneOf();
 		 String getNotContainsExact();
 		 String [] getTypesToSearch();
+     void setTypesToSearch(String [] types);
 	 }
 	 private final UserSocioResearchServiceAsync rpcService;
 	 private final SearchServiceAsync searchService;
@@ -164,11 +115,14 @@ public class UserSearchPerspectivePresenter implements Presenter
 				//display.setGeneralTabVisible();
 				//display.setGeneralQueryText(this.qu);
 				getMappingStructure();
-			} 
+			}
+    if (p_names.contains("types")) {
+      String types = p_values.get(p_names.indexOf("types"));
+      this.display.setTypesToSearch(types.split(","));
+    }
 	}
-	
-	
-	public void bind()
+
+  public void bind()
 	{	
 		eventBus.addHandler(ShowResearchDetailsEvent.TYPE, new ShowResearchDetailsEventHandler() {
 			@Override
@@ -257,7 +211,9 @@ public class UserSearchPerspectivePresenter implements Presenter
 		      
 		      
 		      arr_contains.set(index_c++, obj_b);
-		      History.newItem("search-results@query="+display.getContainsOneOf());
+
+          String searchTypes = joinStringBy(display.getTypesToSearch(),",");
+          History.newItem("search-results@query="+display.getContainsOneOf() + "&types=" + searchTypes.toString());
 	      }if(display.getContainsExact().length()>0)
 	      {
 	    	  JSONObject obj_b = new JSONObject();
@@ -419,8 +375,19 @@ public class UserSearchPerspectivePresenter implements Presenter
 //			}
 //		}.retry(3);
 	}
-	
-	 private void buildMapping(String base_name, ArrayList<MetaUnitDTO> subunits, HashMap<String, String> map)
+
+  public static String joinStringBy(String [] strArray, String joiner) {
+    StringBuilder searchTypes = new StringBuilder();
+    for(int i = 0; i < strArray.length; i++) {
+      searchTypes.append(strArray[i]);
+      if (i < strArray.length - 1) {
+        searchTypes.append(joiner);
+      }
+    }
+    return searchTypes.toString();
+  }
+
+  private void buildMapping(String base_name, ArrayList<MetaUnitDTO> subunits, HashMap<String, String> map)
 	  {
 		    for (MetaUnitDTO dto : subunits)
 		    {

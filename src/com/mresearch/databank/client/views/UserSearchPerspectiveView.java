@@ -1,38 +1,16 @@
 package com.mresearch.databank.client.views;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.HasMouseDownHandlers;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.logical.shared.HasOpenHandlers;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.core.java.util.Collections;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-
-import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
+import com.google.gwt.user.client.ui.*;
 import com.mresearch.databank.client.presenters.UserSearchPerspectivePresenter;
 import com.mresearch.databank.shared.SearchResultDTO;
 import com.mresearch.databank.shared.SearchTaskLawDTO;
 import com.mresearch.databank.shared.SearchTaskResearchDTO;
-import com.mresearch.databank.shared.SocioResearchDTO;
-import com.mresearch.databank.shared.VarDTO;
+
+import java.util.*;
 
 public class UserSearchPerspectiveView extends Composite implements UserSearchPerspectivePresenter.Display{
 
@@ -50,7 +28,7 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
 	//@UiField FlexTable res_table;
 	//@UiField Label queryStr;
 	SimpleResearchList simpleResearchListItem;
-	@UiField CheckBox all,socioresearch,sociovars,publications;//laws,consults;
+	@UiField CheckBox socioresearch,sociovars,publications;//laws,consults;
 	//@UiField ImprovedSearchView impr_search_view;
 	private ArrayList<SearchResultDTO> resultsList;
 	public UserSearchPerspectiveView() {
@@ -147,10 +125,10 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
 	@Override
 	public String[] getTypesToSearch() {
 		ArrayList<String> types = new ArrayList<String>();
-		if(all.getValue()) return new String[]{"research","sociovar",
-												//"law","consultation",
-												"publication"
-												};
+//		if(all.getValue()) return new String[]{"research","sociovar",
+//												//"law","consultation",
+//												"publication"
+//												};
 		
 		if(socioresearch.getValue())types.add("research");
 		if(sociovars.getValue())types.add("sociovar");
@@ -162,4 +140,13 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
 
 		return arr;
 	}
+
+  @Override
+  public void setTypesToSearch(String[] types) {
+    final Set<String> searchTypes = new HashSet<String>(Arrays.asList(types));
+    socioresearch.setValue(searchTypes.contains("research"));
+    sociovars.setValue(searchTypes.contains("sociovar"));
+    publications.setValue(searchTypes.contains("publication"));
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
 }
