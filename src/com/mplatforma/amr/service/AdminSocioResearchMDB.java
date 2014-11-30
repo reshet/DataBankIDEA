@@ -742,98 +742,79 @@ public class AdminSocioResearchMDB implements MessageListener {
     }
 
     private long createVar(SPSSVariable s_var, long research_id) {
-        Var var = null;
-        Long var_id = null;
+        Var var = new Var();
+        var.setResearch_id(research_id);
+        String label = s_var.getLabel();
+        var.setCode(new String(s_var.getName()));
+        var.setLabel(label);
+        if (s_var.valueLabelRecord != null) {
+            ArrayList<String> labels_encoding = s_var.valueLabelRecord.getVLabelValues();
 
-        try {
-            var = new Var();
-
-            var.setResearch_id(research_id);
-
-            String label = s_var.getLabel();
-            var.setCode(new String(s_var.getName()));
-            var.setLabel(label);
-            if (s_var.valueLabelRecord != null) {
-                ArrayList<String> labels_encoding = s_var.valueLabelRecord.getVLabelValues();
-                
-                Set<String> missing_codes = new HashSet<String>();
-                missing_codes.add(s_var.getMissing1());
-                missing_codes.add(s_var.getMissing2());
-                missing_codes.add(s_var.getMissing3());
+            Set<String> missing_codes = new HashSet<String>();
+            missing_codes.add(s_var.getMissing1());
+            missing_codes.add(s_var.getMissing2());
+            missing_codes.add(s_var.getMissing3());
 
 
-                
-                int missings_count = 0;
-                for (int i = 0; i < labels_encoding.size(); i++) {
-                    if(missing_codes.contains(
-                            String.valueOf(s_var.valueLabelRecord.getVLabelCodes().get(i)))) {
-                      missings_count++;
-                    }
+
+            int missings_count = 0;
+            for (int i = 0; i < labels_encoding.size(); i++) {
+                if(missing_codes.contains(
+                        String.valueOf(s_var.valueLabelRecord.getVLabelCodes().get(i)))) {
+                  missings_count++;
                 }
-                if(missings_count < labels_encoding.size()) {
-                  var.setVar_type(VarDTO_Detailed.alt_var_type);
-                } else {
-                     if (s_var instanceof SPSSNumericVariable) {
-                      var.setVar_type(VarDTO_Detailed.real_var_type);
-                     }
-                     if (s_var instanceof SPSSStringVariable) {
-                        var.setVar_type(VarDTO_Detailed.text_var_type);
-                     }
-                }
-                var.setV_label_codes(s_var.valueLabelRecord.getVLabelCodes());
-                var.setV_label_values(labels_encoding);
+            }
+            if(missings_count < labels_encoding.size()) {
+              var.setVar_type(VarDTO_Detailed.alt_var_type);
             } else {
-                if (s_var instanceof SPSSNumericVariable) {
-                    var.setVar_type(VarDTO_Detailed.real_var_type);
-                }
-                if (s_var instanceof SPSSStringVariable) {
+                 if (s_var instanceof SPSSNumericVariable) {
+                  var.setVar_type(VarDTO_Detailed.real_var_type);
+                 }
+                 if (s_var instanceof SPSSStringVariable) {
                     var.setVar_type(VarDTO_Detailed.text_var_type);
-                    SPSSStringVariable str_var = (SPSSStringVariable) s_var;
-                    ArrayList<String> str_arr = new ArrayList<String>();
-                    for (String str : str_var.data) {
-                        str_arr.add(str);
-                    }
-                    var.setCortage_string(str_arr);
-                }
+                 }
             }
-
-            ArrayList<Double> values = new ArrayList<Double>();
-            //SPSS
+            var.setV_label_codes(s_var.valueLabelRecord.getVLabelCodes());
+            var.setV_label_values(labels_encoding);
+        } else {
             if (s_var instanceof SPSSNumericVariable) {
+                var.setVar_type(VarDTO_Detailed.real_var_type);
+            }
+            if (s_var instanceof SPSSStringVariable) {
+                var.setVar_type(VarDTO_Detailed.text_var_type);
+                SPSSStringVariable str_var = (SPSSStringVariable) s_var;
+                var.setCortage_string(new ArrayList<String>(str_var.data));
+            }
+        }
 
-                SPSSNumericVariable s_var_numeric = (SPSSNumericVariable) s_var;
-                for (Iterator<Double> it = s_var_numeric.data.iterator(); it.hasNext();) {
-                    Double value = it.next();
-                    if(value!=null && value!=Double.NaN && value < 1E+6 && value > (-1 * 1E+6)){
-                        values.add(value);
-                    }
-                    else {
-                        values.add(0.0);
-                    }
+        ArrayList<Double> values = new ArrayList<Double>();
+        //SPSS
+        if (s_var instanceof SPSSNumericVariable) {
+
+            SPSSNumericVariable s_var_numeric = (SPSSNumericVariable) s_var;
+            for (Iterator<Double> it = s_var_numeric.data.iterator(); it.hasNext();) {
+                Double value = it.next();
+                if(value!=null && value!=Double.NaN && value < 1E+6 && value > (-1 * 1E+6)){
+                    values.add(value);
+                }
+                else {
+                    values.add(0.0);
                 }
             }
-            var.setCortage(values);
-            
-            var.setMissing1(s_var.getMissing1());
-            var.setMissing2(s_var.getMissing2());
-            var.setMissing3(s_var.getMissing3());
-            
-            //var.setV_label_map(map);
-            em.persist(var);
-            var_id = var.getID();
-            VarDTO_Detailed ddto = var.toDTO_Detailed(null, null, em);
-            launchIndexingVarBULKED(ddto);
-            em.flush();
-            //em.getTransaction().commit();
-            //launchIndexingVar(var_id);
-//     }  catch (UnsupportedEncodingException ex) {
-//            Logger.getLogger(AdminSocioResearchSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-            // testDDI3work();
-        } finally {
         }
+        var.setCortage(values);
+
+        var.setMissing1(s_var.getMissing1());
+        var.setMissing2(s_var.getMissing2());
+        var.setMissing3(s_var.getMissing3());
+
+        //var.setV_label_map(map);
+        em.persist(var);
+        Long var_id = var.getID();
+        VarDTO_Detailed ddto = var.toDTO_Detailed(null, null, em);
+        launchIndexingVarBULKED(ddto);
+        em.flush();
         
-         return var_id;
-        //return var_id;
+        return var_id;
     }
 }
