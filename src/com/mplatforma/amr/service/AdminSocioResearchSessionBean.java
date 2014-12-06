@@ -28,6 +28,7 @@ import javax.jms.*;
 import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
@@ -91,12 +92,12 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             r_id.add(r.getID());
             launchDeleteIndexing(r_id, "research");
             launchDeleteIndexing(Var.getResearchVarsIDs(em, id), "sociovar");
+            Var.deleteResearchVars(em,id);
             em.flush();
-
-            //store.deleteFile(r.getSpssFile());
             em.remove(r);
             em.flush();
-            Var.deleteResearchVars(em,id);
+            File content = new File(AdminSocioResearchMDB.STORAGE_VAULT + r.getSpssFile());
+            content.delete();
             return true;
         }catch(Exception e)
         {
