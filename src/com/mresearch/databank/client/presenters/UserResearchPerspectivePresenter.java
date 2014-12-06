@@ -1,111 +1,26 @@
 package com.mresearch.databank.client.presenters;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
-
-
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.logical.shared.HasOpenHandlers;
-import com.google.gwt.event.logical.shared.HasSelectionHandlers;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.*;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.UserAppController;
-import com.mresearch.databank.client.event.RecalculateDistributionsEvent;
-import com.mresearch.databank.client.event.ShowPlaceEvent;
-import com.mresearch.databank.client.event.ShowResearchDetailsEvent;
-import com.mresearch.databank.client.event.ShowResearchDetailsEventHandler;
-import com.mresearch.databank.client.event.ShowStartPageMainEvent;
-import com.mresearch.databank.client.event.ShowStartPageMainEventHandler;
-import com.mresearch.databank.client.event.ShowVar2DDEvent;
-import com.mresearch.databank.client.event.ShowVar2DDEventHandler;
-import com.mresearch.databank.client.event.ShowVarDetailsEvent;
-import com.mresearch.databank.client.event.ShowVarDetailsEventHandler;
+import com.mresearch.databank.client.event.*;
 import com.mresearch.databank.client.helper.RPCCall;
-import com.mresearch.databank.client.service.AdminSocioResearchService;
-import com.mresearch.databank.client.service.StartPageServiceAsync;
 import com.mresearch.databank.client.service.UserAccountService;
 import com.mresearch.databank.client.service.UserAccountServiceAsync;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
-import com.mresearch.databank.client.views.AnalysisDescItem;
-import com.mresearch.databank.client.views.ConceptItemItem;
-import com.mresearch.databank.client.views.ConceptItemEntity;
-import com.mresearch.databank.client.views.IPickBinder;
-import com.mresearch.databank.client.views.PickElementsTableView;
-import com.mresearch.databank.client.views.RealVariableDetailedView;
-import com.mresearch.databank.client.views.ResearchDescItem;
-import com.mresearch.databank.client.views.ResearchMetadataItem;
-import com.mresearch.databank.client.views.ResearchVarList;
-import com.mresearch.databank.client.views.RootFilterItemAdvanced;
-import com.mresearch.databank.client.views.SearchResultsGenericGrid;
-import com.mresearch.databank.client.views.SearchResultsGrid;
-import com.mresearch.databank.client.views.SimpleResearchList;
-import com.mresearch.databank.client.views.TextVariableDetailedView;
-import com.mresearch.databank.client.views.UserOwnAnalisysList;
-import com.mresearch.databank.client.views.UserOwnResearchList;
-import com.mresearch.databank.client.views.UserResearchAdvancedFilesView;
-import com.mresearch.databank.client.views.UserResearchDetailedFrameView;
-import com.mresearch.databank.client.views.UserResearchDetailedView;
-import com.mresearch.databank.client.views.VarDescItem;
-import com.mresearch.databank.client.views.VariableDetailedView;
-import com.mresearch.databank.client.views.UserResearchVar2DDView;
-import com.mresearch.databank.client.views.WrappedCustomLabel;
-import com.mresearch.databank.shared.ArticleDTO;
-import com.mresearch.databank.shared.FilterBaseDTO;
-import com.mresearch.databank.shared.IShowPlaceParameters;
-import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
-import com.mresearch.databank.shared.NewsDTO;
-import com.mresearch.databank.shared.NewsSummaryDTO;
-import com.mresearch.databank.shared.RealVarDTO_Detailed;
-import com.mresearch.databank.shared.ResearchBundleDTO;
-import com.mresearch.databank.shared.ShowAnalysisSavedParameters;
-import com.mresearch.databank.shared.ShowCatalogParameters;
-import com.mresearch.databank.shared.ShowFilterParameters;
-import com.mresearch.databank.shared.ShowResearchSavedParameters;
-import com.mresearch.databank.shared.SocioResearchDTO;
-import com.mresearch.databank.shared.SocioResearchDTO_Light;
-import com.mresearch.databank.shared.TextVarDTO_Detailed;
-import com.mresearch.databank.shared.UserAccountDTO;
-import com.mresearch.databank.shared.UserAnalysisSaveDTO;
-import com.mresearch.databank.shared.UserHistoryDTO;
-import com.mresearch.databank.shared.UserResearchSettingDTO;
-import com.mresearch.databank.shared.VarDTO;
-import com.mresearch.databank.shared.VarDTO_Detailed;
-import com.mresearch.databank.shared.VarDTO_Light;
-import com.mresearch.databank.shared.IPickableElement;
+import com.mresearch.databank.client.views.*;
+import com.mresearch.databank.shared.*;
+
+import java.util.*;
 
 
 public class UserResearchPerspectivePresenter implements Presenter,Action
@@ -616,18 +531,6 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 	}
 	public void bind()
 	{
-//		display.getTree().addMouseDownHandler(new MouseDownHandler() {
-//			@Override
-//			public void onMouseDown(MouseDownEvent event) {
-//				TreeItem it = display.getSelectedItem();
-//				if (it instanceof SimpleResearchList)
-//				{
-//					//fetchResearchListData();
-//				}
-//				
-//			}
-//		});
-		
 		eventBus.addHandler(ShowVar2DDEvent.TYPE, new ShowVar2DDEventHandler() {
 			@Override
 			public void onShowVar2DD(ShowVar2DDEvent event) {
@@ -636,7 +539,6 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 				display.getCenterPanel().add(new UserResearchVar2DDView(event.getRes_id(),eventBus,display,event.getPre_saved()));
 			}
 		});
-
 		
 		display.getTreeForSelection().addSelectionHandler(new SelectionHandler<TreeItem>() {
 			//private VarDescItem prevVar;

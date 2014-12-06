@@ -163,7 +163,9 @@ public class AdminResearchDetailedPresenter implements Presenter{
 			edit_display.getDeleteBtn().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent arg0) {
-					deleteResearch(edit_display.getResearchID());
+          if (Window.confirm("Исследование будет безвозвратно удалено. Продолжить?")) {
+            deleteResearch(edit_display.getResearchID());
+          }
 				}
 			});
 	}

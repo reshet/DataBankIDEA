@@ -4,22 +4,22 @@ import argo.format.CompactJsonFormatter;
 import argo.format.JsonFormatter;
 import argo.jdom.*;
 import argo.saj.InvalidSyntaxException;
-import com.mresearch.databank.shared.*;
+import com.mresearch.databank.shared.ResearchFilesDTO;
+import com.mresearch.databank.shared.SocioResearchDTO;
+import com.mresearch.databank.shared.SocioResearchDTO_Light;
+import com.mresearch.databank.shared.VarDTO;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
-import java.util.ArrayList;
-
-import java.util.List;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import static argo.jdom.JsonNodeBuilders.aNumberBuilder;
-import static argo.jdom.JsonNodeBuilders.aStringBuilder;
-import static argo.jdom.JsonNodeBuilders.anObjectBuilder;
+import static argo.jdom.JsonNodeBuilders.*;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "SocioResearch.getResearchesLight", query = "SELECT NEW com.mresearch.databank.shared.SocioResearchDTO_Light(x.id, x.name) FROM SocioResearch x ORDER BY x.id"),
-    @NamedQuery(name = "SocioResearch.getResearchesLightIN", query = "SELECT NEW com.mresearch.databank.shared.SocioResearchDTO_Light(x.id, x.name) FROM SocioResearch x WHERE x.id IN :idlist ORDER BY x.id")
+    @NamedQuery(name = "SocioResearch.getResearchesLight", query = "SELECT NEW com.mresearch.databank.shared.SocioResearchDTO_Light(x.id, x.name) FROM SocioResearch x ORDER BY x.name"),
+    @NamedQuery(name = "SocioResearch.getResearchesLightIN", query = "SELECT NEW com.mresearch.databank.shared.SocioResearchDTO_Light(x.id, x.name) FROM SocioResearch x WHERE x.id IN :idlist ORDER BY x.name")
 })
 public class SocioResearch extends AbstractSearchable{
 
@@ -207,21 +207,21 @@ public class SocioResearch extends AbstractSearchable{
 	//this.setId_search_repres(createSearchRepresenter());
 	}
         
-         public static ArrayList<SocioResearchDTO_Light> getResearchsLight(EntityManager em)
-        {
-           
-            TypedQuery<SocioResearchDTO_Light> q = em.createNamedQuery("SocioResearch.getResearchesLight",SocioResearchDTO_Light.class);
-            List<SocioResearchDTO_Light> l = q.getResultList();
-            return new ArrayList<SocioResearchDTO_Light>(l);
-        }
-        public static ArrayList<SocioResearchDTO_Light> getResearchsLightDTOs(EntityManager em, ArrayList<Long> ids)
-        {
-           
-            TypedQuery<SocioResearchDTO_Light> q = em.createNamedQuery("SocioResearch.getResearchesLightIN", SocioResearchDTO_Light.class );
-            q.setParameter("idlist", ids);
-            List<SocioResearchDTO_Light> l = q.getResultList();
-            return new ArrayList<SocioResearchDTO_Light>(l);
-        }
+  public static ArrayList<SocioResearchDTO_Light> getResearchsLight(EntityManager em)
+  {
+
+      TypedQuery<SocioResearchDTO_Light> q = em.createNamedQuery("SocioResearch.getResearchesLight",SocioResearchDTO_Light.class);
+      List<SocioResearchDTO_Light> l = q.getResultList();
+      return new ArrayList<SocioResearchDTO_Light>(l);
+  }
+  public static ArrayList<SocioResearchDTO_Light> getResearchsLightDTOs(EntityManager em, ArrayList<Long> ids)
+  {
+
+      TypedQuery<SocioResearchDTO_Light> q = em.createNamedQuery("SocioResearch.getResearchesLightIN", SocioResearchDTO_Light.class );
+      q.setParameter("idlist", ids);
+      List<SocioResearchDTO_Light> l = q.getResultList();
+      return new ArrayList<SocioResearchDTO_Light>(l);
+  }
 	public SocioResearchDTO toDTO()
 	{
 		SocioResearchDTO  dto = new SocioResearchDTO();

@@ -92,10 +92,8 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             launchDeleteIndexing(r_id, "research");
             launchDeleteIndexing(Var.getResearchVarsIDs(em, id), "sociovar");
             em.flush();
-            //DatabankStartPage sp = DatabankStartPage.getStartPageSingleton(em);
-            //if(sp.getRes().contains(r))sp.getRes().remove(r);
-            //em.persist(sp);
-            //em.flush();
+
+            //store.deleteFile(r.getSpssFile());
             em.remove(r);
             em.flush();
             Var.deleteResearchVars(em,id);

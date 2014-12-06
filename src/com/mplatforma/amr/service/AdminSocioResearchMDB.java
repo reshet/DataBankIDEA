@@ -15,8 +15,6 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.opendatafoundation.data.FileFormatInfo;
-import org.opendatafoundation.data.FileFormatInfo.Format;
 import org.opendatafoundation.data.mod3.*;
 
 import javax.annotation.PostConstruct;
@@ -558,123 +556,23 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     private void parseSPSS(long blobkey, long length) {
         try {
-//            System.out.println("PARSE SPSS MDB, em = " + em);
-//
-//         
-//         Locale locale = Locale.getDefault();
-//         System.out.println("Before setting, Locale is = " + locale);
-//         locale = new Locale("ru","RU");
-//         Locale.setDefault(locale);
-//         System.out.println("After setting, Locale is = " + locale);
-    
-          
-            Long socioresearch_key = null;
-            //byte[] arr = new byte[(int) length];
-
-
-
-
-
-            RxStoredDTO dto = store.getFileInfo(blobkey);
+           RxStoredDTO dto = store.getFileInfo(blobkey);
             File spssfile = new File(AdminSocioResearchMDB.STORAGE_VAULT+blobkey);
-            //arr = store.getFileContents(blobkey);
-
-
-            //byte [] arr2 = makeSyntax(arr);
-            //here make syntax
-
-
-/*            byte[] buf = new byte[4096];
-            UniversalDetector detector = new UniversalDetector(null);
-//
-            ByteArrayInputStream fis = new ByteArrayInputStream(arr);
-//            // (2)
-            int nread;
-            while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
-                detector.handleData(buf, 0, nread);
-            }
-            // (3)
-            detector.dataEnd();*/
-
-            // (4)
-            //String encoding = detector.getDetectedCharset();
-            boolean isCP1251 = false;
-            boolean isKOI8_R = false;
-
-            /*if (encoding != null) {
-                System.out.println("Detected encoding = " + encoding);
-                if (encoding.equals("WINDOWS-1251")) {
-                    isCP1251 = true;
-                }
-                if (encoding.equals("KOI8-R")) {
-                    isKOI8_R = true;
-                }
-            } else {
-                System.out.println("No encoding detected.");
-            }*/
-
-            //String fileName = "/home/reshet/spssfiles/" + dto.getName();
-
-//            BufferedOutputStream bs = null;
-//            File file = new File(fileName);
-//            try {
-//
-//                FileOutputStream fs = new FileOutputStream(file);
-//                bs = new BufferedOutputStream(fs);
-//                bs.write(arr);
-//                bs.close();
-//                bs = null;
-//
-//            } catch (Exception e) {
-//}
-//
-//            if (bs != null) try { bs.close(); } catch (Exception e) {}
-//            
-
             SPSSFile s = new SPSSFile(spssfile);
-            String st = s.getDDI3DefaultPhysicalDataProductID(new FileFormatInfo(Format.SPSS));
-            String ans = "";
-            String answer = "";
-//            ans = "file_cr";
- //           ans+= "length = "+arr.length;
-            //ans+="fetch_size = "+String.valueOf(b_serv.MAX_BLOB_FETCH_SIZE)+ " ";
-//            byte [] arr_first = new byte[100];
-//            for(int i = 0; i < 100;i++)
-//            {
-//                    arr_first[i] = arr[i];
-//            }
-//            ans+=new String(arr_first);
-            //s.
-
-
+//            String st = s.getDDI3DefaultPhysicalDataProductID(new FileFormatInfo(Format.SPSS));
+//            String ans = "";
+//            String answer = "";
             try {
-                //s.setIsCP1251(isCP1251);
-               // s.setIsKOI8_R(isKOI8_R);
                 s.loadMetadata();
-                //        ans+=" meta_loaded";
-                //s.setIsCP1251(false);
-                //s.setIsKOI8_R(false);
-                
                 s.loadData();
-                //        ans+=" data_loaded";
-                //org.w3c.dom.Document doc1 = s.getDDI3LogicalProduct();
-                //Document doc2 = s.getDDI3PhysicalDataProduct(new FileFormatInfo(Format.SPSS));
-                //        ans+=" doc created";
-
-                socioresearch_key = createEmptyResearch(dto.getName(), blobkey);
+                Long socioresearch_key = socioresearch_key = createEmptyResearch(dto.getName(), blobkey);
                 addSPSStoSocioResearch(socioresearch_key, s, blobkey, "");
-
             } catch (SPSSFileException ex) {
                 Logger.getLogger(AdminSocioResearchMDB.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            //return ans+"  "+socioresearch_key + " : vars :  "+answer;
-            //return socioresearch_key;
         } catch (IOException ex) {
             Logger.getLogger(AdminSocioResearchMDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //return ans+"  "+socioresearch_key + " : vars :  "+answer;
-        //return socioresearch_key;
     }
 
     private long createEmptyResearch(String name, long file_id) {
@@ -702,25 +600,10 @@ public class AdminSocioResearchMDB implements MessageListener {
         for (int i = 0; i < spss.getVariableCount(); i++) {
             System.out.println(i);
             SPSSVariable s_var = spss.getVariable(i);
-            //ans1+=s_var.getLabel()+" ";
-            //		try {
-            //			Element el = s_var.getDDI3CodeScheme(doc);
-            //			int a = 2;
-            //			a+=a;
-            //		} catch (DOMException e) {
-            //			// TODO Auto-generated catch block
-            //			e.printStackTrace();
-            //		} catch (SPSSFileException e) {
-            //			// TODO Auto-generated catch block
-            //			e.printStackTrace();
-            //		}
             long s_key = createVar(s_var, socioresearch_id);
-            //ans1 += s_key;
             var_ids.add(s_key);
         }
-        
-            
-        
+
         SocioResearch dsResearch;
         try {
             dsResearch = em.find(SocioResearch.class, socioresearch_id);
@@ -732,8 +615,7 @@ public class AdminSocioResearchMDB implements MessageListener {
             dsResearch.getEntity_item().getMapped_values().put(SocioResearch._NAME, dsResearch.getName());
 
             em.persist(dsResearch);
-            
-           
+
         } finally {
             
         }
@@ -798,6 +680,7 @@ public class AdminSocioResearchMDB implements MessageListener {
                     values.add(value);
                 }
                 else {
+                  // Add system missing here?
                     values.add(0.0);
                 }
             }

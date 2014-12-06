@@ -8,35 +8,17 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.mresearch.databank.client.DatabankApp;
-import com.mresearch.databank.client.UserAppController;
-import com.mresearch.databank.client.event.ShowConsultationDetailsEvent;
-import com.mresearch.databank.client.event.ShowConsultationIndexEvent;
-import com.mresearch.databank.client.event.ShowPublicationDetailsEvent;
-import com.mresearch.databank.client.event.ShowResearchDetailsEvent;
-import com.mresearch.databank.client.event.ShowVarDetailsEvent;
-import com.mresearch.databank.client.event.ShowZaconDetailsEvent;
 import com.mresearch.databank.client.helper.RPCCall;
-import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
-import com.mresearch.databank.client.service.UserAccountService;
-import com.mresearch.databank.client.service.UserAccountServiceAsync;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
 import com.mresearch.databank.shared.VarDTO_Research;
 import com.smartgwt.client.types.ListGridFieldType;
-import com.smartgwt.client.types.SelectionAppearance;
 import com.smartgwt.client.types.SelectionStyle;
-import com.smartgwt.client.types.SelectionType;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
-import com.smartgwt.client.widgets.grid.events.CellDoubleClickEvent;
-import com.smartgwt.client.widgets.grid.events.CellDoubleClickHandler;
-import com.smartgwt.client.widgets.tree.TreeGrid;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -82,6 +64,10 @@ public class SearchResultsGrid extends VerticalPanel
 	  }else doSearchResultsGrid(link_field_name, multityped,width,ev_bus, total,hits,map);
 	  
   }
+  private static String escapeQuotes(String str) {
+    return str.replaceAll("\'","\"");
+  }
+
   private void doSearchResultsGrid(String link_field_name,boolean multityped,long width,SimpleEventBus ev_bus,Integer total, ArrayList<JSONObject> hits, HashMap<String, String> map)
   {
     this.map = map;
@@ -150,7 +136,7 @@ public class SearchResultsGrid extends VerticalPanel
           if(date2.contains("T")){
             date2 = date2.substring(0, date2.indexOf("T"));
           }
-        	  hit.put("socioresearch_dates", new JSONString(date1+" - "+date2));
+        	  hit.put("socioresearch_dates", new JSONString(SearchDateFormatter.formatDate(date1)+" - "+SearchDateFormatter.formatDate(date2)));
         		  
     	  }
     	  
@@ -167,7 +153,7 @@ public class SearchResultsGrid extends VerticalPanel
     		  if( research_names.size()>k && research_names.get(k)!=null){
     			  Integer key = (int) research_names.get(k).getRes_id();
         		  String name = research_names.get(k).getRes_name();
-        		  hit.put("sociovar_researchname", new JSONString("<a href=\"#user-research@showResearch="+key+"\">"+name+"</a>"));
+        		  hit.put("sociovar_researchname", new JSONString("<a href=\"#user-research@showResearch="+key+"\">"+escapeQuotes(name)+"</a>"));
         		  k++;
               }
     		 }
@@ -181,12 +167,12 @@ public class SearchResultsGrid extends VerticalPanel
         	{
         		String val =((JSONString)hit.get(key)).stringValue();
         		// if(key.equals("sociovar_researhname"))rec.setAttribute(key, "<a href=\"#user-research@showResearch="+id+"\">"+val+"</a>");  
-        		if(key.equals("socioresearch_name"))rec.setAttribute(key, "<a href=\"#user-research@showResearch="+id+"\">"+val+"</a>");
+        		if(key.equals("socioresearch_name"))rec.setAttribute(key, "<a href=\"#user-research@showResearch="+id+"\">"+escapeQuotes(val)+"</a>");
         	     // if(key.equals("sociovar_name"))rec.setAttribute(key, "<a href=\"#user-research@showVar="+id+"\">"+val+"</a>");
-        	      if(key.equals("sociovar_name"))rec.setAttribute(key, "<a href=\"#user-research@showVar="+id+"\">"+val+"</a>");
-          	      if(key.equals("law_name"))rec.setAttribute(key, "<a href=\"#user-law@showZacon="+id+"\">"+val+"</a>");
-        	      if(key.equals("publication_name"))rec.setAttribute(key, "<a href=\"#user-pub@showPub="+id+"\">"+val+"</a>");
-        	      if(key.equals("consultation_name"))rec.setAttribute(key, "<a href=\"#user-jury@showConsult="+id+"\">"+val+"</a>");
+        	      if(key.equals("sociovar_name"))rec.setAttribute(key, "<a href=\"#user-research@showVar="+id+"\">"+escapeQuotes(val)+"</a>");
+          	      if(key.equals("law_name"))rec.setAttribute(key, "<a href=\"#user-law@showZacon="+id+"\">"+escapeQuotes(val)+"</a>");
+        	      if(key.equals("publication_name"))rec.setAttribute(key, "<a href=\"#user-pub@showPub="+id+"\">"+escapeQuotes(val)+"</a>");
+        	      if(key.equals("consultation_name"))rec.setAttribute(key, "<a href=\"#user-jury@showConsult="+id+"\">"+escapeQuotes(val)+"</a>");
         	}else
         	{
              	rec.setAttribute(key, ((JSONString)hit.get(key	)).stringValue());
