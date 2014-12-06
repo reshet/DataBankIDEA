@@ -1,16 +1,8 @@
 package com.mresearch.databank.client.views.DBfillers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -18,19 +10,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.ToggleButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.service.AdminSocioResearchService;
 import com.mresearch.databank.client.service.AdminSocioResearchServiceAsync;
@@ -38,11 +18,12 @@ import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
 import com.mresearch.databank.shared.JSON_Representation;
 import com.mresearch.databank.shared.MetaUnitDTO;
-import com.mresearch.databank.shared.MetaUnitDateDTO;
 import com.mresearch.databank.shared.MetaUnitEntityItemDTO;
-import com.mresearch.databank.shared.MetaUnitMultivaluedDTO;
 import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
-import com.mresearch.databank.shared.MetaUnitStringDTO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaUnitEntityItemRegistrator{
 
@@ -64,7 +45,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	private MetaUnitMultivaluedEntityDTO dto;
 	private JSON_Representation current_json;
 	private HashMap<String,String> filling;
-	private long previous_item_id;
+	private Long previous_item_id = null;
 	private String previous_item_name;
 	@UiField ToggleButton editBtn;
 	private String base_name;
@@ -75,12 +56,11 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 		entity_name.setText(dto.getDesc());
 		this.filling = filling;
 		this.consumer = cons;
-		if(this.filling == null)this.filling = new HashMap<String,String>();
-		this.base_name = base_name.equals("")?dto.getUnique_name():base_name+"_"+dto.getUnique_name();
-		//items_list.setMultipleSelect(dto.isIsMultiselected());
-		//items_list.setVisibleItemCount(1);
-		//renderSubUnits();
-		//items_list.se
+		if (this.filling == null) {
+      this.filling = new HashMap<String,String>();
+    }
+		this.base_name = base_name.equals("") ? dto.getUnique_name() : base_name + "_" + dto.getUnique_name();
+
 		editBtn.setStyleName("metaoptsBtn");
 		
 		refreshMembersList();
@@ -147,47 +127,39 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	    pnl.add(delAnch);
 	    pnl.add(editAnch);
 	    p.add(pnl);
-		p.show();
+  		p.show();
 	  }
-	 // @UiHandler(value="add")
+
 	  public void addCmd(ClickEvent ev) {
 	    PopupPanel p = new PopupPanel();
 	    p.setTitle("Добавление экземпляра сущности...");
 	    p.setModal(true);
-	    //p.setPopupPosition(200, 200);
-	    //p.setSize("300px", "400px");
 	    p.setSize("100%", "100%");
 	    p.setWidget(new ItemCreator(new MultiValuedField(this.dto, null, new HashMap<String,String>(),dto.getUnique_name()), this, p));
 	    p.show();
 	    p.center();
 	  }
-	 //@UiHandler(value="addsub")
 	  public void addCmdSub(ClickEvent ev) {
 	    PopupPanel p = new PopupPanel();
 	    p.setTitle("Добавление подэкземпляра сущности...");
 	    p.setModal(true);
-	    //p.setPopupPosition(200, 200);
 	    p.setSize("100%", "100%");
 	    int ind = this.items_list.getSelectedIndex();
-	    if (ind >= 0)
+	    if (ind > 0)
 	    {
-	      Long id = (Long)this.dto.getItem_ids().get(ind);
-	      Long id_ent = Long.valueOf(this.dto.getId());
-	      p.setWidget(new SubItemCreator(id.longValue(), new MultiValuedField(this.dto, null, new HashMap(),dto.getUnique_name()), this, p));
+	      Long id = this.dto.getItem_ids().get(ind - 1);
+	      p.setWidget(new SubItemCreator(id, new MultiValuedField(this.dto, null, new HashMap(),dto.getUnique_name()), this, p));
 	      p.show();
 	      p.center();
 	    }
 	  }
-	 
-	 
-	//@UiHandler(value="delete") 
-	public void delCmd(ClickEvent ev)
-	{
+
+	public void delCmd(ClickEvent ev) {
 		final int ind = items_list.getSelectedIndex();
-		if(ind >=0)
+		if(ind > 0)
 		{
-			final Long id = dto.getItem_ids().get(ind);
-			final Long id_ent = Long.valueOf(this.dto.getId());
+			final Long id = dto.getItem_ids().get(ind - 1);
+			final Long id_ent = this.dto.getId();
 			new RPCCall<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
@@ -205,27 +177,23 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 			}.retry(2);
 		}
 	}
-	//@UiHandler(value="edit") 
-	public void editCmd(ClickEvent ev)
-	{
+
+	public void editCmd(ClickEvent ev) {
 		PopupPanel p = new PopupPanel();
-		//p.setTitle("Редактирование поля...");
 		p.setModal(true);
-		//p.setPopupPosition(400, 400);
 		p.setSize("100%", "100%");
 		p.setWidget(new FieldEditor(new MultiValuedField(dto, null, filling,dto.getUnique_name()),p));
 		p.show();	
 		p.center();
 	}
 	
-	//@UiHandler(value="edit_item") 
 	public void editItemCmd(ClickEvent ev)
 	{
 		int ind = items_list.getSelectedIndex();
-		if(ind >=0)
+		if(ind > 0)
 		{
-			final Long id = dto.getItem_ids().get(ind);
-			final String name = dto.getItem_names().get(ind);
+			final Long id = dto.getItem_ids().get(ind - 1);
+			final String name = dto.getItem_names().get(ind - 1);
 			new RPCCall<HashMap<String, String>>() {
 				@Override
 				public void onFailure(Throwable caught) {
@@ -236,21 +204,16 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 					PopupPanel p = new PopupPanel();
 					p.setTitle("Редактирование объекта...");
 					p.setModal(true);
-					//p.setPopupPosition(400, 400);
 					p.setSize("100%", "100%");
-					//p.setWidget(new EntityItemEditor(new MultiValuedField(dto, null, result),id,name,p));
-					//p.show();	
-					
-			          MultiValuedField f = new MultiValuedField(MultiValuedEntity.this.dto, null, result,dto.getUnique_name());
-			          EntityItemEditor ed = new EntityItemEditor(f, MultiValuedEntity.this, id, name, p);
-			          p.setWidget(ed);
-			          p.show();
-			          p.center();
+          MultiValuedField f = new MultiValuedField(MultiValuedEntity.this.dto, null, result,dto.getUnique_name());
+          EntityItemEditor ed = new EntityItemEditor(f, MultiValuedEntity.this, id, name, p);
+          p.setWidget(ed);
+          p.show();
+          p.center();
 				}
 
 				@Override
-				protected void callService(
-						AsyncCallback<HashMap<String, String>> cb) {
+				protected void callService(AsyncCallback<HashMap<String, String>> cb) {
 					userService.getEntityItem(id, cb);
 				}
 			}.retry(2);
@@ -281,60 +244,37 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	private void renderSubUnits()
 	{
 		items_list.clear();
-		ArrayList<String> base = dto.getItem_names();
-		int i = 0;
-		if(base!=null)
-		for(String dto_name:base)
-		{
-//			if(dto instanceof MetaUnitStringDTO)
-//			{
-//				MetaUnitStringDTO dto_str = (MetaUnitStringDTO)dto;
-//				subunits_table.setWidget(i++, 0, new SimpleStringField(dto_str,null));
-//			}else
-//			if(dto instanceof MetaUnitDateDTO)
-//			{ 
-//				MetaUnitDateDTO dto_str = (MetaUnitDateDTO)dto;
-//				subunits_table.setWidget(i++, 0, new SimpleDateField(dto_str,null));
-//			}else
-//			if(dto instanceof MetaUnitMultivaluedDTO)
-//			{
-//				MetaUnitMultivaluedDTO dto_str = (MetaUnitMultivaluedDTO)dto;
-//				items_list.addItem(dto_str.getDesc());
-//				//subunits_table.setWidget(i++, 0, new MultiValuedEntity(dto_str,null));
-//			}
-			items_list.addItem(dto_name);
-			//. Подзаконные акты
-			//.  Подзаконные акты
-			
-		}
-		if(filling.containsKey(base_name))
-		{
-			  String val = (String)this.filling.get(base_name);
-		      if (val != null)
-		      {
-		        int index = this.dto.getItem_names().indexOf(val);
-		        if(index>=0)
-		        {
-		        	this.items_list.setSelectedIndex(index);
+    items_list.addItem("");
+    ArrayList<String> base = dto.getItem_names();
+    if (base != null) {
+      for(String dto_name:base)
+      {
+        items_list.addItem(dto_name);
+      }
+    }
 
-			        this.previous_item_id = ((Long)this.dto.getItem_ids().get(index)).longValue();
-
-		        }		 
-		      }
+		if (filling.containsKey(base_name)) {
+			  String val = this.filling.get(base_name);
+        if (val != null && !val.equals("")) {
+          int index = this.dto.getItem_names().indexOf(val);
+          if(index >= 0)
+          {
+            this.items_list.setSelectedIndex(index + 1);
+            this.previous_item_id = this.dto.getItem_ids().get(index);
+          }
+        }
 		}
 	}
-	
 	
 	private void rebuildJSON()
 	{
 		JSONObject obj = new JSONObject();
-		int index =-1;
+		int index = -1;
 		index = this.items_list.getSelectedIndex();
-	    if(index>=0)obj.put(base_name, new JSONString(this.items_list.getItemText(index)));
-	    this.current_json = new JSON_Representation(obj);
-	    
-	    //this.populateItemsLinksTo(id, identifier);
-		//here to build JSON from children;
+    if (index >= 0) {
+      obj.put(base_name, new JSONString(this.items_list.getItemText(index)));
+    }
+    this.current_json = new JSON_Representation(obj);
 	}
 	@Override
 	public String getUniqueName() {
@@ -348,13 +288,17 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 
 	@Override
 	public String getFilledValue() {
-		 int index = 0;
-		    if (this.items_list.getItemCount() <= 0) return null;
-		    if (this.items_list.getSelectedIndex() != -1) index = this.items_list.getSelectedIndex();
+		    int index = 0;
+		    if (this.items_list.getItemCount() <= 0) {
+          return null;
+        }
+		    if (this.items_list.getSelectedIndex() != -1) {
+          index = this.items_list.getSelectedIndex();
+        }
 		    LinkedList<Integer> selectedItems = new LinkedList<Integer>();
 		    for (int i = 0; i < this.items_list.getItemCount(); i++) {
 		      if (this.items_list.isItemSelected(i)) {
-		        selectedItems.add(Integer.valueOf(i));
+		        selectedItems.add(i);
 		      }
 		    }
 		    StringBuilder bu = new StringBuilder();
@@ -363,10 +307,10 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 		    {
 		      for (int i = 0; i < selectedItems.size() - 1; i++)
 		      {
-		        bu.append(this.items_list.getItemText(((Integer)selectedItems.get(i)).intValue()));
+		        bu.append(this.items_list.getItemText(selectedItems.get(i)));
 		        bu.append("||");
 		      }
-		      bu.append(this.items_list.getItemText(((Integer)selectedItems.get(selectedItems.size() - 1)).intValue()));
+		      bu.append(this.items_list.getItemText(selectedItems.get(selectedItems.size() - 1)));
 		      val = bu.toString();
 		    }
 		    else {
@@ -378,102 +322,69 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	public MetaUnitDTO getDTO() {
 		return dto;
 	}
-	
-	
-	
-	
-	private void deletePreviousTag(final MetaUnitEntityItemDTO result,final Long id_sys_ent,final long id_item_sel,final String identifier)
+
+	private void deletePreviousTag(final MetaUnitEntityItemDTO result,final Long id_sys_ent,final Long id_item_sel,final String identifier)
 	{
-		 if (result.getTagged_entities_ids().contains(id_sys_ent))
-         {
-			 result.getTagged_entities_identifiers().remove(result.getTagged_entities_ids().indexOf(id_sys_ent));
+		 if (result.getTagged_entities_ids().contains(id_sys_ent)){
+			     result.getTagged_entities_identifiers().remove(result.getTagged_entities_ids().indexOf(id_sys_ent));
 	         result.getTagged_entities_ids().remove(id_sys_ent);
-         }
+     }
 
-         new RPCCall<MetaUnitEntityItemDTO>()
-         {
-           public void onFailure(Throwable caught) {
-          	  Window.alert("Error getting ItemDTO 2"+caught.getMessage());
-    	      }
+    new RPCCall<Void>()
+    {
+      public void onFailure(Throwable caught)
+      {
+        Window.alert("Error updating links "+caught.getMessage());
+      }
 
-           public void onSuccess(final MetaUnitEntityItemDTO result2) {
-             if (!result2.getTagged_entities_ids().contains(id_sys_ent))
-             {
-               result2.getTagged_entities_ids().add(id_sys_ent);
-               result2.getTagged_entities_identifiers().add(identifier);
-             }
-             new RPCCall<Void>()
-             {
-               public void onFailure(Throwable caught)
-               {
-              	  Window.alert("Error updating links "+caught.getMessage());
-        	      }
+      public void onSuccess(Void result) {
+        if (id_item_sel != null) {
+          simpleUpdateTag(id_sys_ent, id_item_sel, identifier);
+        }
+      }
 
-               public void onSuccess(Void result) {
-            	   simpleUpdateTag(id_sys_ent, id_item_sel, identifier);
-               }
-
-               protected void callService(AsyncCallback<Void> cb) {
-                 MultiValuedEntity.this.service.updateMetaUnitEntityItemLinks(result, result2, cb);
-               }
-             }
-             .retry(2);
-           }
-
-           protected void callService(AsyncCallback<MetaUnitEntityItemDTO> cb)
-           {
-             MultiValuedEntity.this.userService.getEntityItemDTO(Long.valueOf(id_item_sel), cb);
-           }
-         }
-         .retry(2);
-
+      protected void callService(AsyncCallback<Void> cb) {
+        MultiValuedEntity.this.service.updateMetaUnitEntityItemLinks(result, cb);
+      }
+    }.retry(2);
 	}
 	
-	private void simpleUpdateTag(final Long id,final long idd,final String identifier)
+	private void simpleUpdateTag(final Long id,final Long id_item_selected, final String identifier)
 	{
-	     new RPCCall<MetaUnitEntityItemDTO>()
-         {
+	     new RPCCall<MetaUnitEntityItemDTO>() {
            public void onFailure(Throwable caught) {
-          	  Window.alert("Error getting ItemDTO 2"+caught.getMessage());
+          	  Window.alert("Error getting ItemDTO 2 " + caught.getMessage());
     	      }
 
-           public void onSuccess(final MetaUnitEntityItemDTO result2) {
-             if (!result2.getTagged_entities_ids().contains(id))
+           public void onSuccess(final MetaUnitEntityItemDTO result) {
+             if (!result.getTagged_entities_ids().contains(id))
              {
-               result2.getTagged_entities_ids().add(id);
-               result2.getTagged_entities_identifiers().add(identifier);
+               result.getTagged_entities_ids().add(id);
+               result.getTagged_entities_identifiers().add(identifier);
              }
-             new RPCCall<Void>()
-             {
+             new RPCCall<Void>(){
                public void onFailure(Throwable caught)
                {
               	  Window.alert("Error updating links "+caught.getMessage());
-        	      }
-
-               public void onSuccess(Void result) {
-               }
-
+        	     }
+               public void onSuccess(Void result) {}
                protected void callService(AsyncCallback<Void> cb) {
-                 MultiValuedEntity.this.service.updateMetaUnitEntityItemLinks(result2, cb);
+                 MultiValuedEntity.this.service.updateMetaUnitEntityItemLinks(result, cb);
                }
-             }
-             .retry(2);
+             }.retry(2);
            }
 
            protected void callService(AsyncCallback<MetaUnitEntityItemDTO> cb)
            {
-             MultiValuedEntity.this.userService.getEntityItemDTO(Long.valueOf(idd), cb);
+             MultiValuedEntity.this.userService.getEntityItemDTO(id_item_selected, cb);
            }
-         }
-         .retry(2);
+       }.retry(2);
 
 	}
 	private void getPreviousDistrib(final Long prev_id,final Long id_sys_ent,final Long id_item_sel,final String identifier)
 	{
-		if(prev_id != null && prev_id != 0)
-		{
-			new RPCCall<MetaUnitEntityItemDTO>()
-	        {
+		if (prev_id != null) {
+			new RPCCall<MetaUnitEntityItemDTO>() {
 	          public void onFailure(Throwable caught) {
 	        	  Window.alert("Error getting ItemDTO "+caught.getMessage());
 	          }
@@ -486,12 +397,11 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	          {
 	            MultiValuedEntity.this.userService.getEntityItemDTO(prev_id, cb);
 	          }
-	        }
-	        .retry(2);
-		}
-		else
-		{
-			simpleUpdateTag(id_sys_ent, id_item_sel, identifier);
+	    }.retry(2);
+		} else {
+      if (id_item_sel != null) {
+        simpleUpdateTag(id_sys_ent, id_item_sel, identifier);
+      }
 		}
 	}
 	@Override
@@ -500,9 +410,12 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	    if ((this.items_list.getItemCount() > 0) && (this.items_list.getSelectedIndex() != -1))
 	    {
 	      index = this.items_list.getSelectedIndex();
-	      final long id_item_selected = ((Long)this.dto.getItem_ids().get(index)).longValue();
+        Long id_item_selected = null;
+        if (index > 0) {
+          id_item_selected = this.dto.getItem_ids().get(index - 1);
+        }
 
-	      if (id_item_selected != this.previous_item_id)
+	      if (id_item_selected == null || !id_item_selected.equals(this.previous_item_id))
 	      {
 	    	  getPreviousDistrib(this.previous_item_id,id_sys_ent,id_item_selected,identifier);
 	      }

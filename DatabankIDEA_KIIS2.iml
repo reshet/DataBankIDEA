@@ -36,7 +36,7 @@
         <setting name="compilerParameters" value="-localWorkers 2" />
         <setting name="compilerMaxHeapSize" value="1520" />
         <setting name="gwtScriptOutputStyle" value="OBF" />
-        <setting name="gwtSdkUrl" value="file://$USER_HOME$/GWT_2.4.0" />
+        <setting name="gwtSdkUrl" value="file://$USER_HOME$/GWT_2.4.0/" />
         <setting name="webFacet" value="Web" />
       </configuration>
     </facet>
@@ -51,7 +51,8 @@
     <orderEntry type="library" name="lib1" level="project" />
     <orderEntry type="library" name="elasticsearch" level="project" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="gwt-user" level="project" />
+    <orderEntry type="library" name="gwt-api-checker" level="project" />
+    <orderEntry type="library" name="GWT_2.4" level="project" />
   </component>
 </module>
 
