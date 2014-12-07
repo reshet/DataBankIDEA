@@ -62,7 +62,7 @@ public class LoginView extends Composite {
 
   // This app's personal client ID assigned by the Google APIs Console
   // (http://code.google.com/apis/console).
- 	private static final String GOOGLE_CLIENT_ID = "157936524178.apps.googleusercontent.com";
+ 	private static final String GOOGLE_CLIENT_ID = "157936524178-6na0469evoo8vbucbc953fl82s6u0rch.apps.googleusercontent.com";
 
   // The auth scope being requested. This scope will allow the application to
   // identify who the authenticated user is.
