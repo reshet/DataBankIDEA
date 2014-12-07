@@ -37,52 +37,19 @@ import java.util.logging.Logger;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
-//import org.opendatafoundation.data.FileFormatInfo;
-//import org.opendatafoundation.data.FileFormatInfo.Format;
-//import org.opendatafoundation.data.mod.SPSSFile;
-//import org.opendatafoundation.data.mod.SPSSFileException;
-//import org.opendatafoundation.data.mod.SPSSNumericVariable;
-//import org.opendatafoundation.data.mod.SPSSStringVariable;
-//import org.opendatafoundation.data.mod.SPSSVariable;
-//import org.opendatafoundation.data.mod2.SPSSNumericVariable;
-//import org.opendatafoundation.data.mod2.SPSSStringVariable;
-//import org.opendatafoundation.data.mod2.SPSSVariable;
-//import org.opendatafoundation.data.mod2.SPSSFile;
-//import org.opendatafoundation.data.mod2.SPSSFileException;
-//import org.opendatafoundation.data.spss.*;
 
 /**
  *
  * @author reshet
  */
-@MessageDriven(mappedName = "jms/kiis/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
-/*@MessageDriven(name = "admin_mdb",activationConfig = {
-        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")*/
-//  @ActivationConfigProperty(propertyName = "destination", propertyValue = "jms/myQCF")
-//})
+@MessageDriven(mappedName = "jms/national/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
 public class AdminSocioResearchMDB implements MessageListener {
-
-//    static {
-//        Locale locale = Locale.getDefault();
-//        System.out.println("Before setting, Locale is = " + locale);
-//        locale = new Locale("ru", "RU");
-//        //  // Setting default locale  
-//        // // locale = Locale.ITALY;
-//        Locale.setDefault(locale);
-//        System.out.println("After setting, Locale is = " + locale);
-//    }
     @PersistenceContext
     private EntityManager em;
-//    @Resource
-//    private MessageDrivenContext mdc;
     @EJB
     private RxStorageBeanRemote store;
-    public static String INDEX_NAME = "databankkiis";
-    public static String STORAGE_VAULT = "/home/reshet/databank/"+INDEX_NAME+"/";
-    /*@Resource(name="indexname")
-    public  String INDEX_NAME;
-*/
+    public static final String INDEX_NAME = "databanknational";
+    public static final String STORAGE_VAULT = "/home/reshet/databank/databanknational/";
     public AdminSocioResearchMDB() {
         super();
     }
@@ -136,10 +103,10 @@ public class AdminSocioResearchMDB implements MessageListener {
     private Client client;
 
     @EJB ESClientBean clientbean;
-    @Resource(mappedName = "jms/kiis/myQCF")
+    @Resource(mappedName = "jms/national/myQCF")
     //@Resource(name = "jmsQCF")
     private QueueConnectionFactory connectionFactory;
-    @Resource(mappedName = "jms/kiis/spss_parse")
+    @Resource(mappedName = "jms/national/spss_parse")
     //@Resource(name = "jmsqueue")
     private Queue queue;
     private QueueConnection connection;
@@ -149,7 +116,6 @@ public class AdminSocioResearchMDB implements MessageListener {
     @PostConstruct
     public void init() {
         client = clientbean.getClient();
-        //node = nodeBuilder().clusterName("elasticsearch_databankalliance_Prj_Cluster").client(false).node();
         try {
             connection = connectionFactory.createQueueConnection();
             session = connection.createQueueSession(false, 0);
@@ -162,8 +128,6 @@ public class AdminSocioResearchMDB implements MessageListener {
 
     @PreDestroy
     public void release() {
-        //node.close();
-
         try {
             q_sender.close();
             connection.close();
@@ -175,112 +139,41 @@ public class AdminSocioResearchMDB implements MessageListener {
     UserSocioResearchBeanRemote U_bean;
 
     private void perform_delete_indexies(ArrayList<Long> ids, String type) {
-        //SocioResearchDTO dto = new SocioResearchDTO();
-        //dto.setId((long)1);
-        //dto.setName("name");
-        //dto.setMethod("method");
-        //dto.setOrg_impl_name("org.impl.name");
-        //String t = System.getProperty("java.classpath");
-        // Node node = nodeBuilder().client(true).node();
         try {
-
-
-            //Client client = node.client();
             BulkRequestBuilder bulkRequest = client.prepareBulk();
 
             String[] indecies = new String[ids.size()];
             int i = 0;
             for (Long ind : ids) {
                 indecies[i++] = String.valueOf(ind);
-//            DeleteResponse response = client.prepareDelete(INDEX_NAME, type, String.valueOf(ind)) 
-//             .execute() 
-//              .actionGet(); 
                 bulkRequest.add(client.prepareDelete(INDEX_NAME, type, String.valueOf(ind)));
 
             }
-
-            //DeleteByQueryRequest req = new DeleteByQueryRequest().types(type).indices(indecies);
-            //   DeleteByQueryResponse resp = client.prepareDeleteByQuery(type).setQuery(QueryBuilders.idsQuery(indecies)).execute().actionGet();
-
-            //DeleteByQueryResponse resp = client.prepareDeleteByQuery(INDEX_NAME).setTypes(type).setQuery(QueryBuilders.idsQuery(indecies)).execute().actionGet();
-
-            // System.out.println(resp.toString());
             BulkResponse resp = bulkRequest.execute().actionGet();
             System.out.println(resp.toString());
 
         } catch (Exception ex) {
             Logger.getLogger(ES_indexing_Bean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // node.close();
         }
     }
 
     private void perform_indexing(long id_research) {
 
         SocioResearchDTO dto = U_bean.getResearch(id_research);
-        //SocioResearchDTO dto = new SocioResearchDTO();
-        //dto.setId((long)1);
-        //dto.setName("name");
-        //dto.setMethod("method");
-        //dto.setOrg_impl_name("org.impl.name");
-        //String t = System.getProperty("java.classpath");
-        // Node node = nodeBuilder().client(true).node();
         try {
-
-
-            //Client client = node.client();
-
-            // on shutdown
-
-
-//            IndexResponse response = client.prepareIndex("twitter", "tweet")
-//            .setSource(jsonBuilder()
-//                        .startObject()
-//                            .field("user", "kimchy")
-//                            .field("postDate", new Date())
-//                            .field("message", "trying out Elastic Search")
-//                        .endObject()
-//                      )
-//            .execute()
-//            .actionGet();
-
-            IndexResponse response = client.prepareIndex(INDEX_NAME, "research", String.valueOf(dto.getID())).setSource(dto.getJson_descriptor() //                    jsonBuilder()
-                    //                        .startObject()
-                    //                            .field("ID", dto.getID())
-                    //                            .field("name", dto.getName())
-                    //                            .field("method", dto.getMethod())
-                    //                            .field("org_impl_name", dto.getOrg_impl_name())
-                    //                            .field("org_order_name", dto.getOrg_order_name())
-                    //                            .field("gen_geathering", dto.getGen_geathering())
-                    //                            .field("sel_complexity", dto.getSel_complexity())
-                    //                            .field("sel_randomity", dto.getSel_randomity())
-                    //                            .field("start_date", dto.getStart_date())
-                    //                            .field("end_date", dto.getEnd_date())
-                    //                            .field("sel_size", dto.getSelection_size()) 
-                    //                            .array("publications",dto.getPublications().toArray())
-                    //                            .array("researchers", dto.getResearchers().toArray())
-                    //                            .array("concepts", dto.getConcepts().toArray())
-                    //                        .endObject()
-                    ).execute().actionGet();
+            IndexResponse response = client.prepareIndex(INDEX_NAME, "research", String.valueOf(dto.getID()))
+                    .setSource(dto.getJson_descriptor())
+                    .execute()
+                    .actionGet();
 
             Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexQueryDoc:" + dto.getJson_descriptor());
             Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse:"+response.toString());
                 Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse2:"+response.getIndex()+" "+response.getId()+" "+response.getVersion()+" "+response.getMatches());
-//            GetResponse response2 = client.prepareGet("twitter", "tweet", "1")
-//                 .execute()
-//                 .actionGet();
-
-            //System.out.println(response.toString());
-
         } catch (Exception ex) {
             Logger.getLogger(ES_indexing_Bean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // node.close();
         }
     }
 
-//    @Resource(mappedName="jms/ES_index")
-//    private  Queue index_queue;
     private void launchIndexingVar(long var_id) {
         try {
             ObjectMessage message = session.createObjectMessage();
@@ -389,92 +282,6 @@ public class AdminSocioResearchMDB implements MessageListener {
             Logger.getLogger(ES_indexing_Bean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-//    private byte[] makeSyntax(byte[] arr) {
-//        String newName1 = "/home/reshet/spss_conv_files/spss_file_" + new Date() + "_" + "incoming" + ".sav";
-//        //save file
-//        saveFileBytes(arr, newName1);
-//
-//        try {
-//            // Execute a command without arguments
-//            String command = "ls";
-//            Process child = Runtime.getRuntime().exec(command);
-//            child.waitFor();
-//            // Execute a command with an argument
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(AdminSocioResearchMDB.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IOException e) {
-//        }
-//        //execute syntax
-//
-//        //load file
-//        String newName2 = "/home/reshet/spss_conv_files/spss_file_" + new Date() + "_" + "utf8_uncompressed" + ".sav";
-//        byte[] ar = getFileBytes(newName2);
-//
-//        return ar;
-//    }
-
-//    private byte[] getFileBytes(String path) {
-//        File f = new File(path);
-//        FileInputStream fin = null;
-//        FileChannel ch = null;
-//        try {
-//            fin = new FileInputStream(f);
-//            ch = fin.getChannel();
-//            int size = (int) ch.size();
-//            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, size);
-//            byte[] bytes = new byte[size];
-//            buf.get(bytes);
-//            return bytes;
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (fin != null) {
-//                    fin.close();
-//                }
-//                if (ch != null) {
-//                    ch.close();
-//                }
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        }
-//        return null;
-//    }
-
-//    private void saveFileBytes(byte[] arr, String name) {
-//        File f = new File(name);
-//        FileOutputStream fout = null;
-//        FileChannel ch = null;
-//        try {
-//            fout = new FileOutputStream(f);
-//            ch = fout.getChannel();
-//            int size = (int) ch.size();
-//            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, size);
-//            byte[] bytes = new byte[size];
-//            buf.put(arr);
-//            //return newName;
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (fout != null) {
-//                    fout.close();
-//                }
-//                if (ch != null) {
-//                    ch.close();
-//                }
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        }
-//        // return null;
-//    }
 
     private void parseSPSS(long blobkey, long length) {
         try {

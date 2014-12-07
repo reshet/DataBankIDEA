@@ -258,6 +258,183 @@
       <property name="ProfileSql" value="false"></property>
     </jdbc-connection-pool>
     <jdbc-resource pool-name="mysql_databank_kiis_pool" jndi-name="jdbc/databank_kiis"></jdbc-resource>
+
+      <jdbc-connection-pool datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource" res-type="javax.sql.ConnectionPoolDataSource" name="mysql_databank_national_pool">
+          <property name="User" value="root"></property>
+          <property name="AutoReconnectForPools" value="false"></property>
+          <property name="LoggerClassName" value="com.mysql.jdbc.log.StandardLogger"></property>
+          <property name="RetriesAllDown" value="120"></property>
+          <property name="IgnoreNonTxTables" value="false"></property>
+          <property name="ProfilerEventHandler" value="com.mysql.jdbc.profiler.LoggingProfilerEventHandler"></property>
+          <property name="StrictFloatingPoint" value="false"></property>
+          <property name="TransformedBitIsBoolean" value="false"></property>
+          <property name="UseOldUTF8Behavior" value="false"></property>
+          <property name="TreatUtilDateAsTimestamp" value="true"></property>
+          <property name="CallableStatementCacheSize" value="100"></property>
+          <property name="TcpSndBuf" value="0"></property>
+          <property name="Port" value="3306"></property>
+          <property name="UseSqlStateCodes" value="true"></property>
+          <property name="InitialTimeout" value="2"></property>
+          <property name="LoadBalanceExceptionChecker" value="com.mysql.jdbc.StandardLoadBalanceExceptionChecker"></property>
+          <property name="AllowUrlInLocalInfile" value="false"></property>
+          <property name="DatabaseName" value="databanknational"></property>
+          <property name="NullNamePatternMatchesAll" value="true"></property>
+          <property name="Password" value="eE271828183"></property>
+          <property name="AllowLoadLocalInfile" value="true"></property>
+          <property name="PreparedStatementCacheSqlLimit" value="256"></property>
+          <property name="Logger" value="com.mysql.jdbc.log.StandardLogger"></property>
+          <property name="PrepStmtCacheSize" value="25"></property>
+          <property name="AlwaysSendSetIsolation" value="true"></property>
+          <property name="ClientCertificateKeyStoreType" value="JKS"></property>
+          <property name="CapitalizeTypeNames" value="true"></property>
+          <property name="CallableStmtCacheSize" value="100"></property>
+          <property name="LocatorFetchBufferSize" value="1048576"></property>
+          <property name="UseSSL" value="false"></property>
+          <property name="JdbcCompliantTruncationForReads" value="true"></property>
+          <property name="TcpRcvBuf" value="0"></property>
+          <property name="UseSSPSCompatibleTimezoneShift" value="false"></property>
+          <property name="CacheCallableStatements" value="false"></property>
+          <property name="DefaultFetchSize" value="0"></property>
+          <property name="UseCompression" value="false"></property>
+          <property name="GenerateSimpleParameterMetadata" value="false"></property>
+          <property name="UseTimezone" value="false"></property>
+          <property name="CacheServerConfiguration" value="false"></property>
+          <property name="AutoDeserialize" value="false"></property>
+          <property name="MaxRows" value="-1"></property>
+          <property name="UseLocalTransactionState" value="false"></property>
+          <property name="SecondsBeforeRetryMaster" value="30"></property>
+          <property name="UseUnicode" value="true"></property>
+          <property name="SlowQueryThresholdMillis" value="2000"></property>
+          <property name="TcpTrafficClass" value="0"></property>
+          <property name="NetTimeoutForStreamingResults" value="600"></property>
+          <property name="DynamicCalendars" value="false"></property>
+          <property name="IncludeThreadNamesAsStatementComment" value="false"></property>
+          <property name="TcpKeepAlive" value="true"></property>
+          <property name="NoDatetimeStringSync" value="false"></property>
+          <property name="EmulateUnsupportedPstmts" value="true"></property>
+          <property name="NullCatalogMeansCurrent" value="true"></property>
+          <property name="ExplainSlowQueries" value="false"></property>
+          <property name="ConnectTimeout" value="0"></property>
+          <property name="UseStreamLengthsInPrepStmts" value="true"></property>
+          <property name="EmptyStringsConvertToZero" value="true"></property>
+          <property name="MaxQuerySizeToLog" value="2048"></property>
+          <property name="FailOverReadOnly" value="true"></property>
+          <property name="IsInteractiveClient" value="false"></property>
+          <property name="LoadBalanceEnableJMX" value="false"></property>
+          <property name="RoundRobinLoadBalance" value="false"></property>
+          <property name="UseAffectedRows" value="false"></property>
+          <property name="ContinueBatchOnError" value="true"></property>
+          <property name="UseFastDateParsing" value="true"></property>
+          <property name="BlobSendChunkSize" value="1048576"></property>
+          <property name="OverrideSupportsIntegrityEnhancementFacility" value="false"></property>
+          <property name="ElideSetAutoCommits" value="false"></property>
+          <property name="PreparedStatementCacheSize" value="25"></property>
+          <property name="GatherPerfMetrics" value="false"></property>
+          <property name="UseOnlyServerErrorMessages" value="true"></property>
+          <property name="TcpNoDelay" value="true"></property>
+          <property name="LogXaCommands" value="false"></property>
+          <property name="ReportMetricsIntervalMillis" value="30000"></property>
+          <property name="AutoSlowLog" value="true"></property>
+          <property name="UseGmtMillisForDatetimes" value="false"></property>
+          <property name="PinGlobalTxToPhysicalConnection" value="false"></property>
+          <property name="VerifyServerCertificate" value="true"></property>
+          <property name="LoadBalanceValidateConnectionOnSwapServer" value="false"></property>
+          <property name="EnableQueryTimeouts" value="true"></property>
+          <property name="UseInformationSchema" value="false"></property>
+          <property name="NoAccessToProcedureBodies" value="false"></property>
+          <property name="LoadBalanceBlacklistTimeout" value="0"></property>
+          <property name="TrustCertificateKeyStoreType" value="JKS"></property>
+          <property name="UltraDevHack" value="false"></property>
+          <property name="AllowMultiQueries" value="false"></property>
+          <property name="FunctionsNeverReturnBlobs" value="false"></property>
+          <property name="SlowQueryThresholdNanos" value="0"></property>
+          <property name="StrictUpdates" value="true"></property>
+          <property name="AutoClosePStmtStreams" value="false"></property>
+          <property name="Url" value="jdbc:mysql://localhost:3306/databanknational"></property>
+          <property name="HoldResultsOpenOverStatementClose" value="false"></property>
+          <property name="TinyInt1isBit" value="true"></property>
+          <property name="LoadBalanceStrategy" value="random"></property>
+          <property name="UseUsageAdvisor" value="false"></property>
+          <property name="TraceProtocol" value="false"></property>
+          <property name="YearIsDateType" value="true"></property>
+          <property name="CachePrepStmts" value="false"></property>
+          <property name="UseColumnNamesInFindColumn" value="false"></property>
+          <property name="ProfileSQL" value="false"></property>
+          <property name="PadCharsWithSpace" value="false"></property>
+          <property name="LoadBalanceAutoCommitStatementThreshold" value="0"></property>
+          <property name="ClientInfoProvider" value="com.mysql.jdbc.JDBC4CommentClientInfoProvider"></property>
+          <property name="UseDynamicCharsetInfo" value="true"></property>
+          <property name="UseNanosForElapsedTime" value="false"></property>
+          <property name="SocketFactory" value="com.mysql.jdbc.StandardSocketFactory"></property>
+          <property name="DontTrackOpenResources" value="false"></property>
+          <property name="DumpMetadataOnColumnNotFound" value="false"></property>
+          <property name="UseLegacyDatetimeCode" value="true"></property>
+          <property name="CompensateOnDuplicateKeyUpdateCounts" value="false"></property>
+          <property name="UseBlobToStoreUTF8OutsideBMP" value="false"></property>
+          <property name="UseReadAheadInput" value="true"></property>
+          <property name="PacketDebugBufferSize" value="20"></property>
+          <property name="BlobsAreStrings" value="false"></property>
+          <property name="ProcessEscapeCodesForPrepStmts" value="true"></property>
+          <property name="AutoGenerateTestcaseScript" value="false"></property>
+          <property name="UseDirectRowUnpack" value="true"></property>
+          <property name="UseOldAliasMetadataBehavior" value="false"></property>
+          <property name="UseServerPrepStmts" value="false"></property>
+          <property name="UseServerPreparedStmts" value="false"></property>
+          <property name="PrepStmtCacheSqlLimit" value="256"></property>
+          <property name="PortNumber" value="3306"></property>
+          <property name="URL" value="jdbc:mysql://localhost:3306/databanknational"></property>
+          <property name="UseJDBCCompliantTimezoneShift" value="false"></property>
+          <property name="CachePreparedStatements" value="false"></property>
+          <property name="Paranoid" value="false"></property>
+          <property name="UseJvmCharsetConverters" value="false"></property>
+          <property name="NoTimezoneConversionForTimeType" value="false"></property>
+          <property name="QueryTimeoutKillsConnection" value="false"></property>
+          <property name="UseUltraDevWorkAround" value="false"></property>
+          <property name="InteractiveClient" value="false"></property>
+          <property name="QueriesBeforeRetryMaster" value="50"></property>
+          <property name="UseFastIntParsing" value="true"></property>
+          <property name="MaxReconnects" value="3"></property>
+          <property name="EmulateLocators" value="false"></property>
+          <property name="Pedantic" value="false"></property>
+          <property name="RelaxAutoCommit" value="false"></property>
+          <property name="ZeroDateTimeBehavior" value="exception"></property>
+          <property name="ClobberStreamingResults" value="false"></property>
+          <property name="IncludeInnodbStatusInDeadlockExceptions" value="false"></property>
+          <property name="ReconnectAtTxEnd" value="false"></property>
+          <property name="MetadataCacheSize" value="50"></property>
+          <property name="LoginTimeout" value="0"></property>
+          <property name="UseCursorFetch" value="false"></property>
+          <property name="LogSlowQueries" value="false"></property>
+          <property name="RetainStatementAfterResultSetClose" value="false"></property>
+          <property name="AllowNanAndInf" value="false"></property>
+          <property name="JdbcCompliantTruncation" value="true"></property>
+          <property name="RunningCTS13" value="false"></property>
+          <property name="DumpQueriesOnException" value="false"></property>
+          <property name="ResultSetSizeThreshold" value="100"></property>
+          <property name="RollbackOnPooledClose" value="true"></property>
+          <property name="UseLocalSessionState" value="false"></property>
+          <property name="CacheCallableStmts" value="false"></property>
+          <property name="MaxAllowedPacket" value="-1"></property>
+          <property name="GatherPerformanceMetrics" value="false"></property>
+          <property name="LoadBalancePingTimeout" value="0"></property>
+          <property name="SelfDestructOnPingSecondsLifetime" value="0"></property>
+          <property name="RewriteBatchedStatements" value="false"></property>
+          <property name="CreateDatabaseIfNotExist" value="false"></property>
+          <property name="PopulateInsertRowWithDefaultValues" value="false"></property>
+          <property name="SocketFactoryClassName" value="com.mysql.jdbc.StandardSocketFactory"></property>
+          <property name="MaintainTimeStats" value="true"></property>
+          <property name="UseHostsInPrivileges" value="true"></property>
+          <property name="UseUnbufferedInput" value="true"></property>
+          <property name="IncludeThreadDumpInDeadlockExceptions" value="false"></property>
+          <property name="RequireSSL" value="false"></property>
+          <property name="SelfDestructOnPingMaxOperations" value="0"></property>
+          <property name="SocketTimeout" value="0"></property>
+          <property name="EnablePacketDebug" value="false"></property>
+          <property name="CacheResultSetMetadata" value="false"></property>
+          <property name="ProfileSql" value="false"></property>
+      </jdbc-connection-pool>
+      <jdbc-resource pool-name="mysql_databank_national_pool" jndi-name="jdbc/databank_national"></jdbc-resource>
+
     <connector-connection-pool max-pool-size="3200" steady-pool-size="32" name="jms/kiis/myQCF-Connection-Pool" resource-adapter-name="jmsra" connection-definition-name="javax.jms.QueueConnectionFactory" transaction-support=""></connector-connection-pool>
     <connector-resource pool-name="jms/kiis/myQCF-Connection-Pool" jndi-name="jms/kiis/myQCF"></connector-resource>
     <admin-object-resource res-adapter="jmsra" res-type="javax.jms.Queue" jndi-name="jms/kiis/spss_parse">
@@ -266,6 +443,15 @@
     <admin-object-resource res-adapter="jmsra" res-type="javax.jms.Queue" jndi-name="jms/kiis/ES_index">
       <property name="Name" value="kiis_index_queue"></property>
     </admin-object-resource>
+
+      <connector-connection-pool max-pool-size="3200" steady-pool-size="32" name="jms/national/myQCF-Connection-Pool" resource-adapter-name="jmsra" connection-definition-name="javax.jms.QueueConnectionFactory" transaction-support=""></connector-connection-pool>
+      <connector-resource pool-name="jms/national/myQCF-Connection-Pool" jndi-name="jms/national/myQCF"></connector-resource>
+      <admin-object-resource res-adapter="jmsra" res-type="javax.jms.Queue" jndi-name="jms/national/spss_parse">
+          <property name="Name" value="natinal_parse_queue"></property>
+      </admin-object-resource>
+      <admin-object-resource res-adapter="jmsra" res-type="javax.jms.Queue" jndi-name="jms/national/ES_index">
+          <property name="Name" value="national_index_queue"></property>
+      </admin-object-resource>
   </resources>
   <servers>
     <server name="server" config-ref="server-config">
@@ -292,6 +478,10 @@
       <resource-ref ref="jms/kiis/myQCF"></resource-ref>
       <resource-ref ref="jms/kiis/spss_parse"></resource-ref>
       <resource-ref ref="jms/kiis/ES_index"></resource-ref>
+        <resource-ref ref="jdbc/databank_national"></resource-ref>
+        <resource-ref ref="jms/national/myQCF"></resource-ref>
+        <resource-ref ref="jms/national/spss_parse"></resource-ref>
+        <resource-ref ref="jms/national/ES_index"></resource-ref>
     </server>
   </servers>
   <nodes>
@@ -305,6 +495,8 @@
       <resource-ref ref="jms/alliance/ES_index"></resource-ref>
       <resource-ref ref="jms/kiis/spss_parse"></resource-ref>
       <resource-ref ref="jms/kiis/ES_index"></resource-ref>
+      <resource-ref ref="jms/national/spss_parse"></resource-ref>
+      <resource-ref ref="jms/national/ES_index"></resource-ref>
       <system-property description="Port Number that JMS Service will listen for remote clients connection." name="JMS_PROVIDER_PORT" value="7676"></system-property>
       <http-service>
         <access-log></access-log>

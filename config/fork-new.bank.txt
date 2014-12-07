@@ -1,0 +1,41 @@
+1. Copy project directory under new name
+2. Set 777 rights
+3. Open in IDEA, rename project, modules and artifacts with new name.
+4. Ensure project compiles.
+5. Git checkout new branch, commit changes and push to remote
+6. Change project-dependent constants
+    1) Database connection name in src/conf/persistence.xml
+    2) Change  AdminSocioResearchMDB.INDEX_NAME constant
+    3) Change AdminSocioResearchMDB @MessageDriven(mappedName="") JMS Queue name
+    4) Change AdminSocioResearchMDB QueueConnectionFactory and Queue mapped names annotation params.
+    5) Change AdminSocioResearchSessionBean QueueConnectionFactory and Queue mapped names annotation params.
+    6) Change UserSocioResearchSessionBean INDEX_NAME constant.
+    7) Build
+7. Create new mysql database. Prepare database by:
+    1) applying V002_Initial_data.sql from migrations. (tables with accounts and databank structure)
+    2) let the JPA create other tables on first deploy
+8. Glassfish config:
+    1) Create db connection and pool
+    2) Ensure has mysql driver
+    3) Create JMS queues
+    4) Save and test config by deploying a new
+    5) Use domain.xml for faster configuration.
+9. Prepare ElasticSearch to use new index
+10. Prepare filesystem /home/reshet/databank/new-databank-name folder for file storage.
+11. Test build and deploy works with separate db.
+    1) Test research creation
+    2) Test metadata apply
+    3) Test search and filter works
+    4) Test user analysis works.
+    5) Test research deletion.
+12. Set-up production server config
+13. Set-up production server folders and cron jobs for backups.
+    mkdir /home/reshet/databank/databanknational
+    mkdir /home/MYSQL_BACKUPS/databanknational
+    mkdir /home/DB_FILE_BACKUPS/databanknational
+    crontab -e
+    25 */12 */2 * * mysqldump --opt --host=localhost --user=root --password=eE271828183 databanknational | gzip > /home/MYSQL_BACKUPS/databanknational/databanknational_sql_backup_`date +\%d\%m\%y_\%H:\%M:\%S`.sql.gz
+    46 0 * * * tar -zcvf /home/DB_FILE_BACKUPS/databanknational/national_files_backup_`date +\%d\%m\%y_\%H:\%M:\%S`.tar.gz /home/reshet/databank/databanknational/
+14. Test on production.
+15. Set-up url alias.
+16. Set-up OAuth provider for users login

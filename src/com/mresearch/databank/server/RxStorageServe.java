@@ -1,27 +1,22 @@
 package com.mresearch.databank.server;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URLEncoder;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.mplatforma.amr.service.AdminSocioResearchMDB;
+import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
+import com.mresearch.databank.shared.RxStoredDTO;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ejb.EJB;
-
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.mplatforma.amr.entity.RxBlobStored;
-import com.mplatforma.amr.service.AdminSocioResearchMDB;
-import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
-import com.mplatforma.amr.service.remote.UserAccountBeanRemote;
-import com.mresearch.databank.shared.RxStoredDTO;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 
 @RemoteServiceRelativePath("serve")
 public class RxStorageServe extends HttpServlet {
@@ -91,7 +86,7 @@ public void doGet(HttpServletRequest req, HttpServletResponse res)
     }
 
     private FileInputStream getFileStream(long id) {
-        File content = new File(AdminSocioResearchMDB.STORAGE_VAULT+id);
+        File content = new File(AdminSocioResearchMDB.STORAGE_VAULT + id);
         FileInputStream fis = null;
         try {
            fis = new FileInputStream(content);
