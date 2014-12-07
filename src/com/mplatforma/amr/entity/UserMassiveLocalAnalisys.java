@@ -53,8 +53,9 @@ public class UserMassiveLocalAnalisys implements Serializable{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
     
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     private UserMassiveLocalSetting setting;
+
     private ArrayList<Double> distribution;
     private ArrayList<Double> distribution_valid;
     private String distr_type;

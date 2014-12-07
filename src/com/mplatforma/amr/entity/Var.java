@@ -19,7 +19,8 @@ import java.util.logging.Logger;
     @NamedQuery(name = "Var.getResearchVarsLightIN", query = "SELECT NEW com.mresearch.databank.shared.VarDTO_Light(x.id, x.code, x.label) FROM Var x WHERE x.id IN :idlist ORDER BY x.id"),
     @NamedQuery(name = "Var.getResearchVarsLightIN_unordered", query = "SELECT NEW com.mresearch.databank.shared.VarDTO_Light(x.id, x.code, x.label) FROM Var x WHERE x.id IN :idlist"),
     @NamedQuery(name = "Var.deleteList", query = "DELETE FROM Var x WHERE x.research_id = :res_id"),
-    @NamedQuery(name = "Var.deleteAnalisys", query = "DELETE FROM UserMassiveLocalAnalisys x WHERE x.var_involved_first.id IN (SELECT v.id FROM Var v WHERE v.research_id = :res_id) OR x.var_involved_second.id IN (SELECT v2.id FROM Var v2 WHERE v2.research_id = :res_id)"),
+    @NamedQuery(name = "Var.deleteAnalisysList", query = "SELECT x FROM UserMassiveLocalAnalisys x WHERE x.var_involved_first.id IN :idlist OR x.var_involved_second.id IN :idlist"),
+    //@NamedQuery(name = "Var.deleteAnalisysSettings", query = "DELETE FROM UserMassiveLocalSetting x WHERE x.research_id = :res_id"),
     @NamedQuery(name = "Var.getIDsList", query = "SELECT x.id FROM Var x WHERE x.research_id = :res_id ORDER BY x.id")
 })
 public class Var {
@@ -110,16 +111,17 @@ public class Var {
     }
 
     public static int deleteResearchVars(EntityManager em, Long id) {
-
-        Query q_an = em.createNamedQuery("Var.deleteAnalisys");
-        q_an.setParameter("res_id", id);
-        q_an.executeUpdate();
+        Query q_an = em.createNamedQuery("Var.deleteAnalisysList");
+        q_an.setParameter("idlist", getResearchVarsIDs(em, id));
+        List<UserMassiveLocalAnalisys> results = q_an.getResultList();
+        for(UserMassiveLocalAnalisys analisys: results) {
+          em.remove(analisys);
+        }
+        //em.flush();
         
         Query q = em.createNamedQuery("Var.deleteList");
         q.setParameter("res_id", id);
         return q.executeUpdate();
-        //List<VarDTO_Light> l = q.getResultList();
-        //return new ArrayList<VarDTO_Light>(l);
     }
 
     public ArrayList<String> getCortage_string() {

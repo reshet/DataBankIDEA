@@ -47,7 +47,7 @@ public class RegisteredUserAnalysisRoot implements Serializable{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private String id;
     
-    @OneToMany(cascade= CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval=true)
     @OrderColumn
     private List<UserMassiveLocalAnalisys> local_research_analisys;
     

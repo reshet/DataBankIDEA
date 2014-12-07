@@ -24,16 +24,14 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.*;
-import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -354,218 +352,139 @@ public class AdminSocioResearchMDB implements MessageListener {
     }
 
     private void perform_indexing_var(VarDTO_Detailed dto) {
-
-
-        //SocioResearchDTO dto = new SocioResearchDTO();
-        //dto.setId((long)1);
-        //dto.setName("name");
-        //dto.setMethod("method");
-        //dto.setOrg_impl_name("org.impl.name");
-        //String t = System.getProperty("java.classpath");
-        // Node node = nodeBuilder().client(true).node();
         try {
-
-
-            //Client client = node.client();
-
-            // on shutdown
-
-
-//            IndexResponse response = client.prepareIndex("twitter", "tweet")
-//            .setSource(jsonBuilder()
-//                        .startObject()
-//                            .field("user", "kimchy")
-//                            .field("postDate", new Date())
-//                            .field("message", "trying out Elastic Search")
-//                        .endObject()
-//                      )
-//            .execute()
-//            .actionGet();
             String jsondesc = generateVarJSONDesc(dto);
             IndexResponse response = client.prepareIndex(INDEX_NAME, "sociovar", String.valueOf(dto.getId())).setSource(jsondesc).execute().actionGet();
 
-//            GetResponse response2 = client.prepareGet("twitter", "tweet", "1")
-//                 .execute()
-//                 .actionGet();
              Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexQueryDoc:" + jsondesc);
             Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse:"+response.toString());
                 Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexResponse2:"+response.getIndex()+" "+response.getId()+" "+response.getVersion()+" "+response.getMatches());
-            //System.out.println(response.index());
 
         } catch (Exception ex) {
             Logger.getLogger(ES_indexing_Bean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // node.close();
         }
     }
 
     private void perform_indexing_law(ZaconDTO dto) {
-
-
-        //SocioResearchDTO dto = new SocioResearchDTO();
-        //dto.setId((long)1);
-        //dto.setName("name");
-        //dto.setMethod("method");
-        //dto.setOrg_impl_name("org.impl.name");
-        //String t = System.getProperty("java.classpath");
-        // Node node = nodeBuilder().client(true).node();
         try {
-
-
-            //Client client = node.client();
-
-            // on shutdown
-
-
-//            IndexResponse response = client.prepareIndex("twitter", "tweet")
-//            .setSource(jsonBuilder()
-//                        .startObject()
-//                            .field("user", "kimchy")
-//                            .field("postDate", new Date())
-//                            .field("message", "trying out Elastic Search")
-//                        .endObject()
-//                      )
-//            .execute()
-//            .actionGet();
-
             IndexResponse response = client.prepareIndex(INDEX_NAME, "law", String.valueOf(dto.getId())).setSource(dto.getJson_desctiptor()).execute().actionGet();
-
-//            GetResponse response2 = client.prepareGet("twitter", "tweet", "1")
-//                 .execute()
-//                 .actionGet();
-
-            System.out.println(response.toString());
             Logger.getLogger(UserSocioResearchSessionBean.class.getName()).log(Level.INFO, "IndexQueryDoc:" + dto.getJson_desctiptor());
-
         } catch (Exception ex) {
             Logger.getLogger(ES_indexing_Bean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // node.close();
         }
     }
 
     private void perform_indexing_pub(PublicationDTO dto) {
         try {
-            //Client client = node.client();
             IndexResponse response = client.prepareIndex(INDEX_NAME, "publication", String.valueOf(dto.getId())).setSource(dto.getJson_desctiptor()).execute().actionGet();
-            System.out.println(response.toString());
-
         } catch (Exception ex) {
             Logger.getLogger(ES_indexing_Bean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
         }
     }
 
     private void perform_indexing_jury(ConsultationDTO dto) {
         try {
-            //Client client = node.client();
             IndexResponse response = client.prepareIndex(INDEX_NAME, "consultation", String.valueOf(dto.getId())).setSource(dto.getJson_desctiptor()).execute().actionGet();
-            System.out.println(response.toString());
-
         } catch (Exception ex) {
             Logger.getLogger(ES_indexing_Bean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
         }
     }
 
-    private byte[] makeSyntax(byte[] arr) {
-        String newName1 = "/home/reshet/spss_conv_files/spss_file_" + new Date() + "_" + "incoming" + ".sav";
-        //save file
-        saveFileBytes(arr, newName1);
+//    private byte[] makeSyntax(byte[] arr) {
+//        String newName1 = "/home/reshet/spss_conv_files/spss_file_" + new Date() + "_" + "incoming" + ".sav";
+//        //save file
+//        saveFileBytes(arr, newName1);
+//
+//        try {
+//            // Execute a command without arguments
+//            String command = "ls";
+//            Process child = Runtime.getRuntime().exec(command);
+//            child.waitFor();
+//            // Execute a command with an argument
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(AdminSocioResearchMDB.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException e) {
+//        }
+//        //execute syntax
+//
+//        //load file
+//        String newName2 = "/home/reshet/spss_conv_files/spss_file_" + new Date() + "_" + "utf8_uncompressed" + ".sav";
+//        byte[] ar = getFileBytes(newName2);
+//
+//        return ar;
+//    }
 
-        try {
-            // Execute a command without arguments
-            String command = "ls";
-            Process child = Runtime.getRuntime().exec(command);
-            child.waitFor();
-            // Execute a command with an argument
-        } catch (InterruptedException ex) {
-            Logger.getLogger(AdminSocioResearchMDB.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException e) {
-        }
-        //execute syntax
+//    private byte[] getFileBytes(String path) {
+//        File f = new File(path);
+//        FileInputStream fin = null;
+//        FileChannel ch = null;
+//        try {
+//            fin = new FileInputStream(f);
+//            ch = fin.getChannel();
+//            int size = (int) ch.size();
+//            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, size);
+//            byte[] bytes = new byte[size];
+//            buf.get(bytes);
+//            return bytes;
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (fin != null) {
+//                    fin.close();
+//                }
+//                if (ch != null) {
+//                    ch.close();
+//                }
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        }
+//        return null;
+//    }
 
-        //load file
-        String newName2 = "/home/reshet/spss_conv_files/spss_file_" + new Date() + "_" + "utf8_uncompressed" + ".sav";
-        byte[] ar = getFileBytes(newName2);
-
-        return ar;
-    }
-
-    private byte[] getFileBytes(String path) {
-        File f = new File(path);
-        FileInputStream fin = null;
-        FileChannel ch = null;
-        try {
-            fin = new FileInputStream(f);
-            ch = fin.getChannel();
-            int size = (int) ch.size();
-            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, size);
-            byte[] bytes = new byte[size];
-            buf.get(bytes);
-            return bytes;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fin != null) {
-                    fin.close();
-                }
-                if (ch != null) {
-                    ch.close();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    private void saveFileBytes(byte[] arr, String name) {
-        File f = new File(name);
-        FileOutputStream fout = null;
-        FileChannel ch = null;
-        try {
-            fout = new FileOutputStream(f);
-            ch = fout.getChannel();
-            int size = (int) ch.size();
-            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, size);
-            byte[] bytes = new byte[size];
-            buf.put(arr);
-            //return newName;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fout != null) {
-                    fout.close();
-                }
-                if (ch != null) {
-                    ch.close();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        // return null;
-    }
+//    private void saveFileBytes(byte[] arr, String name) {
+//        File f = new File(name);
+//        FileOutputStream fout = null;
+//        FileChannel ch = null;
+//        try {
+//            fout = new FileOutputStream(f);
+//            ch = fout.getChannel();
+//            int size = (int) ch.size();
+//            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, size);
+//            byte[] bytes = new byte[size];
+//            buf.put(arr);
+//            //return newName;
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (fout != null) {
+//                    fout.close();
+//                }
+//                if (ch != null) {
+//                    ch.close();
+//                }
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        }
+//        // return null;
+//    }
 
     private void parseSPSS(long blobkey, long length) {
         try {
            RxStoredDTO dto = store.getFileInfo(blobkey);
             File spssfile = new File(AdminSocioResearchMDB.STORAGE_VAULT+blobkey);
             SPSSFile s = new SPSSFile(spssfile);
-//            String st = s.getDDI3DefaultPhysicalDataProductID(new FileFormatInfo(Format.SPSS));
-//            String ans = "";
-//            String answer = "";
             try {
                 s.loadMetadata();
                 s.loadData();
-                Long socioresearch_key = socioresearch_key = createEmptyResearch(dto.getName(), blobkey);
+                Long socioresearch_key = createEmptyResearch(dto.getName(), blobkey);
                 addSPSStoSocioResearch(socioresearch_key, s, blobkey, "");
             } catch (SPSSFileException ex) {
                 Logger.getLogger(AdminSocioResearchMDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -587,7 +506,6 @@ public class AdminSocioResearchMDB implements MessageListener {
             research.updateFileAccessor(em, dto);
             em.persist(research);
             research_id = research.getID();
-            // currentUser.getFriends().add(friend);
         } finally {
         }
         return research_id;
@@ -627,7 +545,12 @@ public class AdminSocioResearchMDB implements MessageListener {
         Var var = new Var();
         var.setResearch_id(research_id);
         String label = s_var.getLabel();
-        var.setCode(new String(s_var.getName()));
+        // Text vars often dont have a label, only code
+        if (label == null || label.equals("")) {
+          label = s_var.getName();
+        }
+
+        var.setCode(s_var.getName());
         var.setLabel(label);
         if (s_var.valueLabelRecord != null) {
             ArrayList<String> labels_encoding = s_var.valueLabelRecord.getVLabelValues();
@@ -636,8 +559,6 @@ public class AdminSocioResearchMDB implements MessageListener {
             missing_codes.add(s_var.getMissing1());
             missing_codes.add(s_var.getMissing2());
             missing_codes.add(s_var.getMissing3());
-
-
 
             int missings_count = 0;
             for (int i = 0; i < labels_encoding.size(); i++) {

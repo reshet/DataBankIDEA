@@ -92,10 +92,10 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
             r_id.add(r.getID());
             launchDeleteIndexing(r_id, "research");
             launchDeleteIndexing(Var.getResearchVarsIDs(em, id), "sociovar");
-            Var.deleteResearchVars(em,id);
-            em.flush();
             em.remove(r);
-            em.flush();
+            //em.flush();
+            Var.deleteResearchVars(em,id);
+            //em.flush();
             File content = new File(AdminSocioResearchMDB.STORAGE_VAULT + r.getSpssFile());
             content.delete();
             return true;

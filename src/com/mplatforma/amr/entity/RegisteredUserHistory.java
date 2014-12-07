@@ -50,7 +50,7 @@ public class RegisteredUserHistory implements Serializable{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private String id;
     
-    @OneToMany(cascade= CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval=true)
     @OrderColumn
     private List<UserMassiveLocalSetting> local_research_settings;
     
