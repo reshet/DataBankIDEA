@@ -1,11 +1,15 @@
 package com.mresearch.databank.server;
 
-import com.mplatforma.amr.entity.RxBlobStored;
 import com.mplatforma.amr.service.AdminSocioResearchMDB;
+import com.mplatforma.amr.service.remote.AdminSocioResearchBeanRemote;
+import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
 import gwtupload.server.UploadAction;
-import gwtupload.server.UploadServlet;
 import gwtupload.server.exceptions.UploadActionException;
+import org.apache.commons.fileupload.FileItem;
 
+import javax.ejb.EJB;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Hashtable;
 import java.util.List;
@@ -13,17 +17,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 //import javassist.bytecode.ByteArray;
-
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItem;
-
-import com.mplatforma.amr.service.remote.AdminSocioResearchBeanRemote;
-import com.mplatforma.amr.service.remote.RxStorageBeanRemote;
 
 
 /**
@@ -78,68 +71,53 @@ public class RxUploadServlet extends UploadAction {
 	      if (false == item.isFormField()) {
 	        cont ++;
 	        try {
-	        	
-	        	
-		      
-		          
-	          /// Create a new file based on the remote file name in the client
-	          // String saveName = item.getName().replaceAll("[\\\\/><\\|\\s\"'{}()\\[\\]]+", "_");
-	          // File file =new File("/tmp/" + saveName);
-	          
-	          /// Create a temporary file placed in /tmp (only works in unix)
-	          // File file = File.createTempFile("upload-", ".bin", new File("/tmp"));
-	          
-	          /// Create a temporary file placed in the default system temp folder
-	          
-		          
-		      //File file = File.createTempFile("upload-", ".bin");
-	          //item.write(file);
-	          
-	          /// Save a list with the received files
+	        	/// Save a list with the received files
 	          String name =item.getName(); 
 	          String ext = name.substring(name.lastIndexOf(".")+1,name.length());
 	          int spss_extracted = 0;
 
-	          /*if(ext.equals("zip"))
+	          if(ext.equals("zip"))
 	          {
-	        	  System.out.println("HEREJO");
 	        	  receivedContentTypes.put(item.getFieldName(), item.getContentType());
 		          byte [] arr = new byte[(int) item.getSize()];
 		          item.getInputStream().read(arr);
-		          System.out.println("READED");
-	        	  
-	        	  byte[] buf = new byte[2048];
+		          //byte[] buf = new byte[2048];
 	              ZipInputStream zipinputstream = null;
 	              ZipEntry zipentry;
-	              zipinputstream = new ZipInputStream(
-	                  new ByteArrayInputStream(arr));
+	              zipinputstream = new ZipInputStream(new ByteArrayInputStream(arr));
 	              zipentry = zipinputstream.getNextEntry();
-	              
-	              while (zipentry != null) 
+	              while (zipentry != null)
 	              { 
 	                  String entryName = zipentry.getName();
 	                  System.out.println(entryName);
-		        	  String sav_ext = entryName.substring(entryName.length()-3,entryName.length());
-		        	  System.out.println("Sav_ext: "+sav_ext);
-			              
+                    String sav_ext = entryName.substring(entryName.length()-3,entryName.length());
+                    System.out.println("Sav_ext: "+sav_ext);
+
 	                  if(sav_ext.equals("sav"))
 	                  {
-	                	  int n = 0 ;
-		                  
-		                  byte [] arr_file = new byte[(int) zipentry.getSize()];
-		                  int cur_length=0;
-		                  while ((n = zipinputstream.read(buf, 0, 2048)) > -1)
-		                  {
-		                	  System.arraycopy(buf, 0, arr_file, cur_length, n);
-		                	  //arr_file
-		                	  cur_length+=n;
-		                  }
-		                  System.out.println("Here done reading zipped spss");
-		                  System.out.println(arr_file.length);
-		                  long id = eao.storeFile(zipentry.getSize(), entryName, zipentry.getComment());
-		                  eao2.parseSPSS(id, zipentry.getSize());
-		                  spss_extracted++;
-		 		      }
+                        int n = 0 ;
+                        long id = eao.storeFile(zipentry.getSize(), entryName, zipentry.getComment());
+                        FileOutputStream outputStream = null;
+                        try
+                        {
+                            outputStream = getSaveFileStream(id);
+                            byte[] buffer = new byte[4096];
+                            while ((n = zipinputstream.read(buffer, 0, buffer.length)) > -1)
+                            {
+                              outputStream.write(buffer, 0, n);
+                            }
+                            outputStream.flush();
+                        }
+                        finally
+                        {
+                            if (outputStream != null) {
+                                outputStream.close();
+                            }
+                        }
+                        System.out.println("Here done reading zipped spss");
+                        eao2.parseSPSS(id, zipentry.getSize());
+                        spss_extracted++;
+		 		            }
 	                  zipinputstream.closeEntry();
 	                  zipentry = zipinputstream.getNextEntry();
 	              }
@@ -147,20 +125,14 @@ public class RxUploadServlet extends UploadAction {
 	              zipinputstream.close();
 	              
 	        	  response += "<ZipUploaded>" +spss_extracted+"</ZipUploaded>";
-	          }else
-	          */
-              //{
+	          } else {
 	        	  receivedContentTypes.put(item.getFieldName(), item.getContentType());
-		          //byte [] arr = new byte[(int) item.getSize()];
-
                   FileOutputStream outputStream = null;
                   long id = eao.storeFile(item.getSize(), item.getName(), item.getContentType());
 
                   try
                   {
-                      //inputStream = new FileInputStream(path);
                       outputStream = getSaveFileStream(id);
-
                       byte[] buffer = new byte[4096];
                       int bytesRead = 0;
                       InputStream input =  item.getInputStream();
@@ -173,27 +145,16 @@ public class RxUploadServlet extends UploadAction {
                       while (bytesRead == buffer.length);
 
                       outputStream.flush();
-                     // item.getInputStream().close();
                   }
                   finally
                   {
                       if(outputStream != null)
                           outputStream.close();
                   }
-
-		          //item.getInputStream().read(arr);
-
 		          receivedFileIds.put(item.getFieldName(),id);
 			      /// Send a customized message to the client.
 		          response += "<RxStoreId>" + id+"</RxStoreId>";
-		       //}
-	        //  receivedFiles.put(item.getFieldName(), file);
-	          //response += "File saved as " + file.getAbsolutePath();
-	          	     
-	          
-	          
-	          
-
+		       }
 	        } catch (Exception e) {
 	          throw new UploadActionException(e);
 	        }
