@@ -77,26 +77,4 @@ public class UserResearchFilesView extends Composite implements AdminResearchDet
             }
     	}
 	}
-	
-	
-	
-//	private void doFetchFiles()
-//	{
-//		new RPCCall<SocioResearchFilesDTO>() {
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				Window.alert("Error on fetching files "+caught.getMessage());
-//			}
-//
-//			@Override
-//			public void onSuccess(SocioResearchFilesDTO result) {
-//				fillWithFetched(result);
-//			}
-//
-//			@Override
-//			protected void callService(AsyncCallback<SocioResearchFilesDTO> cb) {
-//				userResearchService.getResearchFilesInCategory(research_id,category, cb);
-//			}
-//		}.retry(2);
-//	}
 }

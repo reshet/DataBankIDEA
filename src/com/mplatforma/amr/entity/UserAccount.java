@@ -22,9 +22,10 @@ package com.mplatforma.amr.entity;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.UserResearchSettingDTO;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.*;
 
 
 /**
@@ -159,7 +160,7 @@ public class UserAccount implements Serializable{
     oneResult.setAccountType("simpleUser");
     oneResult.setEmailAddress(defaultEmail);
     oneResult.setPassword("pswd");
-    oneResult.setName("Посетитель");
+    oneResult.setName("");
     
 //    Query q = em.createNamedQuery("UserAccount.getDefUser");
 //    q.setParameter("email", defaultEmail);

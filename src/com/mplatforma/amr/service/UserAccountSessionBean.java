@@ -4,28 +4,31 @@
  */
 package com.mplatforma.amr.service;
 
+import com.mplatforma.amr.entity.*;
 import com.mplatforma.amr.service.remote.AdminPubBeanRemote;
 import com.mplatforma.amr.service.remote.UserAccountBeanRemote;
-import com.mplatforma.amr.entity.*;
 import com.mresearch.databank.shared.*;
 import org.elasticsearch.common.jackson.core.JsonFactory;
 import org.elasticsearch.common.jackson.core.JsonParseException;
 import org.elasticsearch.common.jackson.core.JsonParser;
 import org.elasticsearch.common.jackson.core.JsonToken;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -149,7 +152,7 @@ public class UserAccountSessionBean implements UserAccountBeanRemote{
 //					loginInfo.setPictureUrl(jp.getText());
 //				} else 
 //                                    
-                                if ("name".equals(fieldname)) {
+        if ("name".equals(fieldname)) {
 					loginInfo.name = jp.getText();
 				} else if ("email".equals(fieldname)) {
 					loginInfo.email = jp.getText();
@@ -165,9 +168,7 @@ public class UserAccountSessionBean implements UserAccountBeanRemote{
 
     @Override
     public void initDefaults() {
-        
-        
-        
+
         System.out.println("Initing defaults!");
         
         new UserAccount(em).createDefaults();

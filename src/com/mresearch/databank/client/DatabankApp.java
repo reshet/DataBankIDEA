@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.mresearch.databank.client.constants.LangConstants;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.service.StartPageService;
 import com.mresearch.databank.client.service.StartPageServiceAsync;
@@ -19,11 +20,6 @@ import com.mresearch.databank.client.service.UserAccountServiceAsync;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserHistoryDTO;
 
-//import com.mresearch.databank.client.presenters.StartPagePerspectivePresenter;
-//import com.mresearch.databank.client.service.StartPageService;
-//import com.mresearch.databank.client.service.StartPageServiceAsync;
-//import com.mresearch.databank.client.views.HighChartSingleBarPanel;
-//import com.mresearch.databank.client.views.StartPagePerspectiveView;
 
 
 public class DatabankApp implements EntryPoint {
@@ -31,7 +27,7 @@ public class DatabankApp implements EntryPoint {
 	//interface DatabankAppUiBinder extends UiBinder<DockLayoutPanel, DatabankApp> {}
 	interface DatabankAppUiBinder extends UiBinder<ScrollPanel, DatabankApp> {}
 	private static final DatabankAppUiBinder binder = GWT.create(DatabankAppUiBinder.class);
-
+  public static LangConstants langConstants = GWT.create(LangConstants.class);
 	private static DatabankApp singleton;
 	private RootLayoutPanel root;
 	//private StartPagePerspectivePresenter startpagePresenter;
@@ -47,9 +43,7 @@ public class DatabankApp implements EntryPoint {
 		this.currentUserHistory = currentUserHistory;
 	}
 	private final UserAccountServiceAsync userService = GWT.create(UserAccountService.class);
-	  
-	//@UiField VerticalPanel innerPanel;
-	//@UiField ScrollPanel scroller;
+
 	@UiField VerticalPanel verticalPanel;
 	@UiField HTMLPanel pict_footer;
 	public static DatabankApp get()
@@ -70,21 +64,7 @@ public class DatabankApp implements EntryPoint {
 	public void onModuleLoad() {
 		 singleton = this; 
 		// initWidget(binder.createAndBindUi(this));
-		//initDefUsers();
 		login("email","password",null);
-		//login("research@admin.com","default");
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//HighChartSingleBarPanel.chartDO();
-		// root.add(new Button("Some"));
 	}
 	
 	private void initDefUsers()
@@ -163,15 +143,9 @@ public class DatabankApp implements EntryPoint {
            if (getCurrentUser() == null)
    		{
    			Window.alert("Error while login!");
-   			
    			return;
-   	
    		}
-           
-           
-           
-           
-           
+
    		if (getCurrentUser().getAccountType().equals("simpleUser")||getCurrentUser().getAccountType().equals("registeredUser")||getCurrentUser().getAccountType().equals("grantedUser"))
    		{
    			StartPageServiceAsync startpageService = GWT.create(StartPageService.class);
@@ -195,12 +169,6 @@ public class DatabankApp implements EntryPoint {
    		{
    			appController = new JuryAdminAppController(eventBus);
    		}
-   		//else if (getCurrentUser().getAccountType().equals("superAdmin"))
-//   		{
-//   			appController = new SuperAppController(eventBus);
-//   		}
-//
-   		
    		createUI();
       
 	}
@@ -209,7 +177,7 @@ public class DatabankApp implements EntryPoint {
 		userService.logout(new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
-				Window.alert("Вы вышли из банка данных.");
+				Window.alert(langConstants.mainExitMessage());
 			}
 			
 			@Override
@@ -220,10 +188,7 @@ public class DatabankApp implements EntryPoint {
 	}
 	private void createUI()
 	{
-		
-		//DockLayoutPanel outer = binder.createAndBindUi(this);	
-		ScrollPanel outer  = binder.createAndBindUi(this);	
-		//outer.set
+		ScrollPanel outer  = binder.createAndBindUi(this);
 		root = RootLayoutPanel.get();
 		root.clear();
 //		ScrollPanel scrol = new ScrollPanel();
@@ -231,14 +196,6 @@ public class DatabankApp implements EntryPoint {
 //		scrol.setHeight("100%");
 //		scrol.add(outer);
 		root.add(outer);
-		
-		
-		
-		
-		
-		
-		//VerticalPanel p = new VerticalPanel();
-		//outer.setWidget(p);
 		appController.go(verticalPanel);
 		//appController.
 		//startpagePresenter = new StartPagePerspectivePresenter(startpageService, eventBus, new StartPagePerspectiveView());

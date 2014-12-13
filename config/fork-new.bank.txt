@@ -10,6 +10,7 @@
     4) Change AdminSocioResearchMDB QueueConnectionFactory and Queue mapped names annotation params.
     5) Change AdminSocioResearchSessionBean QueueConnectionFactory and Queue mapped names annotation params.
     6) Change UserSocioResearchSessionBean INDEX_NAME constant.
+    7) ResearchFilesAccessor requestMail constant.
     7) Build
 7. Create new mysql database. Prepare database by:
     1) applying V002_Initial_data.sql from migrations. (tables with accounts and databank structure)

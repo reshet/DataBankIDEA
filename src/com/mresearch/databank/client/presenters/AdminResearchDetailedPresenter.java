@@ -55,58 +55,21 @@ public class AdminResearchDetailedPresenter implements Presenter{
 		 
 	 }
 	
-	public interface GroupEditDisplay
-	 {
-		 //String getResearchID();
-//		 ArrayList<String> getConcepts();
-//		 ArrayList<String> getPublications();
-//		 ArrayList<String> getPublications_dois();
-//		 ArrayList<String> getResearchers();
-//		 String getMethod();
-//		 String getOrgImplID();
-//		 String getOrgOrderedID();
-//		 String getSelectionApprchCompl();
-//		 String getSelectionApprchRand();
-//		 
-//		 //int getSelectionSize();
-//		 String getGenerealG();
-//		 Date getStartDate();
-//		 Date getEndDate();
-//		 //String getName();	
-		 //String getWeightVarID();
-//		 HasClickHandlers getCondirmBtn();
-//		 HasClickHandlers getDeleteBtn();
-//		 HasClickHandlers getAddOrgImplPopup();
-//		 HasClickHandlers getAddOrgOrderPopup();
-//		 
-//		 HasClickHandlers getAddOrgImplBtn();
-//		 HasClickHandlers getAddOrgOrderBtn();
-		 HasClickHandlers getEthalonSelector();
-		 void updateViewedDTO(SocioResearchDTO dto);
-		 String getDescription();
-//		 void setOrgImpl(ArrayList<String> names,ArrayList<String> ids);
-//		 String getOrgImplName(String org_impl_id);
-//		 String getOrgOrderName(String org_order_id);
-		 MetaUnitFiller getDBfiller();
-		 MetaUnitCollector getDBcollector();
-		 MetaUnitEntityItemRegistrator getDBregistrator();
-		 
-		 long getEthalonSelectedID();
-		 VerticalPanel getPickResearchesToPropagatePanel();
-		// String getWeightVarName(String weight_var_id);
-//		 void setOrgOrder(ArrayList<String> names,ArrayList<String> ids);	 
-		 //void setVarsWeight(ArrayList<String> names,ArrayList<String> ids);
-		 void setResearchesAvaible(ArrayList<String> names,ArrayList<Long> ids);
+	public interface GroupEditDisplay {
+     HasClickHandlers getEthalonSelector();
+     void updateViewedDTO(SocioResearchDTO dto);
+     String getDescription();
+     MetaUnitFiller getDBfiller();
+     MetaUnitCollector getDBcollector();
+     MetaUnitEntityItemRegistrator getDBregistrator();
+     long getEthalonSelectedID();
+     VerticalPanel getPickResearchesToPropagatePanel();
+     void setResearchesAvaible(ArrayList<String> names,ArrayList<Long> ids);
+     Widget asWidget();
+  }
+	public interface FilesEditDisplay {
 		 Widget asWidget();
-//		 OrgDTO getAddOrgDTO();
-//		 Widget getPopupAddOrg();
-//		 void setOrgPopupPosition(int x, int y);
-//		 void setOrgPopupVisibility(boolean b);
-	 }
-	public interface FilesEditDisplay
-	 {
-		 Widget asWidget();
-	 }
+	}
 	
 	 private final Display display;
 	 private EditDisplay edit_display;
@@ -119,21 +82,21 @@ public class AdminResearchDetailedPresenter implements Presenter{
 	public AdminResearchDetailedPresenter(UserSocioResearchServiceAsync rpcUserSerice,AdminSocioResearchServiceAsync rpcAdminService, SimpleEventBus eventBus,
 		      Display view,AdminResearchVarsView vars_view,EditDisplay edit_dspl, GroupEditDisplay gr_edit_displ,FilesEditDisplay files_ed_displ,AdminResearchVarGeneralizeS1View gener)
 	{
-		 this.rpcAdminService = rpcAdminService;
-		 this.rpcUserService = rpcUserSerice;
-		    this.eventBus = eventBus;
-		    this.display = view;
-		    this.vars_view = vars_view;
-		    this.edit_display = edit_dspl;
-		    this.gr_edit_displ = gr_edit_displ;
-		    this.files_ed_displ = files_ed_displ;
-		    this.display.getEditPanel().add(this.edit_display.asWidget());
-		    this.display.getVarsPanel().add(this.vars_view.asWidget());
-		    this.display.getGroupEditPanel().add(this.gr_edit_displ.asWidget());
-		    this.display.getFilesPanel().add(this.files_ed_displ.asWidget());
-		    gener.setCont(this.display.getUnificPanel());
-		    this.display.getUnificPanel().add(gener);
-		    bind();
+		this.rpcAdminService = rpcAdminService;
+		this.rpcUserService = rpcUserSerice;
+    this.eventBus = eventBus;
+    this.display = view;
+    this.vars_view = vars_view;
+    this.edit_display = edit_dspl;
+    this.gr_edit_displ = gr_edit_displ;
+    this.files_ed_displ = files_ed_displ;
+    this.display.getEditPanel().add(this.edit_display.asWidget());
+    this.display.getVarsPanel().add(this.vars_view.asWidget());
+    this.display.getGroupEditPanel().add(this.gr_edit_displ.asWidget());
+    this.display.getFilesPanel().add(this.files_ed_displ.asWidget());
+    gener.setCont(this.display.getUnificPanel());
+    this.display.getUnificPanel().add(gener);
+    bind();
 	}
 	 
 	@Override

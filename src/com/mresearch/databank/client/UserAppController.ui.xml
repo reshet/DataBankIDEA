@@ -250,8 +250,7 @@
 						</g:Anchor>
 						<g:Anchor href="javascript:;" ui:field="researchNav">
 							<div class="mm-item mm-11 mm-hover">
-								<div class="mm-caption">
-									Банк исследований
+								<div class="mm-caption" ui:field="researchNavCaption">
 								</div>
 							</div>
 						</g:Anchor>
@@ -314,8 +313,7 @@
 						<td><g:Label ui:field="username" styleName="{style.loginfo}"></g:Label></td>
 						<td>	
 						<g:Anchor href="javascript:;" ui:field="loginNav" styleName="{style.login}" horizontalAlignment="ALIGN_RIGHT">
-									<div class="{style.login}">
-										Войти!
+									<div class="{style.login}" ui:field="loginNavCaption">
 									</div>
 						</g:Anchor>
 						</td>
@@ -349,8 +347,5 @@
 					</g:VerticalPanel>
 				</div>
 			</g:HTMLPanel>
-			
-			
-			
 	</g:VerticalPanel>
 </ui:UiBinder> 

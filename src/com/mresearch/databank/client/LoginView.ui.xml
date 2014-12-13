@@ -21,10 +21,8 @@
 				</td>
 				<td>
 					<g:Button ui:field="authGoogleBtn" text="Вход через Google"></g:Button>
-					
 				</td>
 			</tr>
-			
 		</table>
 	</g:HTMLPanel>
 </ui:UiBinder> 

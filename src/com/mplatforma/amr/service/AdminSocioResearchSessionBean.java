@@ -120,79 +120,30 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
       }
     @Override
     public SocioResearchDTO updateResearch(SocioResearchDTO rDTO) {
-       // throw new UnsupportedOperationException("Not supported yet.");
-            if (rDTO.getId() == 0){ // create new
+            if (rDTO.getId() == 0) {
               SocioResearch newResearch = addResearch(rDTO);
               return newResearch.toDTO();
             }
-
-            SocioResearch research = null;
             try {
-             
-                
-              research = em.find(SocioResearch.class, rDTO.getId());
+              SocioResearch research = em.find(SocioResearch.class, rDTO.getId());
               research.updateFromDTO(rDTO,em);
               em.persist(research);
-//              addSSE("SocioResearch","gengeath", rDTO.getGen_geathering());
-//              addSSE("SocioResearch","method", rDTO.getMethod());
-//              ArrayList<String> concepts = rDTO.getConcepts();
-//              if(concepts!=null && concepts.size()>0)
-//              {
-//                  for(String concept:concepts)
-//                  {
-//                          addSSE("SocioResearch","concept", concept);
-//                  }  
-//              }
-             // ArrayList<String> researchers = rDTO.getResearchers();
-//              if(researchers!=null && researchers.size()>0)
-//              {
-//                  for(String researcher:researchers)
-//                  {
-//                          addSSE("SocioResearch","researcher", researcher);
-//                  }
-//              }
-             // addSSE("SocioResearch","org_impl", rDTO.getOrg_impl_name());
-              //addSSE("SocioResearch","org_order", rDTO.getOrg_order_name());
-             // ArrayList<String> pubs = rDTO.getPublications();
-//              if(pubs!=null && pubs.size()>0)
-//              {
-//                  for(String pub:pubs)
-//                  {
-//                          addSSE("SocioResearch","publication", pub);
-//                  }
-//              }
-             // addSSE("SocioResearch","selection_complexity", rDTO.getSel_complexity());
-             // addSSE("SocioResearch","selection_randomity", rDTO.getSel_randomity());
-              
               launchIndexing(rDTO);
-              
-              int bb = 2;
             } catch (Exception e) {
               e.printStackTrace();
             } finally {
             }
-            
             return rDTO;
-
     }
 
     @Override
     public void updateVar(VarDTO_Detailed rDTO) {
-       // throw new UnsupportedOperationException("Not supported yet.");
-            
-
             Var var = null;
             try {
-             
-                
               var = em.find(Var.class, rDTO.getId());
               var.updateFromDTO(rDTO,em);
-             
               em.persist(var);
               launchIndexingVar(rDTO);
-              
-              int bb = 2;
-              
               //findVarsLikeThis(rDTO.getId(), new ComparativeSearchParamsDTO());
             } catch (Exception e) {
               e.printStackTrace();
@@ -205,13 +156,11 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 
     @Resource(mappedName="jms/national/spss_parse")
     private  Queue queue;
-    
-//    @Resource(mappedName="jms/ES_index")
-//    private  Queue index_queue;
-    
-     private QueueConnection connection;
+
+    private QueueConnection connection;
     private QueueSession session;
-    QueueSender q_sender;
+    private QueueSender q_sender;
+
     @PostConstruct
     private void init()
     {
@@ -238,105 +187,58 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
     
      private void launchIndexingVar(VarDTO_Detailed dto)
     {
-         try {
+        try {
             ObjectMessage message = session.createObjectMessage();
             message.setStringProperty("title", "command to index SocioResearch var");
-            // here we create NewsEntity, that will be sent in JMS message
-           // ParseSpssJob job = new ParseSpssJob(blobkey, length);
             IndexVarJobFast job = new IndexVarJobFast(dto);
             message.setObject(job);    
-           // message.setJMSDestination(queue);
             q_sender.send(message);
         } catch (JMSException ex) {
             ex.printStackTrace();
         }
     }
-     
-   
     
     private void launchIndexing(SocioResearchDTO dto)
     {
-         try {
-            
-//            QueueConnection connection = connectionFactory.createQueueConnection();
-//            QueueSession session = connection.createQueueSession(false, 0);
-//            QueueSender q_sender = session.createSender(queue);
-
+        try {
             ObjectMessage message = session.createObjectMessage();
             message.setStringProperty("title", "command to index SocioResearch");
-            // here we create NewsEntity, that will be sent in JMS message
-           // ParseSpssJob job = new ParseSpssJob(blobkey, length);
             IndexResearchJob job = new IndexResearchJob(dto.getId());
             message.setObject(job);    
-           // message.setJMSDestination(queue);
             q_sender.send(message);
-//            q_sender.close();
-//            connection.close();
-            //response.sendRedirect("ListNews");
-
         } catch (JMSException ex) {
             ex.printStackTrace();
         }
     }
     
-    
-      private void launchDeleteIndexing(ArrayList<Long> ids,String type)
-         {
-         try {
-            
-//            QueueConnection connection = connectionFactory.createQueueConnection();
-//            QueueSession session = connection.createQueueSession(false, 0);
-//            QueueSender q_sender = session.createSender(queue);
-
-            ObjectMessage message = session.createObjectMessage();
-            message.setStringProperty("title", "command to delete index "+type+" "+ids.size()+" elements");
-            // here we create NewsEntity, that will be sent in JMS message
-           // ParseSpssJob job = new ParseSpssJob(blobkey, length);
-            if(ids.size()>0){
-                DeleteIndexiesJob job = new DeleteIndexiesJob(ids, type);
-                message.setObject(job);
-                message.setJMSDestination(queue);
-                q_sender.send(message);
-            }
-
-//            q_sender.close();
-//            connection.close();
-            //response.sendRedirect("ListNews");
-
-
-        } catch (JMSException ex) {
-            ex.printStackTrace();
-        }
+    private void launchDeleteIndexing(ArrayList<Long> ids,String type) {
+       try {
+          ObjectMessage message = session.createObjectMessage();
+          message.setStringProperty("title", "command to delete index "+type+" "+ids.size()+" elements");
+          if (ids.size()>0) {
+              DeleteIndexiesJob job = new DeleteIndexiesJob(ids, type);
+              message.setObject(job);
+              message.setJMSDestination(queue);
+              q_sender.send(message);
+          }
+       } catch (JMSException ex) {
+          ex.printStackTrace();
+       }
     }
     
     @Override
     public long parseSPSS(long blobkey, long length) {
-        
         try {
-            
-//            QueueConnection connection = connectionFactory.createQueueConnection();
-//            QueueSession session = connection.createQueueSession(false, 0);
-//            QueueSender q_sender = session.createSender(queue);
-
             ObjectMessage message = session.createObjectMessage();
             message.setStringProperty("title", "command to parse SPSS file");
-            // here we create NewsEntity, that will be sent in JMS message
             ParseSpssJob job = new ParseSpssJob(blobkey, length);
-          
-            message.setObject(job);   
-          //  message.setJMSDestination(queue);
+            message.setObject(job);
             q_sender.send(message);
-//            q_sender.close();
-//            connection.close();
-//            //response.sendRedirect("ListNews");
-
         } catch (JMSException ex) {
             ex.printStackTrace();
         }
-            
-	return 0;
+	      return 0;
     }
-
 
   @Override
   public SocioResearchDTO updateResearchGrouped(SocioResearchDTO rDTO) {
@@ -361,7 +263,7 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 
     @Override
     public VarDTO_Detailed generalizeVar(long var_id, ArrayList<Long> gen_var_ids,UserAccountDTO user) {
-            VarDTO_Detailed detailed = null;
+      VarDTO_Detailed detailed = null;
 	    Var dsVar, detached;
 
 	    try {
@@ -372,20 +274,20 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 	    } finally {
 	    }
 	    
-	return detailed;
+	    return detailed;
     }
 
     @Override
     public long addOrgImpl(OrgDTO dto) {
-          Organization org = null;
-	  long org_id = 0;
-	    try {
-	      org = new Organization(dto);
-	      em.persist(org);
-	      org_id = org.getId();
-	    } finally {
-	    }
-	 return org_id;
+      Organization org = null;
+      long org_id = 0;
+        try {
+          org = new Organization(dto);
+          em.persist(org);
+          org_id = org.getId();
+        } finally {
+        }
+      return org_id;
     }
 
     @Override
@@ -415,33 +317,12 @@ public class AdminSocioResearchSessionBean implements AdminSocioResearchBeanRemo
 	    }
     }
 
-    @Override
-    public Boolean addSSE(String clas, String kind, String value) {
-      /* SingleStringEntity entity = null;
-        try {
-          // for this version of the app, just get hardwired 'default' user
-          //UserAccount currentUser = UserAccount.getDefaultUser(); // detached object
-          //currentUser = pm.makePersistent(currentUser); // attach
-            if(value!=null && !value.equals(""))
-            {
-                List<SingleStringEntity> res = SingleStringEntity.getMatchingFull(em, clas, kind, value);
-                if(res.isEmpty())
-                {
-                   entity = new SingleStringEntity();
-                   entity.setClas(clas);
-                   entity.setKind(kind);
-                   entity.setContents(value);
-                   em.persist(entity);
-                }
-            }
-            return true;
-        } finally {
-            return false;
-        }*/
-        return true;
-    }
+  @Override
+  public Boolean addSSE(String clas, String kind, String value) {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
-    @Override
+  @Override
     public Boolean updateFileAccessor(long research_id, ResearchFilesDTO dto) {
         SocioResearch research = null;
         ResearchFilesAccessor accessor;
