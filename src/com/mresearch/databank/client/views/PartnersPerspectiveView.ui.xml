@@ -1,0 +1,26 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+    </ui:style>
+		<g:HTMLPanel>
+
+	            <div class="column640">
+	                <h1 class="robotobold">Перелік організацій, що передали дані до Національного банку соціологічних даних</h1>
+	            </div>
+	            <div class="column640" style="padding-top: 10px;">
+                    <ol class="robotolight">
+                        <li>Київський міжнародний інститут соціології <a href="http://kiis.com.ua/" class="robotolink" target="_blank">http://kiis.com.ua/</a></li>
+                        <li>Компанія TNS <a href="http://www.tns-ua.com/" class="robotolink" target="_blank">http://www.tns-ua.com/</a></li>
+                        <li>Інститут соціології НАН України <a href="http://i-soc.com.ua/institute/" class="robotolink" target="_blank">http://i-soc.com.ua/institute/</a></li>
+                        <li>Київський національний університет ім. Тараса Шевченко <a href="http://i-soc.com.ua/institute/" class="robotolink" target="_blank"> http://www.univ.kiev.ua/ru/</a></li>
+                        <li>Український центр економічних і політичних досліджень імені Олександра Разумкова <a href="http://www.razumkov.org.ua/" class="robotolink" target="_blank">http://www.razumkov.org.ua/</a></li>
+                        <li>Фонд «Демократичні ініціативи» імені Ілька Кучеріва <a href="http://www.dif.org.ua/" class="robotolink" target="_blank">http://www.dif.org.ua/</a></li>
+                        <li>Український інститут соціальних досліджень ім. Олександра Яременко <a href="http://www.uisr.org.ua/" class="robotolink" target="_blank">http://www.uisr.org.ua/</a></li>
+                        <li>Київський центр політичних досліджень и конфліктології <a href="http://analitik.org.ua/" class="robotolink" target="_blank">http://analitik.org.ua/</a></li>
+                        <li>СОЦИС <a href="http://www.socis.kiev.ua/" class="robotolink" target="_blank">http://www.socis.kiev.ua/</a></li>
+                    </ol>
+	            </div>
+		</g:HTMLPanel>
+		
+</ui:UiBinder> 

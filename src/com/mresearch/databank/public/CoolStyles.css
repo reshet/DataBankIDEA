@@ -167,6 +167,29 @@ h2.article {
     line-height: 100%;
 }
 
+.robotolight {
+    font-family: 'Roboto', sans-serif;
+    color: #272727;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.robotolink {
+    font-family: 'Roboto', sans-serif;
+    color: darkblue;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.robotobold {
+    font-family: 'Roboto', sans-serif;
+    color: #ff781e;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+}
 p {
     font-family: 'Trebuchet MS', Verdana, Arial, Helvetica;
     font-size: 14px;
@@ -258,6 +281,13 @@ div.column640 {
     padding-right: 20px; 
 }
 
+div.column740 {
+    position: relative;
+    width: 720px;
+    float: left;
+    padding-right: 20px;
+}
+
 div.column100 {
     position: relative;
     width: 80px;
@@ -282,15 +312,10 @@ div.figure-caption {
     padding-top: 5px;
 }
 
-/* div.logo { */
-/*     width: 465px; */
-/*     height: 36px; */
-/*     background: transparent url(i/logo.png) left top no-repeat; */
-/* } */
 div.logo {
-    width: 80px;
-    height: 88px;
-    background: transparent url(i/KIIS_logo_small.png) left top no-repeat;
+    width: 100px;
+    height: 100px;
+    background: transparent url(i/logo-ndb-color-small.png) left top no-repeat;
 }
 div.spacer50 {
     clear: both;

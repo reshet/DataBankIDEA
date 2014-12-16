@@ -316,12 +316,15 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
       if (token.startsWith("user-main")) {
         //clearMainPanel();
         presenter = new StartPagePerspectivePresenter(startpageService, eventBus, new StartPagePerspectiveView());
-        base.getFooter().setVisible(true);
+        //base.getFooter().setVisible(true);
          //thisDock.add(presenter.getPlace());
         presenter.go(centerPanel,null,null);
       } else if(token.equals("user-news")){
 //    	  presenter = new UserNewsPerspectivePresenter(startpageService, eventBus, new UserNewsPerspectiveView());
 //          presenter.go(centerPanel,null,null);
+      } else if(token.equals("partners")){
+        centerPanel.clear();
+        centerPanel.add(new PartnersPerspectiveView());
       } else if(token.startsWith("user-research")) {
     	  if (!prevToken.startsWith("user-research")) {
           presenter = new UserResearchPerspectivePresenter(researchService, eventBus, new UserResearchPerspectiveView(eventBus));
@@ -359,12 +362,10 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
     	  param_names = new ArrayList<String>();
     	  param_values = new ArrayList<String>();
     	  parsePathToken(token, param_names, param_values);
-    	  presenter.go(centerPanel,param_names,param_values);
+    	  presenter.go(centerPanel, param_names, param_values);
 
       } else if(token.startsWith("search-results")){
-    	  String [] arr = token.split("=");
-    	  String query = arr[1];
-     	  ArrayList<String> param_names,param_values;
+    	  ArrayList<String> param_names,param_values;
     	  param_names = new ArrayList<String>();
     	  param_values = new ArrayList<String>();
     	  parsePathToken(token, param_names, param_values);
