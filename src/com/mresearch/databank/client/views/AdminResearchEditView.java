@@ -1,57 +1,24 @@
 package com.mresearch.databank.client.views;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.zenika.widget.client.datePicker.DatePicker;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-//import com.google.gwt.user.datepicker.client.DatePicker;
-import com.mresearch.databank.client.DatabankApp;
-import com.mresearch.databank.client.LoginView;
-import com.mresearch.databank.client.helper.RPCCall;
+import com.google.gwt.user.client.ui.*;
 import com.mresearch.databank.client.presenters.AdminResearchDetailedPresenter;
 import com.mresearch.databank.client.views.DBfillers.MetaUnitCollector;
 import com.mresearch.databank.client.views.DBfillers.MetaUnitEntityItemRegistrator;
 import com.mresearch.databank.client.views.DBfillers.MetaUnitFiller;
 import com.mresearch.databank.client.views.DBfillers.MultiValuedField;
-import com.mresearch.databank.client.views.DBfillers.SimpleStringField;
-import com.mresearch.databank.shared.MetaUnitDTO;
-import com.mresearch.databank.shared.MetaUnitMultivaluedDTO;
 import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
-import com.mresearch.databank.shared.MetaUnitStringDTO;
-import com.mresearch.databank.shared.OrgDTO;
-import com.mresearch.databank.shared.SSE_DTO;
-import com.mresearch.databank.shared.SearchTaskResearchDTO;
 import com.mresearch.databank.shared.SocioResearchDTO;
-import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.widgets.RichTextEditor;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+//import com.google.gwt.user.datepicker.client.DatePicker;
 
 public class AdminResearchEditView extends Composite implements AdminResearchDetailedPresenter.EditDisplay{
 
@@ -98,63 +65,23 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		this.dto = dto;
 		research_id = dto.getId();
 		weight_var_ids = dto.getVar_weight_ids();
-		//weights.setMultipleSelect(true);
-//		int i = 0;
-//		if(dto.getPublications()!=null)
-//		for (String publName:dto.getPublications())
-//		{
-//			String doi=null,url=null;
-//			if (i < dto.getPublications_dois().size())doi = dto.getPublications_dois().get(i);
-//			if (i < dto.getPublications_urls().size())url = dto.getPublications_urls().get(i);
-//			VerticalPanel panel = new VerticalPanel();
-//			panel.add(new Label(publName));
-//			panel.add(new Label(doi));
-//			panel.add(new Label(url));
-//		//	flexPubl_tbl.setWidget(i, 0, panel);	
-//			i++;
-//		}
 		renderDBfillers();
 	}
 	private void renderDBfillers()
 	{
-		
-		
-		
 		descriptionEditor.clear();
-		
-        richTextEditor = new RichTextEditor();
-        richTextEditor.setHeight(200);  
-        richTextEditor.setWidth("600px");
-        richTextEditor.setBorder("1px solid green");
-        
-        richTextEditor.setZIndex(0);
-        
-        //richTextEditor.setOverflow(Overflow.HIDDEN);  
-        richTextEditor.setCanDragResize(true);
-      //  richTextEditor.setZIndex(-99900);
-        //richTextEditor.setShowEdges(true);  
-  
-        // Standard control group options include  
-        // "fontControls", "formatControls", "styleControls" and "colorControls"  
-        //richTextEditor.setControlGroups(new String[]{"fontControls", "styleControls"});  
-        richTextEditor.setValue(dto.getDesctiption());  
-        
-        descriptionEditor.add(richTextEditor);
-       // layout.addMember();  
-		
-		
+    richTextEditor = new RichTextEditor();
+    richTextEditor.setHeight(200);
+    richTextEditor.setWidth("600px");
+    richTextEditor.setBorder("1px solid green");
+    richTextEditor.setZIndex(0);
+    richTextEditor.setCanDragResize(true);
+    richTextEditor.setValue(dto.getDesctiption());
+    descriptionEditor.add(richTextEditor);
 		elasticDBfields.clear();
 		_db_.setDesc("Метаданные исследования");
 		mv = new MultiValuedField(_db_, null,dto.getFilling(),"");
 		elasticDBfields.add(mv);
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 	
 	public LinkedList<Long> getSelectedItemsWeights() {
@@ -172,7 +99,6 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		panel.add(new Label(name));
 		panel.add(new Label(doi));
 		panel.add(new Label(url));
-		//flexPubl_tbl.setWidget(flexPubl_tbl.getRowCount(), 0, panel);	
 	}
 	
 	@Override
@@ -225,46 +151,14 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 			ss.add(var_names.get(var_ids.indexOf(weight_var_id)));
 		return ss;
 	}
-	
-
-	
-	
 	@Override
 	public MetaUnitFiller getDBfiller() {
 		return mv;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public MetaUnitCollector getDBcollector() {
 		return mv;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public MetaUnitEntityItemRegistrator getDBregistrator() {
 		return mv;

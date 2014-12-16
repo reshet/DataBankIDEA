@@ -60,13 +60,14 @@ public class MultiValuedEntityMultiselected extends Composite
     initWidget((Widget)uiBinder.createAndBindUi(this));
     this.dto = dto;
     this.entity_name.setText(dto.getDesc());
+    this.items_list.setReadOnly(true);
     this.filling = filling;
     if(this.filling == null)this.filling = new HashMap<String,String>();
     editBtn.setStyleName("metaoptsBtn");
     this.base_name = base_name.equals("")?dto.getUnique_name():base_name+"_"+dto.getUnique_name();
     if (this.filling.containsKey(this.base_name))
     {
-      String val = (String)filling.get(this.base_name);
+      String val = filling.get(this.base_name);
       if (val != null)
       {
         this.items_list.setText(val);
@@ -76,9 +77,11 @@ public class MultiValuedEntityMultiselected extends Composite
           for (String token : tokens)
           {
             int index = dto.getItem_names().indexOf(token);
-            long idd = ((Long)dto.getItem_ids().get(index)).longValue();
-            this.initial_selected_ids.add(Long.valueOf(idd));
-            this.selected_ids.add(Long.valueOf(idd));
+            if (index != -1) {
+              long idd = dto.getItem_ids().get(index);
+              this.initial_selected_ids.add(idd);
+              this.selected_ids.add(idd);
+            }
           }
         }else
         {
