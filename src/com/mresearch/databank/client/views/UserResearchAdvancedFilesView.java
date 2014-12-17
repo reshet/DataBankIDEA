@@ -5,6 +5,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.DatabankApp;
@@ -26,12 +27,23 @@ public class UserResearchAdvancedFilesView extends Composite implements AdminRes
 	
 	private long research_id;
 	private ResearchFilesDTO result;
-  @UiField VerticalPanel arrays_panel,desc_panel, pretest_panel, instrument_panel, sample_panel;
+    @UiField VerticalPanel arrays_panel,desc_panel, pretest_panel, instrument_panel, sample_panel;
 	@UiField VerticalPanel mailto_panel,publications_panel;
+    @UiField Label textFilesTitle, textArrays, textDescription, textPretest, textInstruments, textSample, textPublications, textRequest;
 	public UserResearchAdvancedFilesView(long research_id,ResearchFilesDTO dto) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.research_id = research_id;
 		this.result = dto;
+
+        this.textFilesTitle.setText(DatabankApp.langConstants.researchDetailedFilesTitle());
+        this.textArrays.setText(DatabankApp.langConstants.researchDetailedFilesSectionArrays());
+        this.textDescription.setText(DatabankApp.langConstants.researchDetailedFilesSectionDescription());
+        this.textPretest.setText(DatabankApp.langConstants.researchDetailedFilesSectionPretest());
+        this.textInstruments.setText(DatabankApp.langConstants.researchDetailedFilesSectionInstruments());
+        this.textSample.setText(DatabankApp.langConstants.researchDetailedFilesSectionSample());
+        this.textPublications.setText(DatabankApp.langConstants.researchDetailedFilesSectionPublications());
+        this.textRequest.setText(DatabankApp.langConstants.researchDetailedFilesSectionRequest());
+
 		doFetchFiles();
 	}
 

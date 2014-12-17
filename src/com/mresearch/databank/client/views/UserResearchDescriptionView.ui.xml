@@ -7,6 +7,6 @@
 	<g:VerticalPanel>
 	<g:HTML ui:field="html">
 	</g:HTML>
-	<g:Button ui:field="addToSelectedBtn" text="Добавить в избранные"></g:Button>
+	<g:Button ui:field="addToSelectedBtn"></g:Button>
 	</g:VerticalPanel>
 </ui:UiBinder> 

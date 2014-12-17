@@ -46,7 +46,7 @@ public class UserResearchFilesView extends Composite implements AdminResearchDet
 	
 	private long research_id;
 	private String category;
-	public UserResearchFilesView(long research_id,String category,SocioResearchFilesDTO dto) {
+	public UserResearchFilesView(long research_id, String category, SocioResearchFilesDTO dto) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.research_id = research_id;
 		this.category = category;
@@ -73,7 +73,9 @@ public class UserResearchFilesView extends Composite implements AdminResearchDet
 			files_table.setWidget(i, 1, new Label(dto.getFiles_descs().get(i)));		
 			final long file_id = dto.getFiles_ids().get(i);
 			if(user_class.equals("grantedUser")){
-                files_table.setWidget(i, 2, new HTML("<a href=\""+realPath+"serve?blob-key="+file_id+"\">Скачать</a>"));
+                files_table.setWidget(i, 2,
+                        new HTML("<a href=\""+realPath+"serve?blob-key="+file_id+"\">" +
+                                DatabankApp.langConstants.researchDetailedFilesDownload()+ "</a>"));
             }
     	}
 	}

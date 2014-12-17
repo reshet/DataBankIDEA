@@ -7,36 +7,36 @@
 	
 	<g:TabLayoutPanel barHeight="30" visible="true" width="700px" height="600px">
 		<g:tab>
-			<g:header>
-				Описание
-			</g:header>
-			<g:ScrollPanel width="100%" height="100%">
+            <g:customHeader>
+                <g:Label ui:field="descriptionTabHeader"></g:Label>
+            </g:customHeader>
+            <g:ScrollPanel width="100%" height="100%">
 				<g:VerticalPanel ui:field="descPanel">
 				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:tab>
 		<g:tab>
-			<g:header>
-				Метаданные
-			</g:header>
+            <g:customHeader>
+                <g:Label ui:field="metadataTabHeader"></g:Label>
+            </g:customHeader>
 			<g:ScrollPanel width="100%" height="100%">
 				<g:VerticalPanel ui:field="viewPanel">
 				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:tab>
 		<g:tab>
-			<g:header>
-				Файлы
-			</g:header>
+            <g:customHeader>
+                <g:Label ui:field="filesTabHeader"></g:Label>
+            </g:customHeader>
 			<g:ScrollPanel width="100%" height="100%">
 				<g:VerticalPanel ui:field="filesPanel">
 				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:tab>
 		<g:tab>
-			<g:header>
-				Переменные
-			</g:header>
+            <g:customHeader>
+                <g:Label ui:field="varsTabHeader"></g:Label>
+            </g:customHeader>
 			<g:ScrollPanel width="100%" height="100%">
 				<g:VerticalPanel ui:field="varsPanel">
 				</g:VerticalPanel>

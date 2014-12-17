@@ -6,34 +6,34 @@
 	</ui:style>
 		<g:VerticalPanel>
 			<g:HTMLPanel>
-				<h2>Файлы исследования:</h2>
+				<h3 class="robotolight"><g:Label ui:field="textFilesTitle"/></h3>
 				<table>
                     <tr>
-                        <td>Массивы: </td>
+                        <td><g:Label ui:field="textArrays"/></td>
                         <td><g:VerticalPanel ui:field="arrays_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Краткое описание исследования: </td>
+                        <td><g:Label ui:field="textDescription"/></td>
                         <td><g:VerticalPanel ui:field="desc_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Претест (анкеты, карточки, инструкции, отчет): </td>
+                        <td><g:Label ui:field="textPretest"/></td>
                         <td><g:VerticalPanel ui:field="pretest_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Инструментарий (анкеты, карточки, инструкции): </td>
+                        <td><g:Label ui:field="textInstruments"/></td>
                         <td><g:VerticalPanel ui:field="instrument_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Файл выборки исследования, базы данных: </td>
+                        <td><g:Label ui:field="textSample"/></td>
                         <td><g:VerticalPanel ui:field="sample_panel"></g:VerticalPanel></td>
                     </tr>
                     <tr>
-                        <td>Отчеты, презентации, публикации: </td>
+                        <td><g:Label ui:field="textPublications"/></td>
                         <td><g:VerticalPanel ui:field="publications_panel"></g:VerticalPanel></td>
                     </tr>
 					<tr>
-						<td>Запрос массива данных: </td>
+						<td><g:Label ui:field="textRequest"/></td>
 						<td><g:VerticalPanel ui:field="mailto_panel"></g:VerticalPanel></td>
 					</tr>
 

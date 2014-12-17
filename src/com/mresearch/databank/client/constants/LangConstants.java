@@ -101,4 +101,67 @@ public interface LangConstants extends Constants {
 
     @Key("research.main.filter.string.contains")
     String researchMainFilterStringContains();
+
+    @Key("research.detailed.tab.description")
+    String researchDetailedTabDescription();
+
+    @Key("research.detailed.tab.metadata")
+    String researchDetailedTabMetadata();
+
+    @Key("research.detailed.tab.files")
+    String researchDetailedTabFiles();
+
+    @Key("research.detailed.tab.vars")
+    String researchDetailedTabVars();
+
+    @Key("research.detailed.metadata.title")
+    String researchDetailedMetadataTitle();
+
+    @Key("research.detailed.metadata.weights")
+    String researchDetailedMetadataWeights();
+
+    @Key("research.detailed.metadata.weights.none")
+    String researchDetailedMetadataWeightsNone();
+
+    @Key("research.detailed.selected.box.title")
+    String researchDetailedSelectedBoxTitle();
+
+    @Key("research.detailed.selected.box.success")
+    String researchDetailedSelectedBoxSuccess();
+
+    @Key("research.detailed.selected.button.text")
+    String researchDetailedSelectedButtonText();
+
+    @Key("research.detailed.vars.title")
+    String researchDetailedVarsTitle();
+
+    @Key("research.detailed.files.title")
+    String researchDetailedFilesTitle();
+
+    @Key("research.detailed.files.section.arrays")
+    String researchDetailedFilesSectionArrays();
+
+    @Key("research.detailed.files.section.description")
+    String researchDetailedFilesSectionDescription();
+
+    @Key("research.detailed.files.section.pretest")
+    String researchDetailedFilesSectionPretest();
+
+    @Key("research.detailed.files.section.instruments")
+    String researchDetailedFilesSectionInstruments();
+
+    @Key("research.detailed.files.section.sample")
+    String researchDetailedFilesSectionSample();
+
+    @Key("research.detailed.files.section.publications")
+    String researchDetailedFilesSectionPublications();
+
+    @Key("research.detailed.files.section.request")
+    String researchDetailedFilesSectionRequest();
+
+    @Key("research.detailed.files.download")
+    String researchDetailedFilesDownload();
+
+    @Key("research.detailed.vars.list")
+    String researchDetailedVarsList();
 }

@@ -3,14 +3,13 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:VerticalPanel>
 		<g:HTMLPanel>
-			<h3>Метаданные исследования</h3>
+			<h3 class="robotolight"><g:Label ui:field="textMetadataTitle"/></h3>
 			<g:VerticalPanel ui:field="elasticDBfieldNames"></g:VerticalPanel>
-				
  			<table>
  				<tr>
  					<td>
                         <div class="gray25 bold">
-                            <g:Label>Взвешивание:</g:Label>
+                            <g:Label ui:field="textWeights"></g:Label>
                         </div>
  					</td>
  					<td>
@@ -18,11 +17,6 @@
  					</td>
  				</tr>
  			</table>
-
-
-		</g:HTMLPanel>	
-		
-
-		
+		</g:HTMLPanel>
 	</g:VerticalPanel>
 </ui:UiBinder> 

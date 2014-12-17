@@ -51,6 +51,7 @@ public class UserResearchDescriptionView extends Composite {
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		this.dto = dto;
+        this.addToSelectedBtn.setText(DatabankApp.langConstants.researchDetailedSelectedButtonText());
 		html.setHTML(dto.getDesctiption()==null?"":dto.getDesctiption());
 		if(DatabankApp.get().getCurrentUser().getId()==0)addToSelectedBtn.setVisible(false);
 			else
@@ -96,7 +97,8 @@ public class UserResearchDescriptionView extends Composite {
 			@Override
 			public void onSuccess(Void arg0) {
 				addToSelectedBtn.setVisible(false);
-				PopupPanel b = DialogBoxFactory.createDialogBox("Избранные исследования",new Label("Исследование успешно добавлено!"),null,"ОК");
+				PopupPanel b = DialogBoxFactory.createDialogBox(DatabankApp.langConstants.researchDetailedSelectedBoxTitle(),
+                        new Label(DatabankApp.langConstants.researchDetailedSelectedBoxSuccess()),null,"ОК");
 				b.show();
 			}
 			@Override

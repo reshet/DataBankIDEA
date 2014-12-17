@@ -5,7 +5,7 @@
 		
 	</ui:style>
 	<g:HTMLPanel ui:field="html">
-		<h2>Переменные исследования</h2>
+		<h3 class="robotolight"><g:Label ui:field="textVarsTitle"/></h3>
 		<g:VerticalPanel width="100%" height="100%">
 			<g:Tree width="100%" height="100%" ui:field="tree"></g:Tree>
 		</g:VerticalPanel>

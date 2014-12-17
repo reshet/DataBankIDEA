@@ -42,14 +42,7 @@ public class VarDescItem extends TreeItem implements WrappedCustomLabel{
 		l.setText(dto.getCode()+": "+dto.getLabel().substring(0, end));
 		this.setWidget(l);
 		l.setStylePrimaryName("gwt-TreeItem");
-		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		this.setTitle(dto.getCode()+": "+dto.getLabel());
 		

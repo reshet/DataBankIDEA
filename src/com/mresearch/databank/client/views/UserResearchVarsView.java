@@ -53,49 +53,30 @@ public class UserResearchVarsView extends Composite {
 	}
 	//@UiField HTML htm;
 	@UiField Tree tree;
+    @UiField Label textVarsTitle;
 	private ResearchVarList item;
 	private final UserSocioResearchServiceAsync rpcService = UserSocioResearchService.Util.getInstance();
 	public UserResearchVarsView(SocioResearchDTO dto)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-
-		
-		//html.setHTML(dto.getDesctiption()==null?"":dto.getDesctiption());
+        this.textVarsTitle.setText(DatabankApp.langConstants.researchDetailedVarsTitle());
 		item = new ResearchVarList(new SocioResearchDTO_Light(dto.getId(),dto.getName()));
 		tree.setStyleName("research_section");
 		item.setState(true);
 		tree.addItem(item);
 		fetchResearchVarData(item, item.getResearch_id());
-//		tree.addOpenHandler(new OpenHandler<TreeItem>() {
-//			@Override
-//			public void onOpen(OpenEvent<TreeItem> event) {
-//				TreeItem it = event.getTarget();
-//				if (it instanceof ResearchVarList)
-//				{
-//					ResearchVarList rv = (ResearchVarList)it;
-//					fetchResearchVarData(it, rv.getResearch_id());
-//					//current_research_id = rv.getResearch_id();
-//				}
-//			}
-//		});
-//		
 		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
-			//private VarDescItem prevVar;
 			private WrappedCustomLabel prevRes;
 			@Override
 			public void onSelection(SelectionEvent<TreeItem> event) {
 				TreeItem it = tree.getSelectedItem();
 				if(prevRes!=null)prevRes.getLabel().removeStyleDependentName("selected");
-				//if(prevVar!=null)prevVar.getLabel().removeStyleDependentName("selected");
-				
 				if (it instanceof VarDescItem)
 				{
 					VarDescItem rv = (VarDescItem)it;
 					rv.getLabel().addStyleDependentName("selected");
 					prevRes = (WrappedCustomLabel)rv;
-					//fetchResearchVarData(it, rv.getResearch_id());
 					DatabankApp.get().getEventBus().fireEvent(new ShowVarDetailsEvent(rv.getVar_id()));
-				//	eventBus.fireEvent(new AddResearchDisabledEvent());
 				}
 			}
 		});
@@ -115,7 +96,6 @@ public class UserResearchVarsView extends Composite {
 				item.removeItems();
 				for(VarDTO_Light dto:result)
 				{
-					
 					VarDescItem var_node = new VarDescItem(dto,200);
 					var_node.getLabel().setWidth("580px");
 					//var_node.addItem(dto.getLabel());
