@@ -65,65 +65,63 @@
 					horizontalAlignment="ALIGN_LEFT"
 				>
 					<g:HTML>
-						<h1>Расширенный поиск</h1>
+						<h1 class="robotobold"><g:Label ui:field="searchTitle"></g:Label></h1>
 						<br/>
 					</g:HTML>
 					
 					<g:HorizontalPanel horizontalAlignment="ALIGN_LEFT">
 						<g:VerticalPanel spacing="2" styleName="{style.search-types}">
-							<g:Label text="Область поиска" styleName="{style.large_text}"/>
-                            <g:CheckBox text="Переменные" checked="true" ui:field="sociovars"/>
-                            <g:CheckBox text="Исследования" ui:field="socioresearch"/>
+							<g:Label ui:field="searchLevel" styleName="{style.large_text}"/>
+                            <g:CheckBox checked="true" ui:field="sociovars"/>
+                            <g:CheckBox ui:field="socioresearch"/>
                             <!-- 							<g:CheckBox text="Концепты"/> -->
                             <!-- 							<g:CheckBox text="Опросы"/> -->
-							<g:CheckBox text="Публикации" ui:field="publications"/>
+							<!--<g:CheckBox text="Публикации" ui:field="publications"/>-->
 <!-- 							<g:CheckBox text="Законодательство" ui:field="laws"/> -->
 <!-- 							<g:CheckBox text="Консультации юриста" ui:field="consults"/> -->
 						</g:VerticalPanel>
 						<g:VerticalPanel>
 							<g:HorizontalPanel>
 								<g:VerticalPanel spacing="2" styleName="{style.search-terms}">
-									<g:Label text="Содержит" styleName="{style.large_text}"/>
+									<g:Label ui:field="textContains" styleName="{style.large_text}"/>
 									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
-										<g:Label text="Одно из слов" styleName="{style.small_text}"/>
+										<g:Label ui:field="textOneOfTheWords" styleName="{style.small_text}"/>
 										<g:TextBox ui:field="contains_one_of"></g:TextBox>
 									</g:VerticalPanel>
 									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
-										<g:Label text="Формулировку целиком" styleName="{style.small_text}"/>
+										<g:Label ui:field="textPhrase" styleName="{style.small_text}"/>
 										<g:TextBox ui:field="contains_exact"></g:TextBox>
 									</g:VerticalPanel>			
 								</g:VerticalPanel>
 								
 								<g:VerticalPanel spacing="2" styleName="{style.search-terms}">
-									<g:Label text="А также содержит" styleName="{style.large_text}"/>
+									<g:Label ui:field="textAlsoContains" styleName="{style.large_text}"/>
 									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
-										<g:Label text="Формулировку целиком" styleName="{style.small_text}"/>
+										<g:Label ui:field="textPhrase2" styleName="{style.small_text}"/>
 										<g:TextBox ui:field="contains_exact_too"></g:TextBox>
 									</g:VerticalPanel>			
 									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
-										<g:Label text="или" styleName="{style.small_text}"/>
+										<g:Label ui:field="textOr" styleName="{style.small_text}"/>
 										<g:TextBox ui:field="contains_or"></g:TextBox>
 									</g:VerticalPanel>
 									
 								</g:VerticalPanel>
 								
 								<g:VerticalPanel spacing="2" styleName="{style.search-terms}">
-									<g:Label text="Но не содержит" styleName="{style.large_text}"/>
+									<g:Label ui:field="textButNotContains" styleName="{style.large_text}"/>
 									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
-										<g:Label text="ни одного из слов" styleName="{style.small_text}"/>
+										<g:Label ui:field="textNoneOfTheWords" styleName="{style.small_text}"/>
 										<g:TextBox ui:field="contains_none_of"></g:TextBox>
 									</g:VerticalPanel>
 									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
-										<g:Label text="или точной формулировки" styleName="{style.small_text}"/>
+										<g:Label ui:field="textOrPhrase" styleName="{style.small_text}"/>
 										<g:TextBox ui:field="not_contains_exact"></g:TextBox>
 									</g:VerticalPanel>			
 								</g:VerticalPanel>
 							</g:HorizontalPanel>
 							
 							<g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
-								<g:Button ui:field="search" text="Найти"></g:Button>
-								<g:Label text="или переключиться в " styleName="{style.small_text}"></g:Label>
-								<g:Anchor ui:field="simple_search" text="простой поиск" styleName="{style.small_text}"></g:Anchor>
+								<g:Button ui:field="search"></g:Button>
 							</g:HorizontalPanel>
 						</g:VerticalPanel>
 					</g:HorizontalPanel>
@@ -133,14 +131,6 @@
 						<br/>
 					</g:HTML>
 					<g:VerticalPanel ui:field="centerPanel">
-	<!-- 					<app:ImprovedSearchView ui:field="impr_search_view"> -->
-	<!-- 					</app:ImprovedSearchView> -->
-	<!-- 					<g:HTMLPanel> -->
-	<!-- 						<h2>Результаты поиска по запросу:</h2> -->
-	<!-- 							<h4><g:Label ui:field="queryStr"></g:Label></h4> -->
-	<!-- 						<br/> -->
-	<!-- 					</g:HTMLPanel> -->
-	<!-- 					<g:FlexTable ui:field="res_table"></g:FlexTable> -->
 					</g:VerticalPanel>
 					<app:WhiteFooter></app:WhiteFooter>
 				</g:VerticalPanel>	

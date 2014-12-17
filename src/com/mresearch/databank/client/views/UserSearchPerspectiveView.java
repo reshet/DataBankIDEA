@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
+import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.presenters.UserSearchPerspectivePresenter;
 import com.mresearch.databank.shared.SearchResultDTO;
 import com.mresearch.databank.shared.SearchTaskLawDTO;
@@ -25,25 +26,36 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
 	@UiField VerticalPanel centerPanel,root_panel;
 	@UiField TextBox contains_one_of,contains_exact,contains_exact_too,contains_or,contains_none_of,not_contains_exact;
 	@UiField Button search;
+    @UiField Label searchLevel, searchTitle, textContains, textOneOfTheWords, textPhrase, textPhrase2, textAlsoContains,
+            textOr, textButNotContains, textNoneOfTheWords, textOrPhrase;
 	//@UiField FlexTable res_table;
 	//@UiField Label queryStr;
 	SimpleResearchList simpleResearchListItem;
-	@UiField CheckBox socioresearch,sociovars,publications;//laws,consults;
+	@UiField CheckBox socioresearch,sociovars;//,publications;//laws,consults;
 	//@UiField ImprovedSearchView impr_search_view;
 	private ArrayList<SearchResultDTO> resultsList;
 	public UserSearchPerspectiveView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		//search.addClickHandler(handler)l
+        searchTitle.setText(DatabankApp.langConstants.researchSearchTitle());
+
+        textContains.setText(DatabankApp.langConstants.researchSearchInputContains());
+        textOneOfTheWords.setText(DatabankApp.langConstants.researchSearchInputOneOfTheWords());
+        textPhrase.setText(DatabankApp.langConstants.researchSearchInputFullText());
+        textPhrase2.setText(DatabankApp.langConstants.researchSearchInputFullText());
+        textAlsoContains.setText(DatabankApp.langConstants.researchSearchInputAlsoContains());
+        textOr.setText(DatabankApp.langConstants.researchSearchInputOr());
+        textButNotContains.setText(DatabankApp.langConstants.researchSearchInputButNotContains());
+        textNoneOfTheWords.setText(DatabankApp.langConstants.researchSearchInputNoneOfTheWords());
+        textOrPhrase.setText(DatabankApp.langConstants.researchSearchInputOrFullText());
+
+		search.setText(DatabankApp.langConstants.researchSearchButtonText());
+        searchLevel.setText(DatabankApp.langConstants.researchSearchLevel());
+        socioresearch.setText(DatabankApp.langConstants.researchSearchLevelResearches());
+        sociovars.setText(DatabankApp.langConstants.researchSearchLevelVars());
+
 	}
 	private void displaySearchResults()
 	{
-//		res_table.clear();
-//		int i = 0;
-//		for(SearchResultDTO dto:resultsList)
-//		{
-//			res_table.setWidget(i, 0, new SearchResultView(dto));
-//			i++;
-//		}
 	}
 	@Override
 	public void setSearchResultsData(ArrayList<SearchResultDTO> data) {
@@ -116,28 +128,17 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
 		// TODO Auto-generated method stub
 		return root_panel;
 	}
-	
-	
-	
-	
-	
-	
+
 	@Override
 	public String[] getTypesToSearch() {
 		ArrayList<String> types = new ArrayList<String>();
-//		if(all.getValue()) return new String[]{"research","sociovar",
-//												//"law","consultation",
-//												"publication"
-//												};
-		
 		if(socioresearch.getValue())types.add("research");
 		if(sociovars.getValue())types.add("sociovar");
 		//if(laws.getValue())types.add("law");
-		if(publications.getValue())types.add("publication");
+		//if(publications.getValue())types.add("publication");
 		//if(consults.getValue())types.add("consultation");
 		String [] arr = new String[types.size()];
 		types.toArray(arr);
-
 		return arr;
 	}
 
@@ -146,7 +147,6 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
     final Set<String> searchTypes = new HashSet<String>(Arrays.asList(types));
     socioresearch.setValue(searchTypes.contains("research"));
     sociovars.setValue(searchTypes.contains("sociovar"));
-    publications.setValue(searchTypes.contains("publication"));
-    //To change body of implemented methods use File | Settings | File Templates.
+    //publications.setValue(searchTypes.contains("publication"));
   }
 }
