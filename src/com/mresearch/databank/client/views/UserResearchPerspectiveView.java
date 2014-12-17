@@ -58,7 +58,7 @@ public class UserResearchPerspectiveView extends Composite implements UserResear
 
         tree.setStyleName("research_section");
         filterTabHeader.setText(DatabankApp.langConstants.researchMainFilterHeader());
-        filterTabHeader.setText(DatabankApp.langConstants.researchMainMyResearchesHeader());
+        myResearchesTabHeader.setText(DatabankApp.langConstants.researchMainMyResearchesHeader());
 
         split_panel.setWidgetMinSize(centerChild, 720);
         simpleResearchListItem = new SimpleResearchList();

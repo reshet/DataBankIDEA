@@ -64,10 +64,10 @@
 				<g:VerticalPanel
 					horizontalAlignment="ALIGN_LEFT"
 				>
-					<g:HTML>
+					<g:HTMLPanel>
 						<h1 class="robotobold"><g:Label ui:field="searchTitle"></g:Label></h1>
 						<br/>
-					</g:HTML>
+					</g:HTMLPanel>
 					
 					<g:HorizontalPanel horizontalAlignment="ALIGN_LEFT">
 						<g:VerticalPanel spacing="2" styleName="{style.search-types}">

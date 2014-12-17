@@ -1,12 +1,6 @@
 package com.mresearch.databank.client.views;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -16,19 +10,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.DatabankApp;
-import com.mresearch.databank.shared.FilterBaseDTO;
-import com.mresearch.databank.shared.FilterDiapasonDTO;
 import com.mresearch.databank.shared.MetaUnitDTO;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 
 public abstract class FilterRealDiapasonView extends Composite
   implements IFilterProvider
@@ -50,6 +32,7 @@ public abstract class FilterRealDiapasonView extends Composite
 	initWidget((Widget)uiBinder.createAndBindUi(this));
     this.diapason_name.setText(diapason_name);
     this.textFrom.setText(DatabankApp.langConstants.researchMainFilterRealDiapasonFrom());
+    this.textTo.setText(DatabankApp.langConstants.researchMainFilterRealDiapasonTo());
     this.dto = dt;
     this.base_name = b_name;
     this.from_value.addKeyPressHandler(new KeyPressHandler() {
