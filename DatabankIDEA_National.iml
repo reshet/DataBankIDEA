@@ -33,11 +33,14 @@
     </facet>
     <facet type="gwt" name="GWT">
       <configuration>
-        <setting name="compilerParameters" value="-localWorkers 2" />
-        <setting name="compilerMaxHeapSize" value="1520" />
+        <setting name="compilerParameters" value="-localWorkers 4" />
+        <setting name="compilerMaxHeapSize" value="2000" />
         <setting name="gwtScriptOutputStyle" value="OBF" />
-        <setting name="gwtSdkUrl" value="file://$USER_HOME$/GWT_2.4.0/" />
+        <setting name="gwtSdkUrl" value="file://$MODULE_DIR$/../GWT_2.4.0" />
         <setting name="webFacet" value="Web" />
+        <packaging>
+          <module name="gwtupload.GWTUpload" enabled="false" />
+        </packaging>
       </configuration>
     </facet>
   </component>
