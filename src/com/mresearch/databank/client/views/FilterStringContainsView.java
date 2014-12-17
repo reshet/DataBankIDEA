@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.shared.MetaUnitDTO;
 
 public abstract class FilterStringContainsView extends Composite
@@ -15,7 +16,7 @@ implements IFilterProvider
 private static FilterStringContainsViewUiBinder uiBinder = (FilterStringContainsViewUiBinder)GWT.create(FilterStringContainsViewUiBinder.class);
 
 @UiField
-Label name;
+Label name, textContains;
 
 @UiField
 TextBox value;
@@ -25,6 +26,7 @@ public FilterStringContainsView(String name,String b_name,MetaUnitDTO dt) { init
   this.name.setText(name); 
   this.dto = dt;
   this.base_name = b_name;
+  this.textContains.setText(DatabankApp.langConstants.researchMainFilterStringContains());
 }
 
 public String getValue()

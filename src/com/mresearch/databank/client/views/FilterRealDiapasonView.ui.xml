@@ -7,9 +7,9 @@
 	<g:VerticalPanel>
 		<g:Label ui:field="diapason_name"></g:Label>
 		<g:HorizontalPanel>
-			<g:Label text="С:"></g:Label>
+			<g:Label ui:field="textFrom"></g:Label>
 			<g:TextBox ui:field="from_value" width="50px"></g:TextBox>
-			<g:Label text="До:"></g:Label>
+			<g:Label ui:field="textTo"></g:Label>
 			<g:TextBox ui:field="to_value" width="50px"></g:TextBox>
 		</g:HorizontalPanel>
 	</g:VerticalPanel>

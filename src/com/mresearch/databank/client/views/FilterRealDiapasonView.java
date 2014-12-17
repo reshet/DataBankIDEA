@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.shared.FilterBaseDTO;
 import com.mresearch.databank.shared.FilterDiapasonDTO;
 import com.mresearch.databank.shared.MetaUnitDTO;
@@ -35,7 +36,7 @@ public abstract class FilterRealDiapasonView extends Composite
   private static FilterRealDiapasonViewUiBinder uiBinder = (FilterRealDiapasonViewUiBinder)GWT.create(FilterRealDiapasonViewUiBinder.class);
 
   @UiField
-  Label diapason_name;
+  Label diapason_name, textFrom, textTo;
 
   @UiField
   TextBox from_value;
@@ -48,6 +49,7 @@ public abstract class FilterRealDiapasonView extends Composite
   public FilterRealDiapasonView(String diapason_name,String b_name,MetaUnitDTO dt) { 
 	initWidget((Widget)uiBinder.createAndBindUi(this));
     this.diapason_name.setText(diapason_name);
+    this.textFrom.setText(DatabankApp.langConstants.researchMainFilterRealDiapasonFrom());
     this.dto = dt;
     this.base_name = b_name;
     this.from_value.addKeyPressHandler(new KeyPressHandler() {

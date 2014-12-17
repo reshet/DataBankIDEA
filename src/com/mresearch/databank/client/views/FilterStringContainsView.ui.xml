@@ -7,7 +7,7 @@
 	<g:VerticalPanel>
 		<g:Label ui:field="name"></g:Label>
 		<g:HorizontalPanel>
-			<g:Label text="Содержит:"></g:Label>
+			<g:Label ui:field="textContains"></g:Label>
 			<g:TextBox ui:field="value" width="100px"></g:TextBox>
 		</g:HorizontalPanel>
 	</g:VerticalPanel>

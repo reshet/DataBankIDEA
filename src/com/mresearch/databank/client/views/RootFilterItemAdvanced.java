@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.event.ShowPlaceEvent;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.presenters.Place;
@@ -222,8 +223,8 @@ public class RootFilterItemAdvanced extends VerticalPanel
   private Button cancel_btn;
   public RootFilterItemAdvanced(Place place,SimpleEventBus ev_bus,String type_to_filter,String filter_caption)
   {
-    this.doFilterBtn = new Button("Фильтровать");
-    this.cancel_btn = new Button("Сбросить");
+    this.doFilterBtn = new Button(DatabankApp.langConstants.researchMainFilterActionDo());
+    this.cancel_btn = new Button(DatabankApp.langConstants.researchMainFilterActionCancel());
     
     
     //this.doUseFilters = new TreeItem(filter_caption);

@@ -37,7 +37,7 @@ public class UserResearchPerspectiveView extends Composite implements UserResear
 	@UiField VerticalPanel centerPanel;
 //	VerticalPanel centralPanel;
 	@UiField Tree tree,F_S_tree,F_V_tree,My_researches_tree;
-  @UiField Label filterTabHeader;
+    @UiField Label filterTabHeader, myResearchesTabHeader;
 	@UiField ScrollPanel centerChild;
 	@UiField SplitLayoutPanel split_panel;
 	//@UiField DecoratedTabPanel decortab;
@@ -51,24 +51,26 @@ public class UserResearchPerspectiveView extends Composite implements UserResear
 	public UserResearchPerspectiveView(SimpleEventBus bus) {
 		initWidget(uiBinder.createAndBindUi(this));
 		if (DatabankApp.get().getCurrentUser().getId()!=0) {
-      tabLayout.getTabWidget(2).getParent().setVisible(true);
-    } else {
-      tabLayout.getTabWidget(2).getParent().setVisible(false);
-    }
+          tabLayout.getTabWidget(2).getParent().setVisible(true);
+        } else {
+          tabLayout.getTabWidget(2).getParent().setVisible(false);
+        }
 
-		tree.setStyleName("research_section");
-    filterTabHeader.setText(DatabankApp.langConstants.researchMainFilterHeader());
-    split_panel.setWidgetMinSize(centerChild, 720);
-		simpleResearchListItem = new SimpleResearchList();
-		user_own_ResearchListItem = new UserOwnResearchList();
-		analisys_list = new UserOwnAnalisysList();
-		tree.addItem(simpleResearchListItem);
-		My_researches_tree.setStyleName("research_section");
-		My_researches_tree.addItem(user_own_ResearchListItem);
-		My_researches_tree.addItem(analisys_list);
+        tree.setStyleName("research_section");
+        filterTabHeader.setText(DatabankApp.langConstants.researchMainFilterHeader());
+        filterTabHeader.setText(DatabankApp.langConstants.researchMainMyResearchesHeader());
 
-    rootResearchConcepts = new RootConceptsList("socioresearch", DatabankApp.langConstants.researchMainConceptsResearch());
-    tree.addItem(rootResearchConcepts);
+        split_panel.setWidgetMinSize(centerChild, 720);
+        simpleResearchListItem = new SimpleResearchList();
+        user_own_ResearchListItem = new UserOwnResearchList();
+        analisys_list = new UserOwnAnalisysList();
+        tree.addItem(simpleResearchListItem);
+        My_researches_tree.setStyleName("research_section");
+        My_researches_tree.addItem(user_own_ResearchListItem);
+        My_researches_tree.addItem(analisys_list);
+
+        rootResearchConcepts = new RootConceptsList("socioresearch", DatabankApp.langConstants.researchMainConceptsResearch());
+        tree.addItem(rootResearchConcepts);
 
 		rootVarConcepts = new RootConceptsList("sociovar", DatabankApp.langConstants.researchMainConceptsVars());
 		tree.addItem(rootVarConcepts);

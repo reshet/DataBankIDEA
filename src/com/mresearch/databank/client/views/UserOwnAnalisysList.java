@@ -7,6 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.service.CatalogService;
 import com.mresearch.databank.client.service.CatalogServiceAsync;
 import com.mresearch.databank.shared.ICatalogizationConcept;
@@ -19,9 +20,9 @@ public class UserOwnAnalisysList extends TreeItem implements ICatalogizationConc
 	public UserOwnAnalisysList()
 	{
 		super();
-		setText("Сохраненные распределения");
+		setText(DatabankApp.langConstants.researchMainMyResearchesSavedAnalysis());
 		//setStylePrimaryName("gwt-TreeItem");
-		addItem("Загрузка...");
+		addItem(DatabankApp.langConstants.researchMainListLoad());
 	}
 	
 	

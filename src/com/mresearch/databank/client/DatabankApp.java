@@ -27,7 +27,7 @@ public class DatabankApp implements EntryPoint {
 	//interface DatabankAppUiBinder extends UiBinder<DockLayoutPanel, DatabankApp> {}
 	interface DatabankAppUiBinder extends UiBinder<ScrollPanel, DatabankApp> {}
 	private static final DatabankAppUiBinder binder = GWT.create(DatabankAppUiBinder.class);
-  public static LangConstants langConstants = GWT.create(LangConstants.class);
+    public static LangConstants langConstants = GWT.create(LangConstants.class);
 	private static DatabankApp singleton;
 	private RootLayoutPanel root;
 	//private StartPagePerspectivePresenter startpagePresenter;

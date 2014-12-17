@@ -77,4 +77,28 @@ public interface LangConstants extends Constants {
 
     @Key("research.search.input.or")
     String researchSearchInputOr();
+
+    @Key("research.main.my.researches.header")
+    String researchMainMyResearchesHeader();
+
+    @Key("research.main.my.researches.favorite")
+    String researchMainMyResearchesFavorite();
+
+    @Key("research.main.my.researches.saved.analysis")
+    String researchMainMyResearchesSavedAnalysis();
+
+    @Key("research.main.filter.action.do")
+    String researchMainFilterActionDo();
+
+    @Key("research.main.filter.action.cancel")
+    String researchMainFilterActionCancel();
+
+    @Key("research.main.filter.real.diapason.from")
+    String researchMainFilterRealDiapasonFrom();
+
+    @Key("research.main.filter.real.diapason.to")
+    String researchMainFilterRealDiapasonTo();
+
+    @Key("research.main.filter.string.contains")
+    String researchMainFilterStringContains();
 }
