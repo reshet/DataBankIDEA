@@ -38,9 +38,6 @@
         <setting name="gwtScriptOutputStyle" value="OBF" />
         <setting name="gwtSdkUrl" value="file://$MODULE_DIR$/../GWT_2.4.0" />
         <setting name="webFacet" value="Web" />
-        <packaging>
-          <module name="gwtupload.GWTUpload" enabled="false" />
-        </packaging>
       </configuration>
     </facet>
   </component>
