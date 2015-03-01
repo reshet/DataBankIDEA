@@ -17,7 +17,7 @@ public class ResearchFilesAccessor {
 	private ArrayList<String> file_names = new ArrayList<String>();
 	private ArrayList<String> file_categs = new ArrayList<String>();
 
-  private String requestAccessEmail = "v.paniotto@gmail.com";
+  private String requestAccessEmail = "eugen.bolshov@gmail.com";
 	public ResearchFilesAccessor(){}
 	
 	public ResearchFilesAccessor(ResearchFilesDTO dto)

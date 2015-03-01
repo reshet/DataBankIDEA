@@ -42,14 +42,14 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
  *
  * @author reshet
  */
-@MessageDriven(mappedName = "jms/national/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
+@MessageDriven(mappedName = "jms/alliance/spss_parse", activationConfig = {@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"), @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
 public class AdminSocioResearchMDB implements MessageListener {
     @PersistenceContext
     private EntityManager em;
     @EJB
     private RxStorageBeanRemote store;
-    public static final String INDEX_NAME = "databanknational";
-    public static final String STORAGE_VAULT = "/home/reshet/databank/databanknational/";
+    public static final String INDEX_NAME = "databankalliance";
+    public static final String STORAGE_VAULT = "/home/reshet/databank/databankalliance/";
     public AdminSocioResearchMDB() {
         super();
     }
@@ -103,10 +103,10 @@ public class AdminSocioResearchMDB implements MessageListener {
     private Client client;
 
     @EJB ESClientBean clientbean;
-    @Resource(mappedName = "jms/national/myQCF")
+    @Resource(mappedName = "jms/alliance/myQCF")
     //@Resource(name = "jmsQCF")
     private QueueConnectionFactory connectionFactory;
-    @Resource(mappedName = "jms/national/spss_parse")
+    @Resource(mappedName = "jms/alliance/spss_parse")
     //@Resource(name = "jmsqueue")
     private Queue queue;
     private QueueConnection connection;

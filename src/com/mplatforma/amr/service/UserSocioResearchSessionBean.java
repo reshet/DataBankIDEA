@@ -346,7 +346,7 @@ public class UserSocioResearchSessionBean implements UserSocioResearchBeanRemote
     @EJB
     ESClientBean clientbean;
     //@Resource(name="indexname")
-    public  String INDEX_NAME = "databanknational";
+    public  String INDEX_NAME = "databankalliance";
 
     @PostConstruct
     private void init()
